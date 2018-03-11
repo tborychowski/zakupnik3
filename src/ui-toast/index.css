@@ -1,0 +1,38 @@
+
+.ui-toast-wrapper {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 99;
+	text-align: center;
+	padding-top: 10px;
+	height: 0;
+}
+
+
+.ui-toast {
+	min-width: 200px;
+	max-width: 50%;
+	display: block;
+	margin: 5px auto;
+	padding: 20px 30px;
+	text-align: center;
+	border-radius: 30px;
+	color: rgba(255,255,255, 0.8);
+	box-shadow: 0 0 1px 0 rgba(0,0,0, 0.5);
+	opacity: 1;
+
+}
+.ui-toast:focus { box-shadow: 0 0 5px 2px rgba(0,0,0,0.5); outline: none; }
+
+.ui-toast em {
+	font-weight: 600;
+	color: #fff;
+	font-style: normal;
+}
+
+
+.ui-toast-info { background: rgba(0, 100, 50, 0.8); }
+.ui-toast-warning { background: rgba(120, 86, 0, 0.8); }
+.ui-toast-error { background: rgba(201, 58, 31, 0.8); }

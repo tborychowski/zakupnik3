@@ -5,13 +5,15 @@ const passport = require('./lib/passport');
 const session = require('./lib/session');
 const app = express();
 
-const viewCfg = { root: path.join(__dirname, 'views') };
-
 app.use(session);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+function sendView (res, view) {
+	res.sendFile(view, { root: path.join(__dirname, 'views') });
+}
 
 function isAuthenticated (req, res, next) {
 	if (req.user) return next();
@@ -25,12 +27,13 @@ function isApiAuthenticated (req, res, next) {
 
 app.use('/api/', isApiAuthenticated, require('./api/'));
 
-app.get('/', isAuthenticated, (req, res) => res.sendFile('index.html', viewCfg));
+app.get('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
+app.get('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
 app.use('/assets', isAuthenticated, express.static(path.join(__dirname, '..', 'assets')));
 
 
 app.get('/logout', (req, res) => { req.logout(); res.redirect('/'); });
-app.get('/login', (req, res) => res.sendFile('login.html', viewCfg));
+app.get('/login', (req, res) => sendView(res, 'login.html'));
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
 
 

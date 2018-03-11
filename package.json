@@ -4,7 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon ./server"
+    "start:server": "nodemon --watch ./server ./server",
+    "start:client": "webpack --watch",
+    "start": "npm-run-all --parallel start:server start:client",
+    "build": "webpack"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -14,6 +17,17 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.17.1"
+    "@webcomponents/webcomponentsjs": "^1.1.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "copy-webpack-plugin": "^4.4.1",
+    "css-loader": "^0.28.9",
+    "html-loader": "^0.5.5",
+    "nodemon": "^1.17.1",
+    "npm-run-all": "^4.1.2",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9",
+    "webpack-shell-plugin": "^0.5.0"
   }
 }
