@@ -1,0 +1,9 @@
+node_modules/
+dist/
+app/
+_stuff/
+.sessionsecret
+
+.DS_Store
+*.sublime-*
+*.log
