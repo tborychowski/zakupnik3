@@ -4,29 +4,16 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
 	devtool: 'inline-source-map',
 	mode: 'development',
-	entry: { index: './src/index.js' },
-	output: {
-		path: path.resolve(__dirname, 'assets'),
-		filename: '[name].js',
-	},
-	resolve: {
-		extensions: ['.js', '.json']
-	},
+	entry: { index: './client/index.js' },
+	output: { filename: '[name].js', path: path.resolve(__dirname, 'assets'), },
+	resolve: { extensions: ['.js', '.json'] },
+	stats: 'minimal',
 	module: {
 		rules: [
-			{
-				test: /\.html$/,
-				use: { loader: 'html-loader' }
-			},
-			{
-				test: /\.css$/,
-				use: [ { loader: 'css-loader' } ]	// translates CSS into CommonJS
-			},
-			{
-				test: /\.js$/,
-				use: 'babel-loader',
-				exclude: /node_modules/
-			}
+			{ test: /\.html$/, use: 'html-loader' },
+			{ test: /\.css$/, use: 'css-loader', include: /client\/components/ },
+			{ test: /\.css$/, use: ['style-loader', 'css-loader'], exclude: /client\/components/ },
+			{ test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ }
 		]
 	},
 	plugins: [

@@ -12,7 +12,7 @@ app.use(passport.session());
 
 
 function sendView (res, view) {
-	res.sendFile(view, { root: path.join(__dirname, 'views') });
+	res.sendFile(view, { root: path.join(__dirname, '..', 'client' ) });
 }
 
 function isAuthenticated (req, res, next) {
@@ -27,9 +27,12 @@ function isApiAuthenticated (req, res, next) {
 
 app.use('/api/', isApiAuthenticated, require('./api/'));
 
-app.get('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
-app.get('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
-app.use('/assets', isAuthenticated, express.static(path.join(__dirname, '..', 'assets')));
+app.get('/', (req, res) => sendView(res, 'index.html'));
+app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
+
+
+// app.get('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
+// app.use('/assets', isAuthenticated, express.static(path.join(__dirname, '..', 'assets')));
 
 
 app.get('/logout', (req, res) => { req.logout(); res.redirect('/'); });
