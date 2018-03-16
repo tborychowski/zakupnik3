@@ -1,9 +1,13 @@
+require('./index.css');
+
+
+
 const components = [
 	'components/calendar',
-	'calendar',
+	'components/year-picker',
+	'components/month-picker',
 	'categories',
 ];
-
 
 
 components.forEach(n => {
@@ -14,7 +18,6 @@ components.forEach(n => {
 
 
 function init () {
-	setTimeout(() => document.body.classList.remove('loading'), 300);
 	console.log('ready!');
 }
 

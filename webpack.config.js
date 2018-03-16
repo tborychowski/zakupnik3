@@ -23,11 +23,11 @@ module.exports = {
 				ignore: 'gulpfile.js',
 				flatten: true
 			},
-			{
-				from: path.resolve(__dirname, 'src/*.css'),
-				copyUnmodified: true,
-				flatten: true
-			},
+			// {
+			// 	from: path.resolve(__dirname, 'src/*.css'),
+			// 	copyUnmodified: true,
+			// 	flatten: true
+			// },
 		])
 	]
 };

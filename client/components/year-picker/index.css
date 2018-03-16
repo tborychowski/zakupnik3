@@ -1,0 +1,28 @@
+.year-picker {
+	-moz-user-select: none;
+	user-select: none;
+	position: relative;
+	font: normal 1em sans-serif;
+	width: inherit;
+	display: flex;
+	height: 100%;
+	background-color: rgba(255,255,255,0.9);
+}
+
+.year-picker input {
+	appearance: textfield;
+	-webkit-appearance: textfield;
+	-moz-appearance: textfield;
+	text-align: center;
+	font: inherit;
+	min-width: 3em;
+	padding: 2px 0 1px;
+	height: 100%;
+	background-color: transparent;
+}
+
+.year-picker .btn {
+	box-sizing: border-box;
+	border: none;
+	height: 100%;
+}

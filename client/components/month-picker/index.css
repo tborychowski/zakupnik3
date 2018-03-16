@@ -1,0 +1,32 @@
+
+.month-picker {
+	-moz-user-select: none;
+	user-select: none;
+	position: relative;
+	width: inherit;
+	display: flex;
+	height: 100%;
+	font: inherit;
+}
+
+
+.month {
+	font: inherit;
+	font-size: 12px;
+	text-transform: uppercase;
+	flex: 1;
+	border: none;
+	background-color: rgba(255,255,255,0.3);
+	height: 100%;
+	border: 1px solid transparent;
+	border-width: 0 1px;
+	padding-top: 2px;
+	color: rgba(0,0,0,.6);
+}
+
+
+.month.selected {
+	background-color: rgba(255,255,255,0.9);
+	border-color: #444;
+	color: rgba(0,0,0,1);
+}
