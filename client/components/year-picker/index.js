@@ -1,7 +1,7 @@
 import style from './index.css';
 import template from './index.html';
 
-export default class yearPicker extends HTMLElement {
+class yearPicker extends HTMLElement {
 
 	constructor () {
 		super();
@@ -63,3 +63,5 @@ export default class yearPicker extends HTMLElement {
 	}
 
 }
+
+customElements.define('year-picker', yearPicker);

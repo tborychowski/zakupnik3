@@ -1,0 +1,29 @@
+header {
+	display: flex;
+	height: 32px;
+	align-items: center;
+	border-top: 1px solid #444;
+	border-bottom: 1px solid #444;
+}
+header month-picker { height: 100%; flex: 1; margin: 0 1px; }
+header year-picker { height: 100%; width: 100px; }
+
+
+header .btn-today {
+	height: 100%;
+	box-sizing: inherit;
+	border: 1px solid transparent;
+	border-width: 0 1px;
+	background: #ffffff4d;
+	font: inherit;
+	font-size: 12px;
+	padding-top: 2px;
+	text-transform: uppercase;
+	width: 100px;
+}
+
+.btn-today.active {
+	background-color: #ffffffe6;
+	border-color: #444;
+	color: #000;
+}

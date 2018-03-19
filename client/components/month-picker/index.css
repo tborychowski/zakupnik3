@@ -11,6 +11,7 @@
 
 
 .month {
+	position: relative;
 	font: inherit;
 	font-size: 12px;
 	text-transform: uppercase;
@@ -29,4 +30,19 @@
 	background-color: rgba(255,255,255,0.9);
 	border-color: #444;
 	color: rgba(0,0,0,1);
+}
+
+
+.month.current::after {
+	content: '';
+	display: block;
+	width: 5px;
+	height: 5px;
+	border-radius: 5px;
+	background: linear-gradient(#205DFFFF, #184ACAFF);
+	position: absolute;
+	bottom: 1px;
+	left: 50%;
+	transform: translateX(-50%);
+	opacity: 0.8;
 }

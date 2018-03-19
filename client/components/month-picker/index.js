@@ -1,13 +1,17 @@
 import style from './index.css';
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-const btnTemplate = (month, i) => `<button
-	class="month month-${month.toLowerCase()} month-${i + 1}"
-	data-value="${i + 1}">${month.substr(0, 3)}</button>`;
+const currentMonth = (new Date()).getMonth();
+
+function btnTemplate (month, i) {
+	const cls = ['month', 'month-' + month.toLowerCase(), 'month-' + (i + 1) ];
+	if (i === currentMonth) cls.push('current');
+	return `<button class="${cls.join(' ')}" data-value="${i + 1}">${month.substr(0, 3)}</button>`;
+}
 
 
 
-export default class monthPicker extends HTMLElement {
+class monthPicker extends HTMLElement {
 
 	constructor () {
 		super();
@@ -49,7 +53,6 @@ export default class monthPicker extends HTMLElement {
 		selected.forEach(btn => btn.classList.remove('selected'));
 		selected = this.el.querySelector('.month-' + value);
 		if (selected) selected.classList.add('selected');
-		this.fireEvent('change', { value: parseInt(value, 10), month: months[value - 1] });
 	}
 
 	onClick (e) {
@@ -59,6 +62,7 @@ export default class monthPicker extends HTMLElement {
 		if (monthButton) {
 			const val = monthButton.dataset.value;
 			this.value = val;
+			this.fireEvent('change', { value: parseInt(val, 10), month: months[val - 1] });
 		}
 	}
 
@@ -67,3 +71,5 @@ export default class monthPicker extends HTMLElement {
 	}
 
 }
+
+customElements.define('month-picker', monthPicker);

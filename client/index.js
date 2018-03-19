@@ -3,17 +3,13 @@ require('./index.css');
 
 
 const components = [
-	'components/calendar',
-	'components/year-picker',
-	'components/month-picker',
-	'categories',
+	'header',
 ];
 
 
 components.forEach(n => {
-	const c = require(`./${n}/`).default;
-	if (c.is) customElements.define(c.is, c);
-	else c.init();
+	const c = require(`./${n}/`);
+	c.init();
 });
 
 
