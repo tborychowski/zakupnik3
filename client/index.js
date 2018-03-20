@@ -14,6 +14,7 @@ components.forEach(n => {
 
 
 function init () {
+	document.body.classList.remove('loading');
 	console.log('ready!');
 }
 

@@ -13,7 +13,6 @@
 .month {
 	position: relative;
 	font: inherit;
-	font-size: 12px;
 	text-transform: uppercase;
 	flex: 1;
 	border: none;
@@ -34,14 +33,16 @@
 
 
 .month.current::after {
+	--dot-size: 7px;
+
 	content: '';
 	display: block;
-	width: 5px;
-	height: 5px;
-	border-radius: 5px;
+	width: var(--dot-size);
+	height: var(--dot-size);
+	border-radius: var(--dot-size);
 	background: linear-gradient(#205DFFFF, #184ACAFF);
 	position: absolute;
-	bottom: 1px;
+	bottom: 3px;
 	left: 50%;
 	transform: translateX(-50%);
 	opacity: 0.8;

@@ -1,7 +1,10 @@
 html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
 
-body { box-sizing: border-box; background: #666;
+body { box-sizing: border-box; background: #666; opacity: 1;
 	font: normal 1em sans-serif;
+}
+body.loading {
+	opacity: 0;
 }
 
 body * { box-sizing: inherit; }

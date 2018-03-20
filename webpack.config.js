@@ -5,15 +5,19 @@ module.exports = {
 	devtool: 'inline-source-map',
 	mode: 'development',
 	entry: { index: './client/index.js' },
-	output: { filename: '[name].js', path: path.resolve(__dirname, 'assets'), },
+	output: {
+		filename: '[name].js',
+		path: path.join(__dirname, 'assets'),
+		publicPath: path.join('..', 'assets/'),
+	},
 	resolve: { extensions: ['.js', '.json'] },
 	stats: 'minimal',
 	module: {
 		rules: [
 			{ test: /\.html$/, use: 'html-loader' },
+			{ test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
 			{ test: /\.css$/, use: 'css-loader', include: /client\/components/ },
-			{ test: /\.css$/, use: ['style-loader', 'css-loader'], exclude: /client\/components/ },
-			{ test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ }
+			{ test: /\.css$/, use: ['style-loader/url', 'file-loader'], exclude: /client\/components/ },
 		]
 	},
 	plugins: [

@@ -1,6 +1,5 @@
 node_modules/
-dist/
-app/
+assets/
 _stuff/
 .sessionsecret
 
