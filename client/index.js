@@ -1,23 +1,8 @@
 require('./index.css');
+import { helper } from './core';
 
 
-
-const components = [
+helper.init([
 	'header',
-];
-
-
-components.forEach(n => {
-	const c = require(`./${n}/`);
-	c.init();
-});
-
-
-function init () {
-	document.body.classList.remove('loading');
-	console.log('ready!');
-}
-
-
-if (window.WebComponents.ready) init();
-else window.addEventListener('WebComponentsReady', init);
+	'form',
+]);

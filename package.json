@@ -6,7 +6,8 @@
   "scripts": {
     "start:server": "nodemon --watch ./server ./server",
     "start:client": "webpack --watch",
-    "start": "npm-run-all --parallel start:server start:client",
+    "cleanup": "rm -r assets",
+    "start": "npm run cleanup && npm-run-all --parallel start:server start:client",
     "build": "webpack"
   },
   "dependencies": {

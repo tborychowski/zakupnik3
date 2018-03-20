@@ -30,7 +30,6 @@ app.use('/api/', isApiAuthenticated, require('./api/'));
 app.get('/', (req, res) => sendView(res, 'index.html'));
 app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 
-
 // app.get('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
 // app.use('/assets', isAuthenticated, express.static(path.join(__dirname, '..', 'assets')));
 

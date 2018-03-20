@@ -7,6 +7,7 @@
 	display: flex;
 	height: 100%;
 	font: inherit;
+	overflow: auto;
 }
 
 

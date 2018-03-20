@@ -2,14 +2,14 @@ require('./index.css');
 require('../components/month-picker');
 require('../components/year-picker');
 
-import {$} from '../core';
+import { $ } from '../core';
 
 const today = new Date();
 let el, btnToday, monthPicker, yearPicker, currentDate;
 
 
-// yyyy-mm-dd
-const format = d => d.toISOString().substr(0, 10);
+//TODO: move to "core"
+const format = d => d.toISOString().substr(0, 10);	// yyyy-mm-dd
 const isSameDay = (d1, d2) => format(d1) === format(d2);
 
 

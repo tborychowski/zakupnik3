@@ -1,34 +1,34 @@
 header {
-	display: flex;
-	height: 40px;
-	align-items: center;
 	border-top: 1px solid #444;
 	border-bottom: 1px solid #444;
 	font-size: 14px;
+	width: 100%;
 }
 
-.loading .btn-today { transition: none; }
-.is-today .btn-today { margin-left: -101px; }
+
+header,
+.btn-today,
+month-picker,
+year-picker { position: absolute; top: 0; height: 40px; }
 
 .btn-today {
 	font: inherit;
-	height: 100%;
 	border: 1px solid transparent;
 	border-width: 0 1px;
 	background: #ffffff4d;
 	padding-top: 2px;
 	text-transform: uppercase;
-	width: 100px;
-	margin-right: 1px;
-	transition: margin .3s ease-out;
+	width: 90px;
+	left: 0;
+	transition: left .3s ease-out;
 }
-
-.btn-today:active {
-	background-color: #ffffffe6;
-	border-color: #444;
-	color: #000;
-}
+.btn-today:active { background-color: #ffffffe6; border-color: #444; color: #000; }
 
 
-header month-picker { height: 100%; flex: 1; margin-right: 1px; }
-header year-picker { height: 100%; width: 100px; }
+
+month-picker { left: 91px; right: 101px; z-index: 1; transition: left .3s ease-out; }
+year-picker { right: 0; width: 100px; }
+
+
+.is-today .btn-today { left: -91px; }
+.is-today month-picker { left: 0; }
