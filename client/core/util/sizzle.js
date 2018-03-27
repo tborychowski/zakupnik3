@@ -172,4 +172,4 @@ sizzle.fn.animate = function (from, to, options = {}) {
 // };
 
 
-module.exports = sizzle;
+export default sizzle;

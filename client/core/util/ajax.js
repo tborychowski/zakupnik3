@@ -1,4 +1,4 @@
-const util = require('./util');
+import util from './util.js';
 
 const baseUrl = '';
 
@@ -34,11 +34,16 @@ function ajax (options) {
 }
 
 
+const get = (url, data) => ajax({ url, data: data || {} });
+const post = (url, data) => ajax({ url, data: data || {}, method: 'POST' });
+const put = (url, data) => ajax({ url, data: data || {}, method: 'PUT' });
+const del = (url, data) => ajax({ url, data: data || {}, method: 'DELETE' });
 
-module.exports = {
+
+export default {
 	ajax,
-	get: (url, data) => ajax({ url, data: data || {} }),
-	post: (url, data) => ajax({ url, data: data || {}, method: 'POST' }),
-	put: (url, data) => ajax({ url, data: data || {}, method: 'PUT' }),
-	del: (url, data) => ajax({ url, data: data || {}, method: 'DELETE' })
+	get,
+	post,
+	put,
+	del,
 };

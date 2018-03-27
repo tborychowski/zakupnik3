@@ -6,3 +6,6 @@ _stuff/
 .DS_Store
 *.sublime-*
 *.log
+
+*.crt
+*.key

@@ -20,7 +20,7 @@ class monthPicker extends HTMLElement {
 		this.templateContent = template.content;
 	}
 
-	static get is () { return 'month-picker'; }
+	// static get is () { return 'month-picker'; }
 	static get observedAttributes () { return ['value']; }
 
 	connectedCallback () {

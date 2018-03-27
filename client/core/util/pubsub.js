@@ -24,4 +24,4 @@ function off (handle) {
 }
 
 
-module.exports = { on, off, trigger };
+export default { on, off, trigger };

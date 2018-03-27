@@ -4,11 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "build": "webpack",
     "start:server": "nodemon --watch ./server ./server",
     "start:client": "webpack --watch",
-    "cleanup": "rm -r assets",
-    "start": "npm run cleanup && npm-run-all --parallel start:server start:client",
-    "build": "webpack"
+    "start": "npm-run-all --parallel start:server start:client"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -16,7 +15,8 @@
     "express-session": "^1.15.6",
     "file-loader": "^1.1.11",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "spdy": "^3.4.7"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^1.1.0",

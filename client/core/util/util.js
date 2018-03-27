@@ -88,9 +88,10 @@ function prettyDate (time) {
 		day_diff < 31 && Math.ceil(day_diff / 7) + ' weeks ago';
 }
 
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 
-module.exports = {
+export default {
 	fuzzy,
 	ltrim,
 	rtrim,
@@ -105,6 +106,6 @@ module.exports = {
 	sanitize,
 	serialize,
 	parseUrl,
-	months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+	months,
 	prettyDate,
 };

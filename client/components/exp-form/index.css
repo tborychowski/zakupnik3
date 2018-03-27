@@ -1,0 +1,39 @@
+.flex-filler { flex: 1; }
+
+.form {
+	width: inherit;
+	position: relative;
+	font: inherit;
+	border: 1px solid #ccc;
+}
+
+.form-row { display: flex; align-items: center; padding: 10px; }
+.form-row-repeat input { width: 40px; margin: 0 5px; text-align: center; }
+.form-row-repeat { background: #eee; }
+.form-row-repeat label { line-height: 20px; display: block; }
+
+.form-row-buttons { background: #eee; border-top: 1px solid #ccc; }
+.form-row-buttons button { margin-left: 5px; }
+.form-row-buttons button:first-child { margin-left: 0; }
+
+
+.btn-remove,
+.btn-cancel,
+.btn-save,
+.update .btn-add { display: none; }
+
+.update .btn-remove,
+.update .btn-cancel,
+.update .btn-save { display: block; }
+
+
+
+.subforms { background: #ccc; }
+.subforms .form-row { justify-content: stretch; }
+.subforms .form-row:first-child { background: #eee; }
+.subforms .category { width: 140px; }
+.subforms .description { flex: 1; }
+.subforms .amount { width: 100px; text-align: right; }
+.subforms button { width: 40px; overflow: hidden; }
+.subforms .form-row select,
+.subforms .form-row input { margin-right: 5px; }

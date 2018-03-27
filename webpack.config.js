@@ -15,9 +15,9 @@ module.exports = {
 	module: {
 		rules: [
 			{ test: /\.html$/, use: 'html-loader' },
-			{ test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
+			// { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
 			{ test: /\.css$/, use: 'css-loader', include: /client\/components/ },
-			{ test: /\.css$/, use: ['style-loader/url', 'file-loader'], exclude: /client\/components/ },
+			{ test: /\.css$/, use: ['style-loader', 'css-loader'], exclude: /client\/components/ },
 		]
 	},
 	plugins: [

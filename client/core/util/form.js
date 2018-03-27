@@ -162,4 +162,4 @@ Form.prototype.observeStop = function () { this.observeCb = null; };
 
 
 
-module.exports = Form;
+export default Form;

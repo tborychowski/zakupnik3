@@ -1,8 +1,8 @@
-const EVENT = require('./events');
-const helper = require('./helper');
-const $ = require('./util');
+import EVENT from './events.js';
+import helper from './helper.js';
+import $ from './util/index.js';
 
-module.exports = {
+export {
 	$,
 	helper,
 	EVENT,

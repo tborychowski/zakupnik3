@@ -1,5 +1,5 @@
 require('./index.css');
-import { helper } from './core';
+import { helper } from './core/index.js';
 
 
 helper.init([

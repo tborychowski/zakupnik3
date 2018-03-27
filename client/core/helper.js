@@ -1,4 +1,4 @@
-const $ = require('./util/sizzle');
+import $ from './util/sizzle.js';
 
 
 
@@ -27,6 +27,6 @@ function init (components) {
 
 
 
-module.exports = {
+export default {
 	init
 };

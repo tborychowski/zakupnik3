@@ -90,34 +90,26 @@ function isMath (e) {
 }
 
 // digits + navigation + copy/cut/paste + math operators
-function isCutCopyPaste (e) {
+function isAllowed (e) {
 	const k = e.keyCode;
-	const ctrlOrCmd = e && (e.ctrlKey === true || e.metaKey === true);
-	return ctrlOrCmd && (k === keys.X || k === keys.C || k === keys.V);
+	const allowed = allowedChars[k] === 1;
+	const isCtrlXCV = (e && e.ctrlKey === true) && (k === keys.X || k === keys.C || k === keys.V);
+	const math = isMath(e);
+
+	return isDigit(e) || allowed || isCtrlXCV || math;
 }
 
+function isDigit (e) { return digits[e.keyCode] === 1 && !e.shiftKey; }
 // a - z
 function isAlpha (e) { return (e.keyCode >= 65 && e.keyCode <= 90 && !e.ctrlKey && !e.metaKey); }
 
-function isDigit (e) { return digits[e.keyCode] === 1 && !e.shiftKey; }
-
 function isAlphaNumeric (e) { return isAlpha(e) || isDigit(e); }
-
-function isNavChar (e) { return allowedChars[e.keyCode] === 1; }
-
-function isNumberField (e) {
-	const isEnter = (e.keyCode === 13);
-	return isDigit(e) || isNavChar(e) || isCutCopyPaste(e) || isEnter;
-}
 
 
 export default {
 	keys,
-	isNavChar,
-	isCutCopyPaste,
+	isAllowed,
 	isDigit,
 	isAlpha,
-	isMath,
-	isAlphaNumeric,
-	isNumberField,
+	isAlphaNumeric
 };
