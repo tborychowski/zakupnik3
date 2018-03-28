@@ -1,11 +1,8 @@
-const path = require('path');
-const fs = require('fs');
 const session = require('express-session');
 
 
 //openssl rand -base64 32
-const secretFile = path.join(__dirname, '..', '.sessionsecret');
-const secret = fs.readFileSync(secretFile, 'utf8') || 'super secret shit';
+const secret = 'fX5uuWQMpb/z2+yYGfBvfC/ovgpNpPf/7KNUznBGwpg=';
 
 const sessionCfg = {
 	secret,

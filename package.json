@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tborychowski/zakupnik3.git"
+  },
   "scripts": {
     "build": "webpack",
     "start:server": "nodemon --watch ./server ./server",
