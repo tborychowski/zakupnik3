@@ -37,6 +37,7 @@ class expForm extends HTMLElement {
 
 	resetForm () {
 		this.el.reset();
+		this.el.classList.remove('edit');
 		this.subforms.querySelectorAll('.form-row').forEach(row => row.remove());
 		this.split();
 	}
@@ -69,6 +70,7 @@ class expForm extends HTMLElement {
 
 	edit (data) {
 		this.resetForm();
+		this.el.classList.add('edit');
 		const row = this.subforms.querySelector('.form-row:first-child');
 		row.querySelector('.category').value = data.category_id;
 		row.querySelector('.description').value = data.description;
@@ -108,6 +110,7 @@ class expForm extends HTMLElement {
 	onClick (e) {
 		const target = e.target;
 		if (target.closest('.btn-reset')) return this.resetForm();
+		if (target.closest('.btn-cancel')) return this.resetForm();
 		if (target.closest('.btn-split')) return this.split();
 		if (target.closest('.btn-unsplit')) return this.unsplit(target.closest('.form-row'));
 	}

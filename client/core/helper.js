@@ -3,9 +3,9 @@ import $ from './util/sizzle.js';
 
 
 function fadeInBody () {
-	setTimeout(() => {
-		$(document.body).animate({opacity: 0}, {opacity: 1});
-	}, 300);
+	$(document.body).animate({opacity: 0}, {opacity: 1});
+	// setTimeout(() => {
+	// }, 100);
 }
 
 
