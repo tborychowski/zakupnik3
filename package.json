@@ -17,7 +17,6 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
-    "file-loader": "^1.1.11",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "spdy": "^3.4.7"
@@ -29,6 +28,7 @@
     "babel-preset-env": "^1.6.1",
     "copy-webpack-plugin": "^4.4.1",
     "css-loader": "^0.28.9",
+    "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
     "nodemon": "^1.17.1",
     "npm-run-all": "^4.1.2",

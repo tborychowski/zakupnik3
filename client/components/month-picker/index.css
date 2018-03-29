@@ -23,6 +23,7 @@
 	border-width: 0 1px;
 	padding-top: 2px;
 	color: rgba(0,0,0,.6);
+	overflow: hidden;
 }
 
 
@@ -34,7 +35,7 @@
 
 
 .month.current::after {
-	--dot-size: 7px;
+	--dot-size: 8px;
 
 	content: '';
 	display: block;
@@ -42,9 +43,10 @@
 	height: var(--dot-size);
 	border-radius: var(--dot-size);
 	background: linear-gradient(#205DFFFF, #184ACAFF);
+	box-shadow: 0 0 1px 1px #205DFF88;
 	position: absolute;
-	bottom: 3px;
 	left: 50%;
+	bottom: -3px;
 	transform: translateX(-50%);
 	opacity: 0.8;
 }

@@ -8,7 +8,7 @@ module.exports = {
 	output: {
 		filename: '[name].js',
 		path: path.join(__dirname, 'assets'),
-		publicPath: path.join('..', 'assets/'),
+		publicPath: '../assets/',
 	},
 	resolve: { extensions: ['.js', '.json'] },
 	stats: 'minimal',
@@ -18,6 +18,7 @@ module.exports = {
 			// { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
 			{ test: /\.css$/, use: 'css-loader', include: /client\/components/ },
 			{ test: /\.css$/, use: ['style-loader', 'css-loader'], exclude: /client\/components/ },
+			{ test: /\.svg$/, use: [{ loader: 'file-loader', options: {} }] }
 		]
 	},
 	plugins: [

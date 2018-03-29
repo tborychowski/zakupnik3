@@ -3,13 +3,18 @@ header {
 	border-bottom: 1px solid #444;
 	font-size: 14px;
 	width: 100%;
+	height: 40px;
 }
 
 
 header,
 .btn-today,
 month-picker,
-year-picker { position: absolute; top: 0; height: 40px; }
+year-picker { position: absolute; top: 0; }
+
+.btn-today,
+month-picker,
+year-picker { height: 100%; }
 
 .btn-today {
 	font: inherit;

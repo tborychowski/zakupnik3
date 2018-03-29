@@ -13,8 +13,8 @@ function getGroupHtml (grp) {
 function getRow (categories, idx = 0, description = '') {
 	const options = categories.map(getGroupHtml).join('');
 	let btns = idx === 0 ?
-		'<button type="button" title="Split" class="btn-split btn-secondary"><i class="fa fa-angle-double-down"></i>split</button>' :
-		'<button type="button" title="Remove" class="btn-unsplit btn-secondary"><i class="fa fa-trash-o"></i>remove</button>';
+		'<button type="button" title="Split" class="btn-split"></button>' :
+		'<button type="button" title="Remove" class="btn-unsplit"></button>';
 
 	return `<div class="form-row">
 		<input type="hidden" name="id">
