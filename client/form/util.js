@@ -64,8 +64,20 @@ function repeatEntries (entries, repeater) {
 }
 
 
+function isAllowedKey (e) {
+	const allowedReg = /^[()\d/*+-]{1}$/;
+	const allowedKeys = ['Enter', 'Tab', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', '.'];
+
+	if (allowedKeys.indexOf(e.key) > -1) return true;
+	if (e.metaKey || e.ctrlKey) return true;
+	if (e.key.length < 3 && allowedReg.test(e.key)) return true;
+	return false;
+}
+
+
 export default {
 	parseDateStr,
 	parseAmount,
 	repeatEntries,
+	isAllowedKey,
 };

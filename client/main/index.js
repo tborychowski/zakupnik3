@@ -2,10 +2,13 @@ require('./index.css');
 import ExpForm from '../form';
 
 
-let el, form;
+let form;
 
 
-function formInit () {
+function init () {
+	// el = document.querySelector('#main');
+	form = new ExpForm('#exp-form');
+
 	form.categories = [
 		{ id: 'child_1', name: 'Child 1' },
 		{ id: 'child_2', name: 'Child 2', items: [
@@ -17,12 +20,13 @@ function formInit () {
 			{ id: 'grandchild_33', name: 'Grandchild 3', parentId: 'child_3' },
 		]},
 	];
+
 	form.on('change', res => {
-		console.log(res.type, res.detail.data);
+		console.log(res.type, res.data);
 	});
 
 	form.on('submit', res => {
-		console.log(res.type, res.detail.data);
+		console.log(res.type, res.data);
 	});
 
 
@@ -34,15 +38,6 @@ function formInit () {
 		date: '2018-03-20'
 	});
 
-}
-
-
-
-function init () {
-	el = document.querySelector('#main');
-	form = new ExpForm('#exp-form');
-
-	formInit();
 }
 
 

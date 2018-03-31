@@ -3,9 +3,6 @@ import {Component} from '../core';
 import util from './util.js';
 import templates from './templates.js';
 
-const allowedReg = /^[()\d/*+-]{1}$/;
-const allowedKeys = ['Enter', 'Tab', 'Backspace', 'ArrowLeft', 'ArrowRight'];
-
 
 export default class ExpForm extends Component {
 
@@ -58,7 +55,7 @@ export default class ExpForm extends Component {
 	}
 
 	onFormChange () {
-		this.fire('change', this.getData());
+		this.trigger('change', this.getData());
 	}
 
 
@@ -76,8 +73,9 @@ export default class ExpForm extends Component {
 		const category = row.querySelector('.category').value;
 		const description = row.querySelector('.description').value;
 		const amountEl = row.querySelector('.amount');
-		const amount = util.parseAmount(amountEl.value);
+		let amount = util.parseAmount(amountEl.value);
 		amountEl.setCustomValidity(amount === 'error' ? 'Incorrect formula' : '');
+		if (amount === 'error') amount = 0;
 		return {category, description, amount, date: this.date };
 	}
 
@@ -99,7 +97,7 @@ export default class ExpForm extends Component {
 
 	onSubmit (e) {
 		e.preventDefault();
-		this.fire('submit', this.getData());
+		this.trigger('submit', this.getData());
 		this.resetForm();
 	}
 
@@ -113,9 +111,7 @@ export default class ExpForm extends Component {
 
 
 	onKeyDown (e) {
-		if (allowedKeys.indexOf(e.key) > -1) return true;
-		if (e.metaKey || e.ctrlKey) return true;
-		if (e.key.length < 3 && allowedReg.test(e.key)) return true;
+		if (util.isAllowedKey(e)) return true;
 		e.preventDefault();
 	}
 

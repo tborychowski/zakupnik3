@@ -1,14 +1,14 @@
 export default {
 
 	document: {
-		clicked: 'document-clicked',
-		keyup: 'document-keyup'
+		clicked: Symbol(),
+		keyup: Symbol()
 	},
 
 	toast: {
-		info: 'toast-info',
-		error: 'toast-error',
-		warning: 'toast-warning',
+		info: Symbol(),
+		error: Symbol(),
+		warning: Symbol(),
 	},
 
 };

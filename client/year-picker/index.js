@@ -27,14 +27,14 @@ export default class YearPicker extends Component {
 		if (isNaN(inputValue)) return this.inputEl.value = '';
 		if (this._value === inputValue) return;
 		this.value = inputValue;
-		this.fire('change', { value: inputValue });
+		this.trigger('change', { value: inputValue });
 	}
 
 	onClick (e) {
 		const go = parseInt(e.target.dataset.go, 10);
 		if (isNaN(go)) return;
 		this.value = this._value + go;
-		this.fire('change', { value: this.value });
+		this.trigger('change', { value: this.value });
 	}
 
 }

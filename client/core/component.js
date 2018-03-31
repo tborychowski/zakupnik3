@@ -18,7 +18,7 @@ export default class Component {
 		this.events[type].push(cb);
 	}
 
-	fire (type, data) {
+	trigger (type, data) {
 		if (!this.events[type]) return;
 		this.events[type].forEach(cb => cb({ type, data }));
 	}

@@ -43,7 +43,7 @@ export default class MonthPicker extends Component {
 		if (btn) {
 			const val = parseInt(btn.dataset.value, 10);
 			this.value = val;
-			this.fire('change', { value: val, month: months[val - 1] });
+			this.trigger('change', { value: val, month: months[val - 1] });
 		}
 	}
 
