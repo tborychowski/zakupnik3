@@ -1,0 +1,17 @@
+#main {
+	--header-h: 40px;
+	--margin: 20px;
+
+	position: absolute;
+	top: calc(var(--header-h) + var(--margin));
+	left: var(--margin);
+	right: var(--margin);
+	bottom: var(--margin);
+	background: #ffffffdd;
+}
+
+#main exp-form {
+	width: 700px;
+	display: block;
+	margin: 10px;
+}

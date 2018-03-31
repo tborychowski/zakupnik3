@@ -1,5 +1,5 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	devtool: 'inline-source-map',
@@ -16,23 +16,23 @@ module.exports = {
 		rules: [
 			{ test: /\.html$/, use: 'html-loader' },
 			// { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
-			{ test: /\.css$/, use: 'css-loader', include: /client\/components/ },
+			// { test: /\.css$/, use: 'css-loader', include: /client\/components/ },
 			{ test: /\.css$/, use: ['style-loader', 'css-loader'], exclude: /client\/components/ },
 			{ test: /\.svg$/, use: [{ loader: 'file-loader', options: {} }] }
 		]
 	},
-	plugins: [
-		new CopyWebpackPlugin([
-			{
-				from: path.resolve(__dirname, 'node_modules/@webcomponents/webcomponentsjs/*.{js,map}'),
-				ignore: 'gulpfile.js',
-				flatten: true
-			},
-			// {
-			// 	from: path.resolve(__dirname, 'src/*.css'),
-			// 	copyUnmodified: true,
-			// 	flatten: true
-			// },
-		])
-	]
+	// plugins: [
+	// 	new CopyWebpackPlugin([
+	// 		{
+	// 			from: path.resolve(__dirname, 'node_modules/@webcomponents/webcomponentsjs/*.{js,map}'),
+	// 			ignore: 'gulpfile.js',
+	// 			flatten: true
+	// 		},
+	// 		{
+	// 			from: path.resolve(__dirname, 'src/*.css'),
+	// 			copyUnmodified: true,
+	// 			flatten: true
+	// 		},
+	// 	])
+	// ]
 };

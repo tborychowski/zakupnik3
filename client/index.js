@@ -4,5 +4,5 @@ import { helper } from './core/index.js';
 
 helper.init([
 	'header',
-	'form',
+	'main',
 ]);

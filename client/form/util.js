@@ -1,31 +1,4 @@
 
-function getOptionHtml (opt) {
-	return `<option value="${opt.id}">${opt.name}</option>`;
-}
-
-function getGroupHtml (grp) {
-	if (!grp.items) return '';
-	const options = grp.items.map(getOptionHtml).join('');
-	return `<optgroup label="${grp.name}">${options}</optgroup>`;
-}
-
-
-function getRow (categories, idx = 0, description = '') {
-	const options = categories.map(getGroupHtml).join('');
-	let btns = idx === 0 ?
-		'<button type="button" title="Split" class="btn-split"></button>' :
-		'<button type="button" title="Remove" class="btn-unsplit"></button>';
-
-	return `<div class="form-row">
-		<input type="hidden" name="id">
-		<select name="category_id" class="category">${options}</select>
-  		<input name="description" class="description" placeholder="description" value="${description}">
-		<input name="amount" class="amount" placeholder="0.00">
-		${btns}
-	</div>`;
-}
-
-
 function parseAmount (amount) {
 	/* eslint no-eval: 0 */
 	amount = ('' + amount).replace(/\s/g, '');
@@ -34,7 +7,9 @@ function parseAmount (amount) {
 		try { amount = eval(amount); }
 		catch (e) { amount = 0; }
 	}
-	return parseFloat(amount) || 0;
+	let num = parseFloat(amount);
+	if (num === Infinity || isNaN(num) || num < 0) num = 'error';
+	return num;
 }
 
 // yyyy-mm
@@ -61,7 +36,7 @@ function addMonthsToDate (date, monthDiff) {
 	const dateObj = parseDateStr(date);
 	let year = dateObj.year;
 	let month = dateObj.month + monthDiff;
-	if (month >=13) {
+	if (month >= 13) {
 		year = year + Math.floor(month / 12);
 		month = (month % 12) + 1;
 	}
@@ -92,6 +67,5 @@ function repeatEntries (entries, repeater) {
 export default {
 	parseDateStr,
 	parseAmount,
-	getRow,
 	repeatEntries,
 };

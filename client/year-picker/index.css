@@ -1,9 +1,7 @@
 .year-picker {
 	-moz-user-select: none;
 	user-select: none;
-	position: relative;
 	font: inherit;
-	width: inherit;
 	display: flex;
 	height: 100%;
 	background-color: rgba(255,255,255,0.9);
@@ -13,6 +11,7 @@
 	appearance: textfield;
 	-webkit-appearance: textfield;
 	-moz-appearance: textfield;
+	border: none;
 	text-align: center;
 	font: inherit;
 	min-width: 3em;
@@ -22,7 +21,7 @@
 	flex: 1;
 }
 
-.year-picker .btn {
+.year-picker button {
 	background-color: transparent;
 	box-sizing: border-box;
 	border: none;

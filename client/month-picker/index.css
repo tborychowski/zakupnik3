@@ -1,9 +1,6 @@
-
 .month-picker {
 	-moz-user-select: none;
 	user-select: none;
-	position: relative;
-	width: inherit;
 	display: flex;
 	height: 100%;
 	font: inherit;

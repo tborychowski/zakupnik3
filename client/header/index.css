@@ -9,12 +9,12 @@ header {
 
 header,
 .btn-today,
-month-picker,
-year-picker { position: absolute; top: 0; }
+#month-picker,
+#year-picker { position: absolute; top: 0; }
 
 .btn-today,
-month-picker,
-year-picker { height: 100%; }
+#month-picker,
+#year-picker { height: 100%; }
 
 .btn-today {
 	font: inherit;
@@ -31,9 +31,9 @@ year-picker { height: 100%; }
 
 
 
-month-picker { left: 91px; right: 101px; z-index: 1; transition: left .3s ease-out; }
-year-picker { right: 0; width: 100px; }
+#month-picker { left: 91px; right: 101px; z-index: 1; transition: left .3s ease-out; }
+#year-picker { right: 0; width: 100px; }
 
 
 .is-today .btn-today { left: -91px; }
-.is-today month-picker { left: 0; }
+.is-today #month-picker { left: 0; }
