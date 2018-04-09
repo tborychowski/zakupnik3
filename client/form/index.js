@@ -1,4 +1,3 @@
-require('./index.css');
 import {Component} from '../core';
 import util from './util.js';
 import templates from './templates.js';

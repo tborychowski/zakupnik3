@@ -1,8 +1,7 @@
-require('./index.css');
-import { helper } from './core/index.js';
-
+import { helper } from './core/';
 
 helper.init([
 	'header',
 	'main',
 ]);
+

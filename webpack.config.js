@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
 	devtool: 'inline-source-map',
-	mode: 'development',
+	// mode: 'development',
 	entry: { index: './client/index.js' },
 	output: {
 		filename: '[name].js',
@@ -14,11 +14,16 @@ module.exports = {
 	stats: 'minimal',
 	module: {
 		rules: [
-			{ test: /\.html$/, use: 'html-loader' },
-			// { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
+			{ test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
+			{
+				test: /\.html$/,
+				exclude: /node_modules/,
+				use: { loader: 'svelte-loader', options: { css: false } },
+			},
+			// { test: /\.html$/, use: 'html-loader' },
 			// { test: /\.css$/, use: 'css-loader', include: /client\/components/ },
-			{ test: /\.css$/, use: ['style-loader', 'css-loader'], exclude: /client\/components/ },
-			{ test: /\.svg$/, use: [{ loader: 'file-loader', options: {} }] }
+			// { test: /\.css$/, use: ['style-loader', 'css-loader'], exclude: /client\/components/ },
+			// { test: /\.svg$/, use: [{ loader: 'file-loader', options: {} }] }
 		]
 	},
 	// plugins: [

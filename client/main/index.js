@@ -1,4 +1,3 @@
-require('./index.css');
 import ExpForm from '../form';
 
 

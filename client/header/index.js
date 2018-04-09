@@ -1,5 +1,3 @@
-require('./index.css');
-
 import YearPicker from '../year-picker';
 import MonthPicker from '../month-picker';
 import { $ } from '../core';

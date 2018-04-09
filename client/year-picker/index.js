@@ -1,4 +1,3 @@
-require('./index.css');
 import {Component} from '../core';
 
 export default class YearPicker extends Component {

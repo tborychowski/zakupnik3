@@ -1,0 +1,230 @@
+main-font = 'open_sanslight', sans-serif;
+sidebar-bg = #222
+sidebar-width = 300
+
+img-base = "../assets"
+body-bg = #4A5E71;
+body-bg-dark = rgba(#000, .4);
+menu-width = 50px;
+top-height = 40px;
+middle-width = 490px;
+
+form-color = rgba(#fff, 0.4);
+form-color-light = #eee;
+form-color-dark = #444;
+
+
+
+//*** SHORTCUTS ************************************************************************************
+b(n) { if n is 0 { font-weight: normal } else { font-weight: bold } }				// b:1 -> font-weight: bold;
+i(n) { if n is 0 { font-style: normal } else { font-style: italic } }				// i:1 -> font-style: italic;
+u(n) { if n is 0 { text-decoration: none } else { text-decoration: underline } }	// u:1 -> text-decoration: underline;
+
+padding() { padding: joinArgs(arguments) }
+padding-left(a) { padding-left: px(a) }
+padding-right(a) { padding-right: px(a) }
+padding-top(a) { padding-top: px(a) }
+padding-bottom(a) { padding-bottom: px(a) }
+
+margin() { margin: joinArgs(arguments) }
+margin-left(a) { margin-left: px(a) }
+margin-right(a) { margin-right: px(a) }
+margin-top(a) { margin-top: px(a) }
+margin-bottom(a) { margin-bottom: px(a) }
+
+size(w, h=w) { width: px(w); height: px(h); }
+width(n = 0) { width: px(n) }
+height(n = 0) { height: px(n) }
+
+top(n = 0) { top: px(n) }
+right(n = 0) { right: px(n) }
+left(n = 0) { left: px(n) }
+bottom(n = 0) { bottom: px(n) }
+
+z(n = 0) { z-index: n }
+//*** SHORTCUTS ************************************************************************************
+
+
+// top, right, bottom, left
+pos()
+	a = arguments
+	position: absolute;
+	unless type(a[0]) is not 'unit' { top: px(a[0]); }
+	unless type(a[1]) is not 'unit' { right: px(a[1]); }
+	unless type(a[2]) is not 'unit' { bottom: px(a[2]); }
+	unless type(a[3]) is not 'unit' { left: px(a[3]); }
+
+show(n)
+	if n is 0 { display: none; } else if n is 1 { display: inline-block; } else { display: block; }
+
+text(arg)
+	if arg in (left center right)
+		text-align: arg;
+
+font()
+	if length(arguments) is 3 and type(arguments[1]) is 'literal'	// font: 12/2 -> font-size: 12px; line-height: 2
+		font-size: px(arguments[0]);
+		line-height: arguments[2]
+	else if length(arguments) is 1									// font: 13 -> font-size: 13px;
+		if type(arguments[0]) == 'unit'
+			font-size: px(arguments[0]);
+		else
+			font: arguments;
+	else															// use native font
+		font: arguments;
+
+
+
+// x, y=1, blur=1, col=black, op =.3, io=, ext=
+shadow()
+	if length(arguments[0]) > 1
+		vendor(box-shadow, shadowMultiple(arguments));
+	else
+		if (arguments[0] is none)
+			vendor(box-shadow, none)
+		else
+			vendor(box-shadow, shadowSingle(arguments));
+
+// border: [top] [1px] [solid] [blue], e.g. border: 1px; border: red; border: top blue; border: top 1px; border: top 2px dotted green;
+border-top() { border-top: setBorder(arguments); }
+border-right() { border-right: setBorder(arguments); }
+border-bottom() { border-bottom: setBorder(arguments); }
+border-left() { border-left: setBorder(arguments); }
+border()
+	if arguments[0] == 'none' { border: none; } else { border: setBorder(arguments); }
+
+border-radius() { border-radius: joinArgs(arguments); }
+
+
+gradient()
+	vendorVal(background, 'linear-gradient(top,' + join(',', arguments) + ')', webkit moz o ms)
+
+lgradient()
+	vendorVal(background, 'linear-gradient(left,' + join(',', arguments) + ')', webkit moz o ms)
+
+// set background, e.g. bg: red; bg: img x y; bg: red img;
+bg()
+	arg = arguments
+	if type(arg[0]) == 'rgba'
+		if length(arg) > 1
+			background: arg[0] setBg(arg[1], arg[2] || 0, arg[3] || 0, arg[4] || no-repeat)
+		else
+			background: arg[0]
+	else
+		if arguments[0] == 'none'
+			background: none
+		else
+			background: setBg(arg[0], arg[1] || 0, arg[2] || 0, arg[3] || no-repeat)
+
+
+not-selectable()
+	-webkit-touch-callout: none;
+	vendor(user-select, none, webkit khtml moz ms)
+	cursor: default;
+
+selectable()
+	-webkit-touch-callout: text;
+	vendor(user-select, text, webkit khtml moz ms)
+
+
+
+rotate(d = 0)
+	vendor(transform, s('rotate(%sdeg) translateZ(1px)', d), webkit moz o ms)	// translateZ added for smoothing and Fx border space bug
+
+
+
+
+
+
+
+
+
+
+
+
+//*** STYLE HELPERS ********************************************************************************
+shadowMultiple()
+	for arg, idx in arguments
+		if length(arg) > 1 {
+			if idx == 0 { sh = ''+shadowSingle(arg) } else { push(sh, ''+shadowSingle(arg)) }
+		}
+	return unquote(join(', ', sh))
+
+shadowSingle()
+	arg = arguments
+	if arg[2] == null {	arg[2] = 1 }
+	if arg[1] == null { arg[1] = 1 }
+	if type(arg[3]) == 'rgba' || length(arguments) < 4 {																		// x y blur color opacity inset/outset
+		if arg[5] == null { arg[5] = unquote('') }
+		if arg[4] == null { arg[4] = 1 } else if type(arg[4]) == 'ident' { arg[5] = arg[4]; arg[4] = 1; }						// if opacity omitted - assume 1;
+		if arg[3] == null { arg[3] = black }
+		params = px(arg[0]) px(arg[1]) px(arg[2]) rgba(arg[3], arg[4]) arg[5];
+	} else {																													// x y blur size color opacity inset/outset
+		if arg[6] == null { arg[6] = unquote('') }
+		if arg[5] == null { arg[5] = 1 } else if type(arg[5]) == 'ident' { arg[6] = arg[5]; arg[5] = 1; }						// if opacity omitted - assume 1;
+		if arg[4] == null { arg[4] = black }
+		if arg[3] == null { arg[3] = 0 }
+		params = px(arg[0]) px(arg[1]) px(arg[2]) px(arg[3]) rgba(arg[4], arg[5]) arg[6];
+	}
+	return params;
+
+
+// border: [1px] [solid] [blue], e.g. border: 1; border: red; border: 1 red; border: 1 dotted red;
+setBorder()
+	arg = arguments
+	if arg[0] == 'none'
+		return none
+	else if type(arg[0]) == 'unit'
+		size = arg[0]
+		if type(arg[1]) == 'rgba'
+			color = arg[1]
+			style = solid
+		else
+			if type(arg[1]) == 'ident'
+				style = arg[1]
+				if type(arg[2]) == 'rgba' { color = arg[2] } else { color = transparent }
+			else
+				style = solid
+				if arg[1] == null
+					color = transparent
+	else
+		size = 1
+		style = solid
+		if type(arg[0]) == 'rgba' { color = arg[0] }
+
+	return px(size) style color;
+
+
+setBg()
+	arg = arguments
+	return unquote('url(' + img-base + '/' + unquote(arg[0]) + ') ' + px(arg[1]) + ' ' + px(arg[2]) + ' ' + arg[3]);
+//*** STYLE HELPERS ********************************************************************************
+
+
+
+
+
+//*** GENERIC HELPERS ******************************************************************************
+px(a)
+	if type(a) == 'unit'
+		if unit(a) == 'px' || a == 0 { return a } else { return (a + 0px) }
+	else
+		return a
+
+// Joins arguments with space and adds "px" to values if needed
+joinArgs(args)
+	buf = ''
+	for arg, i in args
+		if i { buf += ' ' + px(arg)	} else { buf += px(arg) }
+	return unquote(buf)
+
+// Vendorize, e.g. -moz-box-shadow
+vendor(prop, params, vendorList = webkit moz)
+	for vendor in vendorList { -{vendor}-{prop}: params }
+	{prop}: params
+
+// Vendorize property value, e.g.  -moz-linear-gradient
+vendorVal(prop, params, vendorList = webkit moz)
+	for vendor in vendorList { {prop}: unquote('-' + vendor + '-' + params) }
+	{prop}: unquote(params)
+//*** GENERIC HELPERS ******************************************************************************
