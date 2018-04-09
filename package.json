@@ -9,25 +9,13 @@
   },
   "scripts": {
     "build": "gulp",
-    "start:server": "nodemon --watch ./server ./server",
-    "start:client": "gulp watch",
-    "start": "npm-run-all --parallel start:server start:client"
+    "start": "gulp watch"
   },
-  "dependencies": {
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "spdy": "^3.4.7"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
-    "copy-webpack-plugin": "^4.4.1",
-    "css-loader": "^0.28.9",
-    "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
     "gulp-clean-css": "^3.9.3",
     "gulp-concat": "^2.6.1",
@@ -35,19 +23,14 @@
     "gulp-livereload": "^3.8.1",
     "gulp-notify": "^3.2.0",
     "gulp-plumber": "^1.2.0",
+    "gulp-sourcemaps": "^2.6.4",
     "gulp-stylus": "^2.7.0",
     "gulp-uglify": "^3.0.0",
-    "html-loader": "^0.5.5",
     "minimist": "^1.2.0",
-    "nodemon": "^1.17.1",
-    "npm-run-all": "^4.1.2",
-    "style-loader": "^0.20.3",
     "svelte": "^1.60.2",
     "svelte-loader": "^2.8.1",
     "through2": "^2.0.3",
     "webpack": "^4.0.1",
-    "webpack-cli": "^2.0.9",
-    "webpack-shell-plugin": "^0.5.0",
     "webpack-stream": "^4.0.3"
   }
 }

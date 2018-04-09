@@ -1,0 +1,121 @@
+<form class="form {{inEdit ? 'edit' : ''}}" on:submit="onsubmit(event)" on:input="oninput(event)">
+	<div class="subforms">
+		{{#each rows as row, idx}}
+		<div class="form-row">
+			<input type="hidden" bind:value=row.id>
+			<select class="select category" bind:value=row.category_id>
+				{{#each categories as group}}
+				<optgroup label="{{group.name}}">
+					{{#if group.items}}
+						{{#each group.items as cat}}
+						<option value="{{cat.id}}">{{cat.name}}</option>
+						{{/each}}
+					{{/if}}
+				</optgroup>
+				{{/each}}
+			</select>
+			<input class="description" placeholder="description" bind:value="row.description">
+			<input class="amount" placeholder="0.00" bind:value=row.amount on:keydown="onkeydown(event)">
+
+			{{#if idx === 0}}
+			<button type="button" title="Split" class="btn btn-split" on:click="split()"></button>
+			{{else}}
+			<button type="button" title="Remove" class="btn btn-unsplit" on:click="unsplit(idx)"></button>
+			{{/if}}
+		</div>
+		{{/each}}
+	</div>
+	<div class="form-row form-row-repeat">
+		<label>Repeat every month, for </label>
+		<input class="repeater" min="1" max="12" type="number" bind:value=repeat>
+		<label> months</label>
+	</div>
+	<div class="form-row form-row-buttons">
+		<button type="button" class="btn btn-reset" on:click="reset()">Reset</button>
+		<button type="button" class="btn danger btn-remove" on:click="remove()">Remove</button>
+		<div class="flex-filler"></div>
+		<button type="button" class="btn btn-cancel" on:click="reset()">Cancel</button>
+		<button type="submit" class="btn success btn-save" on:click="onsubmit()">Save</button>
+		<button type="submit" class="btn success btn-add" on:click="onsubmit()">Add</button>
+	</div>
+</form>
+
+<script>
+import util from './util.js';
+
+export default {
+	data () {
+		return {
+			inEdit: false,
+			date: '',
+			repeat: 1,
+			rows: [ {id: '', description: '', amount: ''} ],
+			categories: [],
+		};
+	},
+	methods: {
+		getData () {
+			const date = this.get('date') || new Date().toISOString().substr(0, 7);
+			const entries = util.deepCopyArray(this.get('rows')).map(e => {
+				e.date = date;
+				e.amount = util.parseAmount(e.amount);
+				return e;
+			});
+
+			// subtract other amounts from the first row
+			const amounts = entries.map((item, i) => i > 0 ? item.amount : 0);
+			const sum = amounts.reduce((a, b) => a + b, 0);	// add all up
+			entries[0].amount -= sum;
+
+			// repeat monthly
+			const repeater = this.get('repeat');
+			return util.repeatEntries(entries, repeater);
+		},
+
+		split () {
+			const rows = this.get('rows');
+			rows.push({id: '', description: rows[0].description, amount: ''});
+			this.set({ rows });
+		},
+
+		unsplit (idx) {
+			const rows = this.get('rows');
+			rows.splice(idx, 1);
+			this.set({ rows });
+		},
+
+		edit (data) {
+			this.set({ inEdit: true, rows: [data] });
+		},
+
+		reset () {
+			this.set({
+				inEdit: false,
+				repeat: 1,
+				rows: [ {id: '', description: '', amount: '' } ]
+			});
+			this.fire('change', { data: this.getData() });
+		},
+
+		oninput () {
+			this.fire('change', { data: this.getData() });
+		},
+
+		remove () {
+			this.fire('remove', { id: this.get('rows')[0].id });
+			this.reset();
+		},
+
+		onsubmit (e) {
+			e.preventDefault();
+			this.fire('submit', { data: this.getData() });
+			this.reset();
+		},
+
+		onkeydown (e) {
+			if (util.isAllowedKey(e)) return true;
+			e.preventDefault();
+		}
+	}
+};
+</script>

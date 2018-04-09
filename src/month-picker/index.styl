@@ -2,10 +2,15 @@
 	-moz-user-select none
 	user-select none
 	display flex
+	position absolute
+	top 0
+	left 91px
+	right 101px
 	height 100%
 	font inherit
 	overflow auto
-
+	z-index 1
+	transition left .3s ease-out
 
 
 .month
@@ -14,31 +19,30 @@
 	text-transform uppercase
 	flex 1
 	border none
-	background-color rgba(255,255,255,0.3)
+	background-color #fff5
 	height 100%
 	border 1px solid transparent
 	border-width 0 1px
 	padding-top 2px
-	color rgba(0,0,0,.6)
+	color #0009
 	overflow hidden
 
 
 
 .month.selected
-	background-color rgba(255,255,255,0.9)
+	background-color #fffe
 	border-color #444
-	color rgba(0,0,0,1)
+	color #000
 
 
 
+dot-size = 8px
 .month.current::after
-	--dot-size 8px
-
 	content ''
 	display block
-	width var(--dot-size)
-	height var(--dot-size)
-	border-radius var(--dot-size)
+	width dot-size
+	height dot-size
+	border-radius dot-size
 	background linear-gradient(#205DFFFF, #184ACAFF)
 	box-shadow 0 0 1px 1px #205DFF88
 	position absolute

@@ -1,0 +1,30 @@
+<div class="month-picker">
+	{{#each months as month, i}}
+		<button class="{{month.cls}}" on:click="onclick(i + 1)">{{month.name}}</button>
+	{{/each}}
+</div>
+
+<script>
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const currentMonth = (new Date()).getMonth() + 1;
+
+export default {
+	data () {
+		return { month: (new Date()).getMonth() + 1 };
+	},
+	computed: {
+		months: (month) => {
+			return months.map((m, i) => ({
+				name: m.substr(0, 3),
+				cls: `month ${month === i + 1 ? 'selected' : ''} ${currentMonth === i + 1 ? 'current' : ''}`
+			}));
+		}
+	},
+	methods: {
+		onclick (month) {
+			this.set({ month });
+			this.fire('change', { month });
+		}
+	}
+};
+</script>

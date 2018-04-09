@@ -79,5 +79,6 @@ export default {
 	parseDateStr,
 	parseAmount,
 	repeatEntries,
+	deepCopyArray,
 	isAllowedKey,
 };

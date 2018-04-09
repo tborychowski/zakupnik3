@@ -1,0 +1,38 @@
+@import "_lib"
+
+header
+	border-top 1px solid #444
+	border-bottom 1px solid #444
+	font-size 14px
+	width 100%
+	height header-h
+	position absolute
+	top 0
+
+
+.btn-today
+	position absolute
+	top 0
+	left 0
+	height 100%
+	width 90px
+	font inherit
+	border 1px solid transparent
+	border-width 0 1px
+	background #ffffff4d
+	padding-top 2px
+	text-transform uppercase
+	transition left .3s ease-out
+
+	&:active
+		background-color #ffffffe6
+		border-color #444
+		color #000
+
+
+.is-today
+	.btn-today
+		left -91px
+
+	.month-picker
+		left 0

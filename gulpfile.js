@@ -9,6 +9,7 @@ const plumber = require('gulp-plumber');
 const eslint = require('gulp-eslint');
 const uglify = require('gulp-uglify');
 const noop = require('through2').obj;
+const sourcemaps = require('gulp-sourcemaps');
 const isProd = require('minimist')(process.argv.slice(2)).prod;
 
 const wpErr = (err, stats) => {
@@ -24,7 +25,7 @@ gulp.task('help', () => {
 
 
 gulp.task('eslint', () => {
-	return gulp.src(['client/**/*.js'])
+	return gulp.src(['src/**/*.js'])
 		.pipe(eslint())
 		.pipe(eslint.format())
 		.pipe(eslint.failAfterError());
@@ -32,7 +33,8 @@ gulp.task('eslint', () => {
 
 
 gulp.task('js', ['eslint'], () => {
-	return gulp.src(['client/index.js'])
+	return gulp.src(['src/index.js'])
+		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(webpack(require('./webpack.config.js'), null, wpErr))
 		.pipe(isProd ? uglify() : noop())
 		.pipe(gulp.dest('assets/'))
@@ -41,11 +43,13 @@ gulp.task('js', ['eslint'], () => {
 
 
 gulp.task('styl', () => {
-	return gulp.src(['client/index.styl', 'client/**/*.styl'])
+	return gulp.src(['src/index.styl', 'src/**/*.styl'])
+		.pipe(isProd ? noop() : sourcemaps.init())
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(stylus({ paths: ['src'], 'include css': true }))
 		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
 		.pipe(concat('index.css'))
+		.pipe(isProd ? noop() : sourcemaps.write())
 		.pipe(gulp.dest('assets'))
 		.pipe(live());
 });
@@ -56,8 +60,8 @@ gulp.task('default', [ 'js', 'styl' ]);
 gulp.task('watch', ['default'], () => {
 	if (isProd) return;
 	live.listen();
-	gulp.watch('client/**/*.styl', ['styl']);
-	gulp.watch('client/**/*.js', ['js']);
-	gulp.watch('client/**/*.html', ['js']);
+	gulp.watch('src/**/*.styl', ['styl']);
+	gulp.watch('src/**/*.js', ['js']);
+	gulp.watch('src/**/*.html', ['js']);
 });
 
