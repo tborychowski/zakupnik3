@@ -1,38 +1,39 @@
 @import "_lib"
 
-default-color = #777
+default-color = #888
 info-color = #1a82fb
-positive-color = #57901D
-negative-color = #9a1616
+success-color = #57901D
+danger-color = #9a1616
 warning-color = #fa6800
 
 
 .btn
 	show 1;
-	padding 5 20
+	padding 6 24
 	margin-bottom 0;
-	font 13/1.4
+	font 16/1.4
 	height auto;
 	text-align center
 	white-space nowrap
 	vertical-align middle
 	cursor default
-	bg none
 	border transparent
-	border-radius 4
+	border-radius 6
 	shadow 0 1 1 #000 .06;
 	-webkit-app-region no-drag
 	color #fff
+	transition background-color .2s, border-color .2s
 
-
-	&:focus
-		outline none; shadow none;
 
 
 	// default
 	border-color lighten(default-color, 15%)
 	border-bottom-color darken(default-color, 15%)
 	gradient lighten(default-color, 10%) darken(default-color, 10%)
+
+	&:focus
+		box-shadow 0 0 1px 1px darken(default-color, 50%)
+
 	&:active
 		gradient default-color darken(default-color, 15%)
 		color #fff8
@@ -40,12 +41,15 @@ warning-color = #fa6800
 
 
 	&.success
-		border-color lighten(positive-color, 15%)
-		border-bottom-color darken(positive-color, 15%)
-		gradient lighten(positive-color, 10%) darken(positive-color, 10%)
+		border-color lighten(success-color, 15%)
+		border-bottom-color darken(success-color, 15%)
+		gradient lighten(success-color, 10%) darken(success-color, 10%)
+
+		&:focus
+			box-shadow 0 0 1px 1px darken(success-color, 50%)
 
 		&:active
-			gradient positive-color darken(positive-color, 15%)
+			gradient success-color darken(success-color, 15%)
 
 
 	&.info
@@ -53,23 +57,32 @@ warning-color = #fa6800
 		border-bottom-color darken(info-color, 15%)
 		gradient lighten(info-color, 10%) darken(info-color, 10%)
 
+		&:focus
+			box-shadow 0 0 1px 1px darken(info-color, 50%)
+
 		&:active
 			gradient info-color darken(info-color, 15%)
 
 
 	&.danger
-		border-color lighten(negative-color, 15%)
-		border-bottom-color darken(negative-color, 15%)
-		gradient lighten(negative-color, 10%) darken(negative-color, 10%)
+		border-color lighten(danger-color, 15%)
+		border-bottom-color darken(danger-color, 15%)
+		gradient lighten(danger-color, 10%) darken(danger-color, 10%)
+
+		&:focus
+			box-shadow 0 0 1px 1px darken(danger-color, 50%)
 
 		&:active
-			gradient negative-color darken(negative-color, 15%)
+			gradient danger-color darken(danger-color, 15%)
 
 
 	&.warning
 		border-color lighten(warning-color, 15%)
 		border-bottom-color darken(warning-color, 15%)
 		gradient lighten(warning-color, 10%) darken(warning-color, 10%)
+
+		&:focus
+			box-shadow 0 0 1px 1px darken(warning-color, 50%)
 
 		&:active
 			gradient warning-color darken(warning-color, 15%)

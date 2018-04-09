@@ -32,6 +32,13 @@ gulp.task('eslint', () => {
 });
 
 
+gulp.task('fonts', () => {
+	const pth = 'node_modules/ionicons/dist/';
+	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest('assets/'));
+	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest('fonts/'));
+});
+
+
 gulp.task('js', ['eslint'], () => {
 	return gulp.src(['src/index.js'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))

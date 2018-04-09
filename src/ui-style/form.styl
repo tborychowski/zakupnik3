@@ -11,16 +11,16 @@ input
 	vertical-align top
 	height 34
 	padding 0 10
-	transition background-color .2s, border-color .2s
+	transition background-color .3s ease-out, border-color .3s ease-out, box-shadow .3s ease-out
 	border 1 form-element-border
 	color form-element-text
-	bg rgba(form-element-bg, 0.1)
+	background-color rgba(form-element-bg, 0.1)
 
 
 	&:focus
-		border-color orange !important
-		outline none
-		bg rgba(form-element-bg, 0.8)
+		background-color rgba(form-element-bg, 0.8)
+		border-color orange
+		shadow 0 0 2 1 orange
 
 
 label
@@ -32,9 +32,10 @@ label
 select
 	display inline-block
 	width 100%
-	background-image url("data:image/svg+xmlcharset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E")
+	padding-top 1px
+	background-image url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E")
 	background-repeat no-repeat
-	background-position right center
+	background-position right .75rem center
 	background-size 8px 10px
 	-webkit-appearance none
 	-moz-appearance none

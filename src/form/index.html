@@ -18,9 +18,9 @@
 			<input class="amount" placeholder="0.00" bind:value=row.amount on:keydown="onkeydown(event)">
 
 			{{#if idx === 0}}
-			<button type="button" title="Split" class="btn btn-split" on:click="split()"></button>
+			<button type="button" title="Split" class="btn btn-split ion-md-swap" on:click="split()"></button>
 			{{else}}
-			<button type="button" title="Remove" class="btn btn-unsplit" on:click="unsplit(idx)"></button>
+			<button type="button" title="Remove" class="btn btn-unsplit ion-md-close" on:click="unsplit(idx)"></button>
 			{{/if}}
 		</div>
 		{{/each}}

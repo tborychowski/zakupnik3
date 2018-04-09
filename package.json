@@ -26,6 +26,7 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-stylus": "^2.7.0",
     "gulp-uglify": "^3.0.0",
+    "ionicons": "^3.0.0",
     "minimist": "^1.2.0",
     "svelte": "^1.60.2",
     "svelte-loader": "^2.8.1",
