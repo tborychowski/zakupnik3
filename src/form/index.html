@@ -3,7 +3,7 @@
 		{{#each rows as row, idx}}
 		<div class="form-row">
 			<input type="hidden" bind:value=row.id>
-			<select class="select category" bind:value=row.category_id>
+			<select class="select category" bind:value=row.category_id autofocus="autofocus">
 				{{#each categories as group}}
 				<optgroup label="{{group.name}}">
 					{{#if group.items}}
