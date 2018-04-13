@@ -1,19 +1,21 @@
-<form class="form {{inEdit ? 'edit' : ''}}" on:submit="onsubmit(event)" on:input="oninput(event)">
+<form ref:form class="form {{inEdit ? 'edit' : ''}}" on:submit="onsubmit(event)" on:input="oninput(event)">
 	<div class="subforms">
 		{{#each rows as row, idx}}
 		<div class="form-row">
 			<input type="hidden" bind:value=row.id>
-			<select class="select category" bind:value=row.category_id autofocus="autofocus">
-				{{#each categories as group}}
-				<optgroup label="{{group.name}}">
-					{{#if group.items}}
+			<div class="select-wrap">
+				<select class="select category" bind:value=row.category_id autofocus="autofocus">
+					{{#each categories as group}}
+					<optgroup label="{{group.name}}">
+						{{#if group.items}}
 						{{#each group.items as cat}}
 						<option value="{{cat.id}}">{{cat.name}}</option>
 						{{/each}}
-					{{/if}}
-				</optgroup>
-				{{/each}}
-			</select>
+						{{/if}}
+					</optgroup>
+					{{/each}}
+				</select>
+			</div>
 			<input class="description" placeholder="description" bind:value="row.description">
 			<input class="amount" placeholder="0.00" bind:value=row.amount on:keydown="onkeydown(event)">
 
@@ -41,13 +43,13 @@
 </form>
 
 <script>
-import util from './util.js';
+import util from './form-util.js';
 
 export default {
 	data () {
 		return {
 			inEdit: false,
-			date: '',
+			date: new Date().toISOString().substr(0, 7),
 			repeat: 1,
 			rows: [ {id: '', description: '', amount: ''} ],
 			categories: [],
@@ -56,11 +58,12 @@ export default {
 	methods: {
 		getData () {
 			const date = this.get('date') || new Date().toISOString().substr(0, 7);
-			const entries = util.deepCopyArray(this.get('rows')).map(e => {
-				e.date = date;
-				e.amount = util.parseAmount(e.amount);
-				return e;
-			});
+			const entries = util.deepCopyArray(this.get('rows'))
+				.map(e => {
+					e.date = date;
+					e.amount = util.parseAmount(e.amount);
+					return e;
+				});
 
 			// subtract other amounts from the first row
 			const amounts = entries.map((item, i) => i > 0 ? item.amount : 0);

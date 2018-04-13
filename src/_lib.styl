@@ -3,9 +3,12 @@ main-font = system,-apple-system,".SFNSDisplay-Regular","Helvetica Neue",Helveti
 img-base = "../assets"
 header-h = 40
 
-form-element-border = rgba(#333, 0.5);
-form-element-text = #222;
+form-element-border = rgba(#333, 0.5)
+form-element-text = #222
 form-element-bg = #f5f5f5f5
+
+accent-color = orange
+
 
 
 //*** SHORTCUTS ************************************************************************************
@@ -118,12 +121,6 @@ not-selectable()
 selectable()
 	-webkit-touch-callout: text;
 	vendor(user-select, text, webkit khtml moz ms)
-
-
-
-rotate(d = 0)
-	vendor(transform, s('rotate(%sdeg) translateZ(1px)', d), webkit moz o ms)	// translateZ added for smoothing and Fx border space bug
-
 
 
 

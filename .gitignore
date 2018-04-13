@@ -1,11 +1,6 @@
 node_modules/
 assets/
 _stuff/
-.sessionsecret
 
 .DS_Store
-*.sublime-*
 *.log
-
-*.crt
-*.key

@@ -1,0 +1,25 @@
+<div class="table" ref:table>
+	{{#if data && data.items }}
+		{{#each data.items as item, idx}}
+			<div>{{item.date}} ||
+				{{item.category}} ||
+				{{item.description}} ||
+				€{{item.amount_str}}</div>
+		{{/each}}
+		<div>Total: €{{data.total_str}}</div>
+	{{/if}}
+</div>
+
+
+<script>
+export default {
+	data () {
+		return { data: [] };
+	},
+	oncreate () {
+	},
+
+	methods: {
+	}
+};
+</script>

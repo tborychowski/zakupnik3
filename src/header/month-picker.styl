@@ -1,3 +1,5 @@
+@import "_lib"
+
 .month-picker
 	-moz-user-select none
 	user-select none
@@ -42,12 +44,9 @@ dot-size = 8px
 	display block
 	width dot-size
 	height dot-size
-	border-radius dot-size
-	background linear-gradient(#205DFFFF, #184ACAFF)
-	box-shadow 0 0 1px 1px #205DFF88
+	background-color #444
 	position absolute
 	left 50%
-	bottom -3px
-	transform translateX(-50%)
-	opacity 0.8
+	bottom -(dot-size / 2)
+	transform translateX(-50%) rotate(45deg)
 

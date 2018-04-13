@@ -3,8 +3,8 @@
 <YearPicker ref:yearPicker on:change="onYearPickerChange(event.year)"></YearPicker>
 
 <script>
-import YearPicker from '../year-picker';
-import MonthPicker from '../month-picker';
+import YearPicker from './year-picker';
+import MonthPicker from './month-picker';
 
 const today = new Date();
 let currentDate;
@@ -13,19 +13,9 @@ const isSameDay = (d1, d2) => format(d1) === format(d2);
 
 
 export default {
-	data () {
-		return { isToday: false };
-	},
-
-	components: {
-		MonthPicker,
-		YearPicker,
-	},
-
-	oncreate () {
-		this.goto();
-	},
-
+	data () { return { isToday: false }; },
+	components: { MonthPicker, YearPicker },
+	oncreate () { this.goto(); },
 	methods: {
 		goto (day = today) {
 			currentDate = day;
@@ -52,7 +42,6 @@ export default {
 			this.refs.monthPicker.set({ month: day.getMonth() + 1 });
 			this.goto(day);
 		}
-
-	},
+	}
 };
 </script>

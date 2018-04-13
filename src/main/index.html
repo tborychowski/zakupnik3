@@ -1,47 +1,57 @@
-<ExpForm ref:form></ExpForm>
+<Form ref:form></Form>
+<Table ref:table></Table>
 
 <script>
-import ExpForm from '../form';
-
+import Form from './form';
+import Table from './table';
+import {Categories, Expenses} from './data';
 
 export default {
-	data () {
-		return {};
-	},
-
-	components: {
-		ExpForm,
-	},
-
+	data () { return {}; },
+	components: { Form, Table },
 	oncreate () {
-		this.refs.form.set({
-			date: '2018-01',
-			categories: [
-				{ id: 'child_1', name: 'Child 1' },
-				{ id: 'child_2', name: 'Child 2', items: [
-					{ id: 'grandchild_21', name: 'Grandchild 1', parentId: 'child_2' },
-				]},
-				{ id: 'child_3', name: 'Child 3', items: [
-					{ id: 'grandchild_31', name: 'Grandchild 1', parentId: 'child_3' },
-					{ id: 'grandchild_32', name: 'Grandchild 2', parentId: 'child_3' },
-					{ id: 'grandchild_33', name: 'Grandchild 3', parentId: 'child_3' },
-				]},
-			]
-		});
-
-		this.refs.form.edit({
-			id: 5,
-			category_id: 'grandchild_33',
-			description: 'Lidl',
-			amount: 101
-		});
+		this.loadCategories();
+		this.loadTable();
 	},
-
 	methods: {
+		loadCategories () {
+			Categories.get().then(categories => {
+				this.refs.form.set({ categories });
+			});
+		},
+
+		loadTable () {
+			Expenses.get().then(data => {
+				this.refs.table.set({ data });
+			})
+		}
 	}
 };
 
 
+
+// this.refs.form.edit({
+// 	id: 5,
+// 	category_id: 'grandchild_33',
+// 	description: 'Lidl',
+// 	amount: 101
+// });
+
+
+// this.refs.form.set({
+// 	date: '2018-01',
+// 	categories: [
+// 		{ id: 'child_1', name: 'Child 1' },
+// 		{ id: 'child_2', name: 'Child 2', items: [
+// 			{ id: 'grandchild_21', name: 'Grandchild 1', parentId: 'child_2' },
+// 		]},
+// 		{ id: 'child_3', name: 'Child 3', items: [
+// 			{ id: 'grandchild_31', name: 'Grandchild 1', parentId: 'child_3' },
+// 			{ id: 'grandchild_32', name: 'Grandchild 2', parentId: 'child_3' },
+// 			{ id: 'grandchild_33', name: 'Grandchild 3', parentId: 'child_3' },
+// 		]},
+// 	]
+// });
 
 
 // el.on('remove', e => console.log(e));

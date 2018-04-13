@@ -2967,6 +2967,10 @@ liftoff@^2.1.0:
     rechoir "^0.6.2"
     resolve "^1.1.7"
 
+lite-grid@^1.6.4:
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/lite-grid/-/lite-grid-1.6.4.tgz#bfe7b137e1bf31e8bb02cf086f49a30281ab90c6"
+
 livereload-js@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/livereload-js/-/livereload-js-2.3.0.tgz#c3ab22e8aaf5bf3505d80d098cbad67726548c9a"
