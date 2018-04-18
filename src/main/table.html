@@ -1,0 +1,41 @@
+<div class="table" ref:table>
+	{{#if data && data.items }}
+		<table>
+		<thead><tr>
+			<td class="date">Date</td>
+			<td class="desc">Description</td>
+			<td class="amount">Amount</td>
+		</tr></thead>
+		<tbody>
+			{{#each data.items as item, idx}}
+				<tr>
+					<td>{{item.date.substr(0, 7)}}</td>
+					<td class="desc">{{item.category}} - {{item.description}}</td>
+					<td class="amount">{{item.amount_str}}</td>
+				</tr>
+			{{/each}}
+		</tbody>
+		<tfoot><tr>
+			<td colspan="2">
+				<!-- <i class="ion-md-search"></i> -->
+				<input class="table-filter" type="search" placeholder="Filter">
+			</td>
+			<td class="amount">{{data.total_str}}</td>
+		</tr></tfoot>
+		</table>
+	{{/if}}
+</div>
+
+
+<script>
+export default {
+	data () {
+		return { data: [] };
+	},
+	oncreate () {
+	},
+
+	methods: {
+	}
+};
+</script>

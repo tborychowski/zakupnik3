@@ -1,0 +1,89 @@
+@import "lib"
+
+default-color = #666
+info-color = #1a82fb
+success-color = #57901D
+danger-color = #9a1616
+warning-color = #fa6800
+
+
+.btn
+	show 1;
+	padding 3 20 4
+	min-width 80px
+	margin-bottom 0;
+	font 14/1.4
+	height auto;
+	text-align center
+	white-space nowrap
+	vertical-align middle
+	cursor default
+	border transparent
+	border-radius 6
+	shadow 0 1 1 #000 .06;
+	color #fff
+	transition background-color .2s, border-color .2s
+	user-select none
+
+
+
+	// default
+	border-color lighten(default-color, 15%)
+	border-bottom-color darken(default-color, 15%)
+	gradient lighten(default-color, 10%) darken(default-color, 10%)
+
+	&:focus
+		box-shadow 0 0 1px 1px darken(default-color, 50%)
+
+	&:active
+		gradient default-color darken(default-color, 15%)
+		color #fff8
+
+
+
+	&.success
+		border-color lighten(success-color, 15%)
+		border-bottom-color darken(success-color, 15%)
+		gradient lighten(success-color, 10%) darken(success-color, 10%)
+
+		&:focus
+			box-shadow 0 0 1px 1px darken(success-color, 50%)
+
+		&:active
+			gradient success-color darken(success-color, 15%)
+
+
+	&.info
+		border-color lighten(info-color, 15%)
+		border-bottom-color darken(info-color, 15%)
+		gradient lighten(info-color, 10%) darken(info-color, 10%)
+
+		&:focus
+			box-shadow 0 0 1px 1px darken(info-color, 50%)
+
+		&:active
+			gradient info-color darken(info-color, 15%)
+
+
+	&.danger
+		border-color lighten(danger-color, 15%)
+		border-bottom-color darken(danger-color, 15%)
+		gradient lighten(danger-color, 10%) darken(danger-color, 10%)
+
+		&:focus
+			box-shadow 0 0 1px 1px darken(danger-color, 50%)
+
+		&:active
+			gradient danger-color darken(danger-color, 15%)
+
+
+	&.warning
+		border-color lighten(warning-color, 15%)
+		border-bottom-color darken(warning-color, 15%)
+		gradient lighten(warning-color, 10%) darken(warning-color, 10%)
+
+		&:focus
+			box-shadow 0 0 1px 1px darken(warning-color, 50%)
+
+		&:active
+			gradient warning-color darken(warning-color, 15%)

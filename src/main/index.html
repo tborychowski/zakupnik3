@@ -1,0 +1,48 @@
+<div class="form-box">
+	<YearMonthPicker ref:picker></YearMonthPicker>
+	<Form ref:form></Form>
+</div>
+<Table ref:table></Table>
+
+<script>
+import YearMonthPicker from './YearMonthPicker';
+import Form from './form';
+import Table from './table';
+import {Categories, Expenses} from './data';
+
+export default {
+	data () { return {}; },
+	components: { Form, Table, YearMonthPicker },
+	oncreate () {
+		this.loadCategories();
+		this.loadTable();
+		this.refs.picker.on('change', e => console.log(e))
+	},
+	methods: {
+		loadCategories () {
+			Categories.get().then(categories => {
+				this.refs.form.set({ categories });
+			});
+		},
+
+		loadTable () {
+			Expenses.get().then(data => {
+				this.refs.table.set({ data });
+			})
+		}
+	}
+};
+
+// this.refs.form.edit({
+// 	id: 5,
+// 	category_id: 'grandchild_33',
+// 	description: 'Lidl',
+// 	amount: 101
+// });
+
+
+// el.on('remove', e => console.log(e));
+// el.on('change', e => console.log(e));
+// el.on('submit', e => console.log(e));
+
+</script>

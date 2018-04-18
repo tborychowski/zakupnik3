@@ -14,7 +14,7 @@
         "semi": [2, "always"],
         "no-undef": 2,
         "no-mixed-spaces-and-tabs": 2,
-        "no-unused-vars": 2,
+        "no-unused-vars": 1,
         "no-trailing-spaces": 2,
         "no-shadow": 2,
         "eol-last": 1,
