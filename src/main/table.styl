@@ -1,8 +1,62 @@
 @import "_lib"
 
+
 .table
-	width 700
-	height 500
-	margin 20 auto
-	box-shadow 0 1px 5px rgba(#000, .4)
-	background #eee
+	height 100%
+	overflow-y auto
+	padding 0
+	cursor default
+	font-size 14px
+
+	table
+		margin 0
+		width 100%
+		border-collapse collapse
+
+	.amount
+		text-align right
+
+	td
+		padding 8px 20px 6px
+		line-height 1
+
+	thead
+	tfoot
+		position sticky
+		td
+			background #ccc
+			font-weight 600
+	thead
+		top 0
+		td
+			padding-top 13px
+			padding-bottom 10px
+
+	tfoot
+		bottom 0
+
+	tbody
+	tfoot
+		.amount::before
+			content '€'
+			color #666
+			margin-right 5px
+	tbody
+		tr:nth-child(odd)
+			background #fcfcfc
+
+		tr:hover
+			background #aaa
+
+
+
+.table-filter
+	width 160px
+	font-weight normal
+	padding 1px 8px 0
+	height 20px
+	font-size 13px
+	text-align center
+
+	&:focus
+		text-align left

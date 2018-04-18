@@ -1,21 +1,32 @@
 @import "_lib"
 
 
-.flex-filler
-	flex 1
-
 .form
 	position relative
 	font inherit
-	width 700
-	margin 0 auto
-	box-shadow 0 1px 5px rgba(#000, .4)
-	background #eee
 
 	.btn-split
 	.btn-unsplit
 		width 32px
 		padding 5 0
+
+	.btn-remove
+	.btn-cancel
+	.btn-save
+		display none
+
+	&.edit
+		.btn-remove
+		.btn-cancel
+		.btn-save
+			display block
+
+		.btn-add
+		.btn-reset
+			display none
+
+.flex-filler
+	flex 1
 
 .form-row
 	display flex
@@ -39,13 +50,14 @@
 
 
 
-.form-row-buttons
+.form-footer
 	background #ccc
 	border-top 1px solid #aaa
-	padding 20px
+	padding 10px 20px
 
 	button
 		margin-left 10px
+
 
 	.btn-remove
 	.btn-reset
@@ -55,6 +67,9 @@
 
 .subforms
 	padding-top 10px
+
+	button
+		min-width 0
 
 	.form-row:first-child
 		padding-top 10px
@@ -83,20 +98,3 @@
 	.amount
 		width 100px
 		text-align right
-
-
-.form
-	.btn-remove
-	.btn-cancel
-	.btn-save
-		display none
-
-	&.edit
-		.btn-remove
-		.btn-cancel
-		.btn-save
-			display block
-
-		.btn-add
-		.btn-reset
-			display none

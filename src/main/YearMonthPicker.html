@@ -1,0 +1,117 @@
+<div class="year-month-picker {{isToday ? 'is-today': ''}}" on:wheel="onwheel(event)">
+	<button ref:leftButton class="btn-prev" title="Previous month"
+		on:keydown="keydown(event.key, -1)"
+		on:keyup="keyup(event.key)"
+		on:mousedown="tick(-1)"
+		on:mouseout="mup()"
+		on:mouseup="mup()"><i class="ion-ios-arrow-back"></i></button>
+
+	<span class="day">{{months[month]}} {{year}}</span>
+
+	<button ref:rightButton class="btn-next" title="Next month"
+		on:keydown="keydown(event.key, 1)"
+		on:keyup="keyup(event.key)"
+		on:mousedown="tick(1)"
+		on:mouseout="mup()"
+		on:mouseup="mup()"><i class="ion-ios-arrow-forward"></i></button>
+
+	<button title="Today" class="btn-today" on:click="reset()"><i class="ion-md-undo"></i></button>
+</div>
+
+<script>
+function zeroState () {
+	const d = new Date();
+	const month = d.getMonth();
+	const year = d.getFullYear();
+	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	return { months, month, year, current: { month, year } };
+}
+
+export default {
+	data () { return zeroState(); },
+	computed: {
+		isToday: (month, year, current) => {
+			return month === current.month && year === current.year;
+		}
+	},
+	methods: {
+		onwheel (e) {
+			const threshold = 2;
+			let val = null;
+			if (e.deltaY < -threshold) val = -1;
+			else if (e.deltaY > threshold) val = 1;
+			if (val) this.wheelThrottle(val, false);
+		},
+
+		wheelThrottle (value) {
+			if (!this.throttler) {
+				// this.tick(value, false);
+				this.go(value);
+				this.notify();
+				this.throttler = setTimeout(() => (this.throttler = null), 100);
+			}
+		},
+
+		keyup (key) {
+			this.keyIsDown = false;
+			if (this.ticker) clearTimeout(this.ticker);
+			if (key === ' ' || key === 'Enter' ||
+				key === 'ArrowLeft' || key === 'ArrowRight' ||
+				key === 'ArrowDown' || key === 'ArrowUp') this.notify();
+		},
+
+		keydown (key, value) {
+			if (this.keyIsDown) return;
+			if (key === 'ArrowLeft' || key === 'ArrowDown') {
+				this.refs.leftButton.focus();
+				this.keyIsDown = true;
+				return this.tick(-1);
+			}
+			if (key === 'ArrowRight' || key === 'ArrowUp') {
+				this.refs.rightButton.focus();
+				this.keyIsDown = true;
+				return this.tick(1);
+			}
+			if (key === ' ' || key === 'Enter') {
+				this.keyIsDown = true;
+				this.tick(value);
+			}
+		},
+
+		mup () {
+			if (this.ticker) clearTimeout(this.ticker);
+			if (this.mouseIsDown) this.notify();
+			this.mouseIsDown = false;
+		},
+
+		tick (value, delay = 300) {
+			if (this.ticker) clearTimeout(this.ticker);
+			this.go(value);
+			if (delay === false || this.get('isToday')) return;
+			this.mouseIsDown = true;
+			this.ticker = setTimeout(() => {
+				delay = Math.max(60, delay - 40);
+				this.tick(value, delay);
+			}, delay);
+		},
+
+		go (value) {
+			let {month, year} = this.get();
+			month += value;
+			if (month < 0) { month = 11; year -= 1; }
+			else if (month > 11) { month = 0; year += 1; }
+			this.set({ month, year });
+		},
+
+		notify () {
+			const {month, year} = this.get();
+			this.fire('change', { month, year });
+		},
+
+		reset () {
+			this.set(zeroState());
+			this.notify();
+		}
+	}
+};
+</script>

@@ -1,17 +1,22 @@
-<Form ref:form></Form>
+<div class="form-box">
+	<YearMonthPicker ref:picker></YearMonthPicker>
+	<Form ref:form></Form>
+</div>
 <Table ref:table></Table>
 
 <script>
+import YearMonthPicker from './YearMonthPicker';
 import Form from './form';
 import Table from './table';
 import {Categories, Expenses} from './data';
 
 export default {
 	data () { return {}; },
-	components: { Form, Table },
+	components: { Form, Table, YearMonthPicker },
 	oncreate () {
 		this.loadCategories();
 		this.loadTable();
+		this.refs.picker.on('change', e => console.log(e))
 	},
 	methods: {
 		loadCategories () {
@@ -27,8 +32,6 @@ export default {
 		}
 	}
 };
-
-
 
 // this.refs.form.edit({
 // 	id: 5,

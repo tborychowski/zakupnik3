@@ -1,6 +1,7 @@
 @import "_lib"
 
 .month-picker
+
 	-moz-user-select none
 	user-select none
 	display flex
@@ -15,38 +16,36 @@
 	transition left .3s ease-out
 
 
-.month
-	position relative
-	font inherit
-	text-transform uppercase
-	flex 1
-	border none
-	background-color #fff5
-	height 100%
-	border 1px solid transparent
-	border-width 0 1px
-	padding-top 2px
-	color #0009
-	overflow hidden
+	.month
+		position relative
+		font inherit
+		text-transform uppercase
+		flex 1
+		border none
+		background-color #fff5
+		height 100%
+		border 1px solid transparent
+		border-width 0 1px
+		padding-top 2px
+		color #0009
+		overflow hidden
 
 
 
-.month.selected
-	background-color #fffe
-	border-color #444
-	color #000
+	.month.selected
+		background-color #fffe
+		border-color #444
+		color #000
 
-
-
-dot-size = 8px
-.month.current::after
-	content ''
-	display block
-	width dot-size
-	height dot-size
-	background-color #444
-	position absolute
-	left 50%
-	bottom -(dot-size / 2)
-	transform translateX(-50%) rotate(45deg)
+	dot-size = 8px
+	.month.current::after
+		content ''
+		display block
+		width dot-size
+		height dot-size
+		background-color #444
+		position absolute
+		left 50%
+		bottom -(dot-size / 2)
+		transform translateX(-50%) rotate(45deg)
 
