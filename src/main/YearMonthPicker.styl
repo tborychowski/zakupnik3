@@ -1,26 +1,25 @@
-@import "_lib"
+@import "lib"
 
 .year-month-picker
 	position relative
-	-moz-user-select none
 	user-select none
-	font-size 20px
+	font 20
 	display flex
 	align-items stretch
 	justify-content center
-	padding 2px 0 0
-	height 50px
+	padding 2 0 0
+	height 50
 	background #ccc
-	border-bottom 1px solid #aaa
+	border-bottom #aaa
 
 	.btn-today
 	.btn-prev
 	.btn-next
-		border 1px solid transparent
+		border transparent
 		background none
-		border-radius 4px
+		border-radius 4
 		font-size inherit
-		margin 10px
+		margin 10
 		color #888
 
 		&:focus
@@ -32,13 +31,13 @@
 		height 100%
 		display flex
 		align-items center
-		padding 1px 10px 0
+		padding 1 10 0
 
 	.btn-today
 		position absolute
-		height 27px
-		top 2px
-		left 10px
+		top 2
+		left 10
+		height 27
 
 	&.is-today .btn-today
 		opacity 0

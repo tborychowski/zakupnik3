@@ -53,7 +53,7 @@ gulp.task('styl', () => {
 	return gulp.src(['src/index.styl', 'src/**/*.styl'])
 		.pipe(isProd ? noop() : sourcemaps.init())
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-		.pipe(stylus({ paths: ['src'], 'include css': true }))
+		.pipe(stylus({ paths: ['src', 'src/core'], 'include css': true }))
 		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
 		.pipe(concat('index.css'))
 		.pipe(isProd ? noop() : sourcemaps.write())

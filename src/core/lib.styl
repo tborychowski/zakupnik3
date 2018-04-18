@@ -1,7 +1,6 @@
 main-font = system,-apple-system,".SFNSDisplay-Regular","Helvetica Neue",Helvetica,"Segoe UI",sans-serif;
 
 img-base = "../assets"
-header-h = 40
 
 form-element-border = rgba(#333, 0.5)
 form-element-text = #222
@@ -50,12 +49,6 @@ pos()
 	unless type(a[2]) is not 'unit' { bottom: px(a[2]); }
 	unless type(a[3]) is not 'unit' { left: px(a[3]); }
 
-show(n)
-	if n is 0 { display: none; } else if n is 1 { display: inline-block; } else { display: block; }
-
-text(arg)
-	if arg in (left center right)
-		text-align: arg;
 
 font()
 	if length(arguments) is 3 and type(arguments[1]) is 'literal'	// font: 12/2 -> font-size: 12px; line-height: 2
@@ -71,16 +64,6 @@ font()
 
 
 
-// x, y=1, blur=1, col=black, op =.3, io=, ext=
-shadow()
-	if length(arguments[0]) > 1
-		vendor(box-shadow, shadowMultiple(arguments));
-	else
-		if (arguments[0] is none)
-			vendor(box-shadow, none)
-		else
-			vendor(box-shadow, shadowSingle(arguments));
-
 // border: [top] [1px] [solid] [blue], e.g. border: 1px; border: red; border: top blue; border: top 1px; border: top 2px dotted green;
 border-top() { border-top: setBorder(arguments); }
 border-right() { border-right: setBorder(arguments); }
@@ -91,12 +74,6 @@ border()
 
 border-radius() { border-radius: joinArgs(arguments); }
 
-
-gradient()
-	vendorVal(background, 'linear-gradient(top,' + join(',', arguments) + ')', webkit moz o ms)
-
-lgradient()
-	vendorVal(background, 'linear-gradient(left,' + join(',', arguments) + ')', webkit moz o ms)
 
 // set background, e.g. bg: red; bg: img x y; bg: red img;
 bg()
@@ -113,18 +90,9 @@ bg()
 			background: setBg(arg[0], arg[1] || 0, arg[2] || 0, arg[3] || no-repeat)
 
 
-not-selectable()
-	-webkit-touch-callout: none;
-	vendor(user-select, none, webkit khtml moz ms)
-	cursor: default;
-
-selectable()
-	-webkit-touch-callout: text;
-	vendor(user-select, text, webkit khtml moz ms)
-
-
-
-
+user-select()
+	-moz-user-select: arguments;
+	user-select: arguments;
 
 
 
@@ -133,31 +101,6 @@ selectable()
 
 
 //*** STYLE HELPERS ********************************************************************************
-shadowMultiple()
-	for arg, idx in arguments
-		if length(arg) > 1 {
-			if idx == 0 { sh = ''+shadowSingle(arg) } else { push(sh, ''+shadowSingle(arg)) }
-		}
-	return unquote(join(', ', sh))
-
-shadowSingle()
-	arg = arguments
-	if arg[2] == null {	arg[2] = 1 }
-	if arg[1] == null { arg[1] = 1 }
-	if type(arg[3]) == 'rgba' || length(arguments) < 4 {																		// x y blur color opacity inset/outset
-		if arg[5] == null { arg[5] = unquote('') }
-		if arg[4] == null { arg[4] = 1 } else if type(arg[4]) == 'ident' { arg[5] = arg[4]; arg[4] = 1; }						// if opacity omitted - assume 1;
-		if arg[3] == null { arg[3] = black }
-		params = px(arg[0]) px(arg[1]) px(arg[2]) rgba(arg[3], arg[4]) arg[5];
-	} else {																													// x y blur size color opacity inset/outset
-		if arg[6] == null { arg[6] = unquote('') }
-		if arg[5] == null { arg[5] = 1 } else if type(arg[5]) == 'ident' { arg[6] = arg[5]; arg[5] = 1; }						// if opacity omitted - assume 1;
-		if arg[4] == null { arg[4] = black }
-		if arg[3] == null { arg[3] = 0 }
-		params = px(arg[0]) px(arg[1]) px(arg[2]) px(arg[3]) rgba(arg[4], arg[5]) arg[6];
-	}
-	return params;
-
 
 // border: [1px] [solid] [blue], e.g. border: 1; border: red; border: 1 red; border: 1 dotted red;
 setBorder()
@@ -207,14 +150,4 @@ joinArgs(args)
 	for arg, i in args
 		if i { buf += ' ' + px(arg)	} else { buf += px(arg) }
 	return unquote(buf)
-
-// Vendorize, e.g. -moz-box-shadow
-vendor(prop, params, vendorList = webkit moz)
-	for vendor in vendorList { -{vendor}-{prop}: params }
-	{prop}: params
-
-// Vendorize property value, e.g.  -moz-linear-gradient
-vendorVal(prop, params, vendorList = webkit moz)
-	for vendor in vendorList { {prop}: unquote('-' + vendor + '-' + params) }
-	{prop}: unquote(params)
 //*** GENERIC HELPERS ******************************************************************************

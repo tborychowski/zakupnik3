@@ -1,4 +1,4 @@
-@import "_lib"
+@import "lib"
 
 
 .table
@@ -6,19 +6,17 @@
 	overflow-y auto
 	padding 0
 	cursor default
-	font-size 14px
+	font 14/1
 
 	table
 		margin 0
 		width 100%
 		border-collapse collapse
+	td
+		padding 8 20 6
 
 	.amount
 		text-align right
-
-	td
-		padding 8px 20px 6px
-		line-height 1
 
 	thead
 	tfoot
@@ -29,8 +27,8 @@
 	thead
 		top 0
 		td
-			padding-top 13px
-			padding-bottom 10px
+			padding-top 13
+			padding-bottom 10
 
 	tfoot
 		bottom 0
@@ -40,7 +38,7 @@
 		.amount::before
 			content '€'
 			color #666
-			margin-right 5px
+			margin-right 5
 	tbody
 		tr:nth-child(odd)
 			background #fcfcfc
@@ -51,11 +49,10 @@
 
 
 .table-filter
-	width 160px
+	size 160 20
 	font-weight normal
-	padding 1px 8px 0
-	height 20px
-	font-size 13px
+	padding 1 8 0
+	font 13
 	text-align center
 
 	&:focus
