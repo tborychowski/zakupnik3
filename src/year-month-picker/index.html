@@ -30,9 +30,8 @@ function zeroState () {
 export default {
 	data () { return zeroState(); },
 	computed: {
-		isToday: (month, year, current) => {
-			return month === current.month && year === current.year;
-		}
+		isToday: (month, year, current) => (month === current.month && year === current.year),
+		dateStr: (month, year) => `${year}-${('0' + (month + 1)).substr(-2)}`
 	},
 	methods: {
 		onwheel (e) {
@@ -45,7 +44,6 @@ export default {
 
 		wheelThrottle (value) {
 			if (!this.throttler) {
-				// this.tick(value, false);
 				this.go(value);
 				this.notify();
 				this.throttler = setTimeout(() => (this.throttler = null), 100);
@@ -87,7 +85,7 @@ export default {
 		tick (value, delay = 300) {
 			if (this.ticker) clearTimeout(this.ticker);
 			this.go(value);
-			if (delay === false || this.get('isToday')) return;
+			if (this.get('isToday')) return this.notify();
 			this.mouseIsDown = true;
 			this.ticker = setTimeout(() => {
 				delay = Math.max(60, delay - 40);
@@ -104,8 +102,8 @@ export default {
 		},
 
 		notify () {
-			const {month, year} = this.get();
-			this.fire('change', { month, year });
+			const {month, year, dateStr} = this.get();
+			this.fire('change', { month, year, dateStr });
 		},
 
 		reset () {

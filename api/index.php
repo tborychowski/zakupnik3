@@ -2,6 +2,10 @@
 require('lib/_lib.php');
 date_default_timezone_set('Europe/Dublin');
 
+//TODO: remove!!!
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 //header('content-type: text/plain; charset=utf8');	// XXX: for debug only
 

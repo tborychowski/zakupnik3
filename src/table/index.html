@@ -8,7 +8,7 @@
 		</tr></thead>
 		<tbody>
 			{{#each data.items as item, idx}}
-				<tr>
+				<tr on:click="onRowClick(item)">
 					<td>{{item.date.substr(0, 7)}}</td>
 					<td class="desc">{{item.category}} - {{item.description}}</td>
 					<td class="amount">{{item.amount_str}}</td>
@@ -36,6 +36,9 @@ export default {
 	},
 
 	methods: {
+		onRowClick (item) {
+			this.fire('click', item);
+		}
 	}
 };
 </script>

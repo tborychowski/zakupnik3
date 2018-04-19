@@ -1,3 +1,3 @@
-import Main from './main';
+import App from './app';
 
-new Main({ target: document.querySelector('#app') });
+new App({ target: document.querySelector('#app') });

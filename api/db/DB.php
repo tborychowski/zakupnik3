@@ -77,8 +77,11 @@ class DB {
 		if (!$this->db) return $this;
 		$id = $data['id'];
 		unset($data['id']);
+		unset($data['category']);
+		unset($data['amount_str']);
+
 		$res = $this->db->update($table, $data, [ 'id' => intval($id) ]);
-		$this->output = ['result' => 'success'];
+		$this->output = ['result' => $res ? 'success' : 'error'];
 		return $this;
 	}
 

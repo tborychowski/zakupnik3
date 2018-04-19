@@ -21,12 +21,13 @@ class Entries extends DB {
 			$columns = [
 				'entries.id',
 				'entries.date',
+				'entries.category_id',
 				'categories.name(category)',
 				'entries.description',
-				'entries.amount'
+				'entries.amount',
 			];
 
-			$where["ORDER"] = ["entries.date" => "DESC", "entries.id" => "DESC"];
+			$where["ORDER"] = ["entries.id" => "DESC", "entries.date" => "DESC"];
 
 			$this->output = $this->db->select($this->table, $join, $columns, $where);
 			$this->integerise('id,category_id,amount');

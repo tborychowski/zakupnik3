@@ -4,6 +4,8 @@
  * http://medoo.in
  * Version 1.1.3
  *
+ * docs: https://web.archive.org/web/20160920033402/http://medoo.in:80/api/debug
+ *
  * Copyright 2016, Angel Lai
  * Released under the MIT license
  */
@@ -748,7 +750,7 @@ class medoo
 		$column = $where == null ? $join : $columns;
 
 		$is_single_column = (is_string($column) && $column !== '*');
-		
+
 		$query = $this->query($this->select_context($table, $join, $columns, $where));
 
 		$stack = array();
@@ -955,7 +957,7 @@ class medoo
 				{
 					return $data[ 0 ][ preg_replace('/^[\w]*\./i', "", $column) ];
 				}
-				
+
 				if ($column === '*')
 				{
 					return $data[ 0 ];

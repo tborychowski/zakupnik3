@@ -1,0 +1,65 @@
+<div class="form-box">
+	<YearMonthPicker ref:picker></YearMonthPicker>
+	<Form ref:form></Form>
+</div>
+<Table ref:table></Table>
+
+<script>
+import YearMonthPicker from '../year-month-picker';
+import Form from '../form';
+import Table from '../table';
+import {Categories, Expenses} from '../data';
+
+export default {
+	data () { return {}; },
+	components: { Form, Table, YearMonthPicker },
+	oncreate () {
+		const date = new Date().toISOString().substr(0, 7);
+		Categories.get().then(categories => this.refs.form.set({ date, categories }));
+
+		this.refs.form.on('change', this.onFormChange.bind(this));
+		this.refs.form.on('remove', this.onRemoveItem.bind(this));
+		this.refs.form.on('submit', this.onFormSubmit.bind(this));
+		this.refs.form.on('error', this.onFormError.bind(this));
+		this.refs.picker.on('change', this.onDateChange.bind(this));
+		this.refs.table.on('click', this.onTableClick.bind(this));
+
+		this.loadTable(date);
+	},
+	methods: {
+		loadTable (date) {
+			if (!date) date = this.lastDate;
+			else this.lastDate = date;
+			Expenses.get(date).then(data => {
+				this.lastTableData = data;
+				this.setData(data);
+			});
+		},
+
+		setData (data) { this.refs.table.set({ data }); },
+
+		onDateChange (date) { this.refs.form.set({ date: date.dateStr }); },
+
+		onFormChange (data) {
+			console.log('form changed', data);
+		},
+
+		onFormSubmit (data) {
+			Expenses.save(data).then(() => {
+				this.loadTable();
+			});
+		},
+
+		onRemoveItem (item) {
+			console.log(item);
+		},
+
+		onFormError (err) {
+			console.log(err);	// TODO: toast?
+		},
+
+		onTableClick (item) { this.refs.form.edit(item); },
+	}
+};
+
+</script>
