@@ -4,3 +4,8 @@ _stuff/
 
 .DS_Store
 *.log
+
+*.crt
+*.key
+
+mongodb/

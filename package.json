@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "gulp",
+    "start:db": "mongod --dbpath ./mongodb",
     "start:client": "gulp watch",
     "start:server": "nodemon --watch ./server ./server",
     "start": "npm-run-all --parallel start:server start:client"
