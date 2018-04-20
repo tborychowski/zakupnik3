@@ -11,9 +11,9 @@ const uglify = require('gulp-uglify');
 const noop = require('through2').obj;
 const sourcemaps = require('gulp-sourcemaps');
 const isProd = require('minimist')(process.argv.slice(2)).prod;
-
+const webpackConfig = require('./webpack.config.js');
 const PUBLIC_PATH = 'public/';
-'
+
 const wpErr = (err, stats) => {
 	if (err) notify.onError('Error: ' + err);
 	err = stats.compilation.errors;
@@ -36,15 +36,20 @@ gulp.task('eslint', () => {
 
 gulp.task('fonts', () => {
 	const pth = 'node_modules/ionicons/dist/';
-	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest(PUBLIC_PATH));
-	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(`${PUBLIC_PATH}fonts/`));
+	const out = `${PUBLIC_PATH}fonts/`;
+	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest(out));
+	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(out));
 });
 
+
+gulp.task('html', () => {
+	gulp.src(['client/*.html']).pipe(gulp.dest(PUBLIC_PATH));
+});
 
 gulp.task('js', ['eslint'], () => {
 	return gulp.src(['client/index.js'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-		.pipe(webpack(require('./webpack.config.js'), null, wpErr))
+		.pipe(webpack(webpackConfig, null, wpErr))
 		.pipe(isProd ? uglify() : noop())
 		.pipe(gulp.dest(PUBLIC_PATH))
 		.pipe(live());
@@ -64,7 +69,7 @@ gulp.task('styl', () => {
 });
 
 
-gulp.task('default', [ 'js', 'styl' ]);
+gulp.task('default', [ 'js', 'styl', 'fonts', 'html', 'eslint' ]);
 
 gulp.task('watch', ['default'], () => {
 	if (isProd) return;
@@ -72,5 +77,6 @@ gulp.task('watch', ['default'], () => {
 	gulp.watch('client/**/*.styl', ['styl']);
 	gulp.watch('client/**/*.js', ['js']);
 	gulp.watch('client/**/*.html', ['js']);
+	gulp.watch('client/*.html', ['html']);
 });
 

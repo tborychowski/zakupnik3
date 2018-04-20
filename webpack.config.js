@@ -3,11 +3,11 @@ const path = require('path');
 module.exports = {
 	devtool: 'inline-source-map',
 	// mode: 'development',
-	entry: { index: './src/index.js' },
+	entry: { index: './client/index.js' },
 	output: {
 		filename: '[name].js',
-		path: path.join(__dirname, 'assets'),
-		publicPath: './assets/',
+		path: path.join(__dirname, 'public'),
+		publicPath: './public/',
 	},
 	resolve: { extensions: ['.js', '.json', '.html'] },
 	stats: 'minimal',
