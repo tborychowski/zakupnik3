@@ -3,7 +3,6 @@ const cssmin = require('gulp-clean-css');
 const webpack = require('webpack-stream');
 const concat = require('gulp-concat');
 const stylus = require('gulp-stylus');
-const live = require('gulp-livereload');
 const notify = require('gulp-notify');
 const plumber = require('gulp-plumber');
 const eslint = require('gulp-eslint');
@@ -51,8 +50,7 @@ gulp.task('js', ['eslint'], () => {
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(webpack(webpackConfig, null, wpErr))
 		.pipe(isProd ? uglify() : noop())
-		.pipe(gulp.dest(PUBLIC_PATH))
-		.pipe(live());
+		.pipe(gulp.dest(PUBLIC_PATH));
 });
 
 
@@ -64,8 +62,7 @@ gulp.task('styl', () => {
 		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
 		.pipe(concat('index.css'))
 		.pipe(isProd ? noop() : sourcemaps.write())
-		.pipe(gulp.dest(PUBLIC_PATH))
-		.pipe(live());
+		.pipe(gulp.dest(PUBLIC_PATH));
 });
 
 
@@ -73,7 +70,6 @@ gulp.task('default', [ 'js', 'styl', 'fonts', 'html', 'eslint' ]);
 
 gulp.task('watch', ['default'], () => {
 	if (isProd) return;
-	live.listen();
 	gulp.watch('client/**/*.styl', ['styl']);
 	gulp.watch('client/**/*.js', ['js']);
 	gulp.watch('client/**/*.html', ['js']);

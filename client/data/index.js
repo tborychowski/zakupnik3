@@ -1,11 +1,16 @@
 
 function get (url) {
-	return fetch(url).then(res => res.json());
+	return fetch(url, { credentials: 'include' }).then(res => res.json());
 }
 
 function post (url, params) {
 	const body = JSON.stringify(params);
-	const opts = { method: 'POST', body, headers: { 'Content-type': 'application/json' }};
+	const opts = {
+		method: 'POST',
+		headers: { 'Content-type': 'application/json' },
+		credentials: 'include',
+		body,
+	};
 	return fetch(url, opts).then(res => res.json());
 }
 

@@ -11,7 +11,7 @@
     "start:db": "mongod --dbpath ./mongodb",
     "start:client": "gulp watch",
     "start:server": "nodemon --watch ./server ./server",
-    "start": "npm-run-all --parallel start:server start:client"
+    "start": "npm-run-all --parallel start:db start:server start:client"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -29,7 +29,6 @@
     "gulp-clean-css": "^3.9.3",
     "gulp-concat": "^2.6.1",
     "gulp-eslint": "^4.0.2",
-    "gulp-livereload": "^3.8.1",
     "gulp-notify": "^3.2.0",
     "gulp-plumber": "^1.2.0",
     "gulp-sourcemaps": "^2.6.4",
@@ -37,6 +36,7 @@
     "gulp-uglify": "^3.0.0",
     "ionicons": "^3.0.0",
     "minimist": "^1.2.0",
+    "mongodb": "^3.0.7",
     "nodemon": "^1.17.1",
     "npm-run-all": "^4.1.2",
     "svelte": "^1.60.2",
