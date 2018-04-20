@@ -11,12 +11,13 @@
     "start:db": "mongod --dbpath ./mongodb",
     "start:client": "gulp watch",
     "start:server": "nodemon --watch ./server ./server",
-    "start": "npm-run-all --parallel start:db start:server start:client"
+    "start": "npm-run-all --parallel start:server start:client"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "mongoose": "^5.0.15",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "spdy": "^3.4.7"
@@ -36,7 +37,6 @@
     "gulp-uglify": "^3.0.0",
     "ionicons": "^3.0.0",
     "minimist": "^1.2.0",
-    "mongodb": "^3.0.7",
     "nodemon": "^1.17.1",
     "npm-run-all": "^4.1.2",
     "svelte": "^1.60.2",

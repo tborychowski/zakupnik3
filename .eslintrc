@@ -6,7 +6,8 @@
         "browser": true
     },
     "parserOptions": {
-        "sourceType": "module"
+		"sourceType": "module",
+		"ecmaVersion": 8
     },
     "rules": {
         "indent": [2, "tab"],

@@ -1,46 +1,21 @@
-const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017';
-const dbName = 'zakupnik';
+const mongoose = require('mongoose');
 
-let client, db;
+mongoose.connect('mongodb://localhost/zakupnik');
+
+const db = mongoose.connection;
+
+db.on('error', e => console.error('connection error:', e));
+db.once('open', () => console.log('Connected to DB'));
 
 
-function connect () {
-	if (db) Promise.resolve(db);
-	return new Promise((resolve, reject) => {
-		MongoClient.connect(url, function (err, _client) {
-			if (err) return reject(err);
-			client = _client;
-			resolve(_client.db(dbName));
-		});
-	})
+function Model (name, obj) {
+	const schema = mongoose.Schema(obj);
+	return mongoose.model(name, schema);
 }
 
-function disconnect () {
-	if (client) client.close();
-	client = null;
-}
-
-
-async function getAll (collection, params = {}) {
-	return new Promise((resolve, reject) => {
-		db.collection(collection)
-		.find(params)
-		.toArray((err, res) => {
-			if (err) return reject(err);
-			resolve(res);
-		});
-	});
-}
-
-async function get (collection, params = {}) {
-	db = await connect(dbName);
-	res = await getAll(collection, params);
-	disconnect();
-	return res;
-}
 
 
 module.exports = {
-	get,
+	db,
+	Model,
 };

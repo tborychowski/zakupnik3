@@ -16,6 +16,7 @@ export default {
 	oncreate () {
 		const date = new Date().toISOString().substr(0, 7);
 		Categories.get().then(categories => this.refs.form.set({ date, categories }));
+		this.loadTable(date);
 
 		this.refs.form.on('change', this.onFormChange.bind(this));
 		this.refs.form.on('remove', this.onRemoveItem.bind(this));
@@ -23,20 +24,17 @@ export default {
 		this.refs.form.on('error', this.onFormError.bind(this));
 		this.refs.picker.on('change', this.onDateChange.bind(this));
 		this.refs.table.on('click', this.onTableClick.bind(this));
-
-		this.loadTable(date);
 	},
+
 	methods: {
 		loadTable (date) {
 			if (!date) date = this.lastDate;
 			else this.lastDate = date;
 			Expenses.get(date).then(data => {
 				this.lastTableData = data;
-				this.setData(data);
+				this.refs.table.set({ data });
 			});
 		},
-
-		setData (data) { this.refs.table.set({ data }); },
 
 		onDateChange (date) { this.refs.form.set({ date: date.dateStr }); },
 

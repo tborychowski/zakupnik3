@@ -6,6 +6,7 @@ const Categories = require('./categories');
 
 
 api.get('/entries', Entries.get);
+api.get('/entries/:id', Entries.get);
 api.post('/entries', Entries.post);
 api.put('/entries/:id', Entries.put);
 api.delete('/entries/:id', Entries.del);
