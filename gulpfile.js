@@ -12,6 +12,8 @@ const noop = require('through2').obj;
 const sourcemaps = require('gulp-sourcemaps');
 const isProd = require('minimist')(process.argv.slice(2)).prod;
 
+const PUBLIC_PATH = 'public/';
+'
 const wpErr = (err, stats) => {
 	if (err) notify.onError('Error: ' + err);
 	err = stats.compilation.errors;
@@ -25,7 +27,7 @@ gulp.task('help', () => {
 
 
 gulp.task('eslint', () => {
-	return gulp.src(['src/**/*.js'])
+	return gulp.src(['client/**/*.js', 'server/**/*.js'])
 		.pipe(eslint())
 		.pipe(eslint.format())
 		.pipe(eslint.failAfterError());
@@ -34,30 +36,30 @@ gulp.task('eslint', () => {
 
 gulp.task('fonts', () => {
 	const pth = 'node_modules/ionicons/dist/';
-	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest('assets/'));
-	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest('fonts/'));
+	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest(PUBLIC_PATH));
+	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(`${PUBLIC_PATH}fonts/`));
 });
 
 
 gulp.task('js', ['eslint'], () => {
-	return gulp.src(['src/index.js'])
+	return gulp.src(['client/index.js'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(webpack(require('./webpack.config.js'), null, wpErr))
 		.pipe(isProd ? uglify() : noop())
-		.pipe(gulp.dest('assets/'))
+		.pipe(gulp.dest(PUBLIC_PATH))
 		.pipe(live());
 });
 
 
 gulp.task('styl', () => {
-	return gulp.src(['src/index.styl', 'src/**/*.styl'])
+	return gulp.src(['client/index.styl', 'client/**/*.styl'])
 		.pipe(isProd ? noop() : sourcemaps.init())
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-		.pipe(stylus({ paths: ['src', 'src/core'], 'include css': true }))
+		.pipe(stylus({ paths: ['client', 'client/core'], 'include css': true }))
 		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
 		.pipe(concat('index.css'))
 		.pipe(isProd ? noop() : sourcemaps.write())
-		.pipe(gulp.dest('assets'))
+		.pipe(gulp.dest(PUBLIC_PATH))
 		.pipe(live());
 });
 
@@ -67,8 +69,8 @@ gulp.task('default', [ 'js', 'styl' ]);
 gulp.task('watch', ['default'], () => {
 	if (isProd) return;
 	live.listen();
-	gulp.watch('src/**/*.styl', ['styl']);
-	gulp.watch('src/**/*.js', ['js']);
-	gulp.watch('src/**/*.html', ['js']);
+	gulp.watch('client/**/*.styl', ['styl']);
+	gulp.watch('client/**/*.js', ['js']);
+	gulp.watch('client/**/*.html', ['js']);
 });
 
