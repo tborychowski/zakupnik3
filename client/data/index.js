@@ -1,4 +1,3 @@
-
 function get (url) {
 	return fetch(url, { credentials: 'include' }).then(res => res.json());
 }
@@ -17,19 +16,16 @@ function post (url, params) {
 
 
 const Categories = {
-	get: () => get('api/categorytree'),
+	get: () => get('api/categories'),
 };
 
 const Expenses = {
-	get (date = '', id = '') {
-		if (id) id = `/${id}`;
-		if (date) date = `?date=${date}`;
-		return get(`api/entries${id}${date}`);
+	get (date = '') {
+		return get(`api/entries?date=${date}`);
 	},
 	save (data) {
-		const id = data.length === 1 && data[0].id;
-		if (data.length === 1) data = data[0];
-		return post(`api/entries${id ? '/' + id : ''}`, data);
+		if (data.length === 1 && data[0].id) return put('api/entries', data);
+		return post('api/entries', data);
 	}
 };
 

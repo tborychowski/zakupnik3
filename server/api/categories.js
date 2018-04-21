@@ -1,13 +1,20 @@
-// const express = require('express');
-// const api = express.Router();
+const express = require('express');
+const api = express.Router();
+const {Model} = require('./db');
 
+const Category = Model('Category', {
+	name: { type: String, required: true },
+	items: []
+});
 
-function tree (req, res) {
-	res.status(200).json([ 'category tree' ]);
-}
 
 function get (req, res) {
-	res.status(200).json([ 'categories' ]);
+	Category
+		.find({})
+		.exec((err, items) => {
+			if (err) return console.error(err);
+			res.status(200).json(items);
+		});
 }
 
 function post (req, res) {
@@ -22,11 +29,12 @@ function del (req, res) {
 
 }
 
+api.route('/')
+	.get(get)
+	.post(post)
+	.put(put)
+	.delete(del);
 
-module.exports = {
-	tree,
-	get,
-	post,
-	put,
-	del
-};
+
+
+module.exports = api;

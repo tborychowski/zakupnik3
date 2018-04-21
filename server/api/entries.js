@@ -1,4 +1,6 @@
-const {db, Model} = require('./db');
+const express = require('express');
+const api = express.Router();
+const {Model} = require('./db');
 
 const Entry = Model('Entry', {
 	date: String,			// YYYY-MM
@@ -8,7 +10,7 @@ const Entry = Model('Entry', {
 });
 
 
-
+// get one or many
 function get (req, res) {
 	const params = {};
 	if (req.params.id) {
@@ -22,26 +24,32 @@ function get (req, res) {
 		.sort({ date: -1 })
 		.exec((err, items) => {
 			if (err) return console.error(err);
-			res.status(200).json({ total_str: 100, items });
+			res.status(200).json(items);
 		});
 }
 
+// add new
 function post (req, res) {
 
 }
 
+// update
 function put (req, res) {
 
 }
 
+// delete
 function del (req, res) {
 
 }
 
 
-module.exports = {
-	get,
-	post,
-	put,
-	del
-};
+
+api.route('/')
+	.get(get)
+	.post(post)
+	.put(put)
+	.delete(del);
+
+
+module.exports = api;

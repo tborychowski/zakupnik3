@@ -1,5 +1,5 @@
 <div class="table" ref:table>
-	{{#if data && data.items }}
+	{{#if data && data.length }}
 		<table>
 		<thead><tr>
 			<td class="date">Date</td>
@@ -7,11 +7,11 @@
 			<td class="amount">Amount</td>
 		</tr></thead>
 		<tbody>
-			{{#each data.items as item, idx}}
+			{{#each data as item, idx}}
 				<tr on:click="onRowClick(item)">
 					<td>{{item.date.substr(0, 7)}}</td>
 					<td class="desc">{{item.category}} - {{item.description}}</td>
-					<td class="amount">{{item.amount_str}}</td>
+					<td class="amount">{{format(item.amount)}}</td>
 				</tr>
 			{{/each}}
 		</tbody>
@@ -20,7 +20,7 @@
 				<!-- <i class="ion-md-search"></i> -->
 				<input class="table-filter" type="search" placeholder="Filter">
 			</td>
-			<td class="amount">{{data.total_str}}</td>
+			<td class="amount">{{format(total)}}</td>
 		</tr></tfoot>
 		</table>
 	{{/if}}
@@ -28,9 +28,19 @@
 
 
 <script>
+
+function formatNumber (num) {
+	num = Math.round(0 + num * 100) / 100;
+	return num.toLocaleString('en-GB', { minimumFractionDigits: 2 })
+}
+
 export default {
 	data () {
 		return { data: [] };
+	},
+	computed: {
+		total (data) { return data.reduce((p, c) => p + c.amount, 0); },
+		format (data) { return formatNumber; }
 	},
 	oncreate () {
 	},
