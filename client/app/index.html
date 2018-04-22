@@ -36,7 +36,10 @@ export default {
 			});
 		},
 
-		onDateChange (date) { this.refs.form.set({ date: date.dateStr }); },
+		onDateChange (date) {
+			this.refs.form.set({ date: date.dateStr });
+			this.loadTable(date.dateStr);
+		},
 
 		onFormChange (data) {
 			console.log('form changed', data);
