@@ -18,4 +18,6 @@ function Model (name, obj) {
 module.exports = {
 	db,
 	Model,
+	Schema: mongoose.Schema,
+	ObjectId: mongoose.Types.ObjectId
 };

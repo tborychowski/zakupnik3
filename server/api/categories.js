@@ -4,32 +4,50 @@ const {Model} = require('./db');
 
 const Category = Model('Category', {
 	name: { type: String, required: true },
-	items: []
+	items: [String]
 });
 
 
+
+// get all
 function get (req, res) {
-	Category
-		.find({})
+	return Category
+		.find()
+		.select({name: true, items: true})
+		.sort({ name: 1 })
 		.exec((err, items) => {
-			if (err) return console.error(err);
+			if (err) return res.status(500).json(err);
 			res.status(200).json(items);
 		});
 }
 
-function post (req, res) {
 
+// new
+function post (req, res) {
+	const cat = {name: req.body.name};
+	if (req.body.items) cat.items = req.body.items;
+	return Category.create(cat)
+		.then(item => res.status(200).json(item))
+		.catch(e => res.status(500).json(e));
 }
 
+// update
 function put (req, res) {
-
+	return Category
+		.findOneAndUpdate({_id: req.params.id}, req.body, { 'new': true })
+		.select({name: true, items: true})
+		.then(item => res.status(200).json(item))
+		.catch(e => res.status(500).json(e));
 }
 
 function del (req, res) {
-
+	return Category.deleteOne({ _id: req.params.id })
+		.then(item => res.status(200).json(item))
+		.catch(e => res.status(500).json(e));
 }
 
-api.route('/')
+
+api.route('/:id*?')
 	.get(get)
 	.post(post)
 	.put(put)
