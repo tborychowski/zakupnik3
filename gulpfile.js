@@ -7,6 +7,9 @@ const notify = require('gulp-notify');
 const plumber = require('gulp-plumber');
 const eslint = require('gulp-eslint');
 const uglify = require('gulp-uglify');
+const mocha = require('gulp-mocha');
+const env = require('gulp-env');
+const nodemon = require('gulp-nodemon');
 const noop = require('through2').obj;
 const sourcemaps = require('gulp-sourcemaps');
 const isProd = require('minimist')(process.argv.slice(2)).prod;
@@ -18,6 +21,19 @@ const wpErr = (err, stats) => {
 	err = stats.compilation.errors;
 	if (err.length) notify.onError('Error: ' + err[0].message);
 };
+
+let serverStarted = false;
+const startServer = done =>
+	nodemon({ script: './server/index.js', watch: ['./server'], ext: 'js', })
+		.on('start', () => {
+			if (serverStarted) return;
+			serverStarted = true;
+			setTimeout(done, 500);
+		});
+
+
+env.set({ NODE_TLS_REJECT_UNAUTHORIZED: 0 });
+
 
 gulp.task('help', () => {
 	const tasks = '  ' + Object.keys(gulp.tasks).sort().join('\n  ');
@@ -45,6 +61,7 @@ gulp.task('html', () => {
 	gulp.src(['client/*.html']).pipe(gulp.dest(PUBLIC_PATH));
 });
 
+
 gulp.task('js', ['eslint'], () => {
 	return gulp.src(['client/index.js'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
@@ -66,7 +83,29 @@ gulp.task('styl', () => {
 });
 
 
-gulp.task('default', [ 'js', 'styl', 'fonts', 'html', 'eslint' ]);
+gulp.task('test-server', done => {
+	env.set({ NODE_ENV: 'test' });
+	startServer(done);
+});
+
+
+gulp.task('server', done => {
+	env.set({ NODE_ENV: 'dev' });
+	startServer(done);
+});
+
+
+function runTest () {
+	return gulp
+		.src(['./test/**/*.spec.js'], { read: false })
+		.pipe(mocha({ reporter: 'list' }))
+		.on('error', () => process.exit(1))
+		.on('end', () => process.exit(0));
+}
+
+gulp.task('test-with-server', ['test-server'], runTest);
+gulp.task('test', runTest);
+
 
 gulp.task('watch', ['default'], () => {
 	if (isProd) return;
@@ -76,3 +115,5 @@ gulp.task('watch', ['default'], () => {
 	gulp.watch('client/*.html', ['html']);
 });
 
+
+gulp.task('default', [ 'js', 'styl', 'fonts', 'html', 'eslint' ]);

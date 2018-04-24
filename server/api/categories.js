@@ -41,7 +41,7 @@ function put (req, res) {
 }
 
 function del (req, res) {
-	return Category.deleteOne({ _id: req.params.id })
+	return Category.remove({ _id: req.params.id })
 		.then(item => res.status(200).json(item))
 		.catch(e => res.status(500).json(e));
 }

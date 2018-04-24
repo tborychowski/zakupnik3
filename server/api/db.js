@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/zakupnik');
+const dbName = (process.env.NODE_ENV === 'test' ? 'zakupnik-test' : 'zakupnik');
+mongoose.connect(`mongodb://localhost/${dbName}`, () => console.log(`DB: ${dbName}`));
 
 const db = mongoose.connection;
 
@@ -9,7 +10,7 @@ db.once('open', () => console.log('Connected to DB'));
 
 
 function Model (name, obj) {
-	const schema = mongoose.Schema(obj);
+	const schema = mongoose.Schema(obj, { versionKey: false });
 	return mongoose.model(name, schema);
 }
 

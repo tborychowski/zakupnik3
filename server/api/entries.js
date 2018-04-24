@@ -46,7 +46,7 @@ function put (req, res) {
 
 // delete
 function del (req, res) {
-	return Entry.deleteOne({ _id: req.params.id })
+	return Entry.remove({ _id: req.params.id })
 		.then(item => res.status(200).json(item))
 		.catch(e => res.status(500).json(e));
 }
