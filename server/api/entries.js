@@ -1,32 +1,36 @@
 const express = require('express');
 const api = express.Router();
-const {Model} = require('./db');
+const {Entry, raw} = require('./db');
 
-const Entry = Model('Entry', {
-	date: { type: String, required: true },             // YYYY-MM
-	parent_category: { type: String, required: true },
-	category: { type: String, required: true },
-	description: String,
-	amount: { type: Number, required: true }
-});
+
+
+function getOne (req, res) {
+	return Entry
+		.findById(req.params.id)
+		.then(item => res.status(200).json(item))
+		.catch(e => res.status(500).json(e));
+}
 
 
 function get (req, res) {
-	const params = {};
-	if (req.params.id) params._id = req.params.id;
-	else {
-		const q = req.query;
-		if (q.date) params.date = { $regex: new RegExp('^' + q.date) };
-		if (q.parent_category) params.parent_category = q.parent_category;
-		if (q.category) params.category = q.category;
-	}
-	Entry
-		.find(params)
-		.sort({ date: -1 })
-		.exec((err, items) => {
-			if (err) return res.status(500).json(err);
-			res.status(200).json(items);
-		});
+	if (req.params.id) return getOne(req, res);
+
+	let where = '';
+	if (req.query.date) where = `WHERE entry.date LIKE "${req.query.date}%"`;
+
+	const q = `SELECT entry.id, entry.date, entry.amount, entry.description,
+		entry.category_id AS 'category.id',
+		cat.name AS 'category.name',
+		parent_cat.id AS 'parent_category.id',
+		parent_cat.name AS 'parent_category.name'
+		FROM entries AS entry
+		LEFT OUTER JOIN categories AS cat ON entry.category_id = cat.id
+		LEFT OUTER JOIN categories AS parent_cat ON cat.parent_id = parent_cat.id
+		${where} ORDER BY entry.date DESC`;
+
+	return raw(q)
+		.then(items => res.status(200).json(items))
+		.catch(e => res.status(500).json(e));
 }
 
 // add new
@@ -39,15 +43,15 @@ function post (req, res) {
 // update
 function put (req, res) {
 	return Entry
-		.findOneAndUpdate({_id: req.params.id}, req.body, { 'new': true })
-		.then(item => res.status(200).json(item))
+		.update(req.body, { where: { id: req.params.id } })
+		.then(result => res.status(200).json({ updated: result[0] }))
 		.catch(e => res.status(500).json(e));
 }
 
 // delete
 function del (req, res) {
-	return Entry.remove({ _id: req.params.id })
-		.then(item => res.status(200).json(item))
+	return Entry.destroy({ where: { id: req.params.id } })
+		.then(count => res.status(200).json({ deleted: count }))
 		.catch(e => res.status(500).json(e));
 }
 

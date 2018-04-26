@@ -7,5 +7,7 @@ _stuff/
 
 *.crt
 *.key
+*.db
 
 mongodb/
+

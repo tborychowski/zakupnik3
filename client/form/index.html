@@ -7,9 +7,9 @@
 				<select class="select category" bind:value=row.category autofocus="autofocus">
 					{{#each categories as group}}
 					<optgroup label="{{group.name}}">
-						{{#if group.items}}
-						{{#each group.items as cat}}
-						<option value="{{cat.name}}">{{cat.name}}</option>
+						{{#if group.categories}}
+						{{#each group.categories as cat}}
+						<option value="{{cat.id}}">{{cat.name}}</option>
 						{{/each}}
 						{{/if}}
 					</optgroup>

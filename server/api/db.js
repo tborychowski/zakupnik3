@@ -1,24 +1,50 @@
-const mongoose = require('mongoose');
-
-const dbName = (process.env.NODE_ENV === 'test' ? 'zakupnik-test' : 'zakupnik');
-mongoose.connect(`mongodb://localhost/${dbName}`, () => console.log(`DB: ${dbName}`));
-
-const db = mongoose.connection;
-
-db.on('error', e => console.error('connection error:', e));
-db.once('open', () => console.log('Connected to DB'));
+const Sequelize = require('sequelize');
+const dottie = require('dottie');
 
 
-function Model (name, obj) {
-	const schema = mongoose.Schema(obj, { versionKey: false });
-	return mongoose.model(name, schema);
+const dbName = (process.env.NODE_ENV === 'test' ? ':memory:' : 'database.db');
+const sequelize = new Sequelize(`sqlite:${dbName}`, {
+	define: { timestamps: false, underscored: true },
+	logging: process.env.NODE_ENV !== 'test'
+});
+
+
+// sequelize.authenticate()
+// 	.then(() => console.log('Connected to the database: ' + dbName))
+// 	.catch(err => console.error('Unable to connect to the database:', err));
+
+
+const Category = sequelize.define('category', {
+	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+	name: { type: Sequelize.TEXT, allowNull: false },
+	parent_id: { type: Sequelize.INTEGER, field: 'parent_id', allowNull: false }
+});
+// Category.hasMany(Category, {foreignKey: 'parent_id'});
+
+
+
+const Entry = sequelize.define('entry', {
+	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+	date: { type: Sequelize.TEXT, allowNull: false },
+	amount: { type: Sequelize.FLOAT, allowNull: false },
+	description: { type: Sequelize.TEXT },
+});
+Entry.belongsTo(Category);
+
+
+function raw (query) {
+	return sequelize
+		.query(query)
+		.spread(results => results)
+		.then(dottie.transform); // built-in "nest" doesn't do it right
 }
 
 
+sequelize.sync();
 
 module.exports = {
-	db,
-	Model,
-	Schema: mongoose.Schema,
-	ObjectId: mongoose.Types.ObjectId
+	Category,
+	Entry,
+	raw,
+	Op: Sequelize.Op
 };
