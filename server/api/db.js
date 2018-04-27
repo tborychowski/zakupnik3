@@ -1,24 +1,64 @@
-const mongoose = require('mongoose');
+const Sequelize = require('sequelize');
 
-const dbName = (process.env.NODE_ENV === 'test' ? 'zakupnik-test' : 'zakupnik');
-mongoose.connect(`mongodb://localhost/${dbName}`, () => console.log(`DB: ${dbName}`));
+const dbName = (process.env.NODE_ENV === 'test' ? ':memory:' : 'database.db');
+const sequelize = new Sequelize(`sqlite:${dbName}`, {
+	define: { timestamps: false, underscored: true },
+	// logging: s => console.log(`${s}\n`)
+	logging: false
+});
 
-const db = mongoose.connection;
+// console.log('\n\n\n\n*************************** APP STARTING ***************************\n\n');
+// sequelize.authenticate()
+// 	.then(() => console.log('Connected to the database: ' + dbName))
+// 	.catch(err => console.error('Unable to connect to the database:', err));
 
-db.on('error', e => console.error('connection error:', e));
-db.once('open', () => console.log('Connected to DB'));
 
 
-function Model (name, obj) {
-	const schema = mongoose.Schema(obj, { versionKey: false });
-	return mongoose.model(name, schema);
+const Category = sequelize.define('category', {
+	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+	name: { type: Sequelize.TEXT, allowNull: false, unique: true },
+});
+
+
+const Group = sequelize.define('group', {
+	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+	name: { type: Sequelize.TEXT, allowNull: false },
+	keywords: { type: Sequelize.TEXT },
+});
+Category.hasMany(Group);
+Group.belongsTo(Category);
+
+
+
+const Entry = sequelize.define('entry', {
+	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+	date: { type: Sequelize.TEXT, allowNull: false },
+	amount: { type: Sequelize.FLOAT, allowNull: false },
+	description: { type: Sequelize.TEXT },
+});
+Entry.belongsTo(Group);
+
+
+function raw (query) {
+	const dottie = require('dottie');
+	return sequelize
+		.query(query)
+		.spread(results => results)
+		.then(dottie.transform); // built-in "nest" doesn't do it right
 }
 
+function init () {
+	return sequelize.sync();
+}
+
+init();
 
 
 module.exports = {
-	db,
-	Model,
-	Schema: mongoose.Schema,
-	ObjectId: mongoose.Types.ObjectId
+	init,
+	Category,
+	Group,
+	Entry,
+	raw,
+	Op: Sequelize.Op
 };

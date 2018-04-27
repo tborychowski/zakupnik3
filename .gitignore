@@ -5,7 +5,7 @@ _stuff/
 .DS_Store
 *.log
 
-*.crt
-*.key
+*.db
 
 mongodb/
+

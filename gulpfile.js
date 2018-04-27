@@ -83,6 +83,7 @@ gulp.task('styl', () => {
 });
 
 
+
 gulp.task('test-server', done => {
 	env.set({ NODE_ENV: 'test' });
 	startServer(done);
@@ -95,16 +96,13 @@ gulp.task('server', done => {
 });
 
 
-function runTest () {
+gulp.task('test', ['test-server'], () => {
 	return gulp
 		.src(['./test/**/*.spec.js'], { read: false })
 		.pipe(mocha({ reporter: 'list' }))
 		.on('error', () => process.exit(1))
 		.on('end', () => process.exit(0));
-}
-
-gulp.task('test-with-server', ['test-server'], runTest);
-gulp.task('test', runTest);
+});
 
 
 gulp.task('watch', ['default'], () => {

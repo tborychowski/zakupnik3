@@ -4,6 +4,7 @@ const api = express.Router();
 
 api.use('/entries', require('./entries'));
 api.use('/categories', require('./categories'));
+api.use('/groups', require('./groups'));
 
 
 api.get('/', (req, res) => res.send('Hello from API!'));
