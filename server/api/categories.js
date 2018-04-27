@@ -1,6 +1,6 @@
 const express = require('express');
 const api = express.Router();
-const {Category} = require('./db');
+const {Category, Group} = require('./db');
 
 
 function getOne (req, res) {
@@ -10,17 +10,10 @@ function getOne (req, res) {
 		.catch(e => res.status(500).json(e));
 }
 
-
 function get (req, res) {
 	if (req.params.id) return getOne(req, res);
-
-	Category.hasMany(Category, {foreignKey: 'parent_id'});
 	return Category
-		.findAll({
-			order: [['name', 'ASC']],
-			where: { parent_id: 0 },
-			include: [{ model: Category }]
-		})
+		.findAll({ order: ['name'], include: Group })		// include: [{ model: Group }]
 		.then(items => res.status(200).json(items))
 		.catch(e => res.status(500).json(e));
 }
@@ -29,9 +22,8 @@ function get (req, res) {
 function post (req, res) {
 	return Category.create(req.body)
 		.then(item => res.status(200).json(item))
-		.catch(e => res.status(500).json(e));
+		.catch(e => res.status(500).json(e.errors));
 }
-
 
 // update
 function put (req, res) {
@@ -47,13 +39,10 @@ function del (req, res) {
 		.catch(e => res.status(500).json(e));
 }
 
-
 api.route('/:id*?')
 	.get(get)
 	.post(post)
 	.put(put)
 	.delete(del);
-
-
 
 module.exports = api;

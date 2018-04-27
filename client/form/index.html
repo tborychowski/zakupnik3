@@ -4,12 +4,12 @@
 		<div class="form-row">
 			<input type="hidden" bind:value=row.id>
 			<div class="select-wrap">
-				<select class="select category" bind:value=row.category autofocus="autofocus">
-					{{#each categories as group}}
-					<optgroup label="{{group.name}}">
-						{{#if group.categories}}
-						{{#each group.categories as cat}}
-						<option value="{{cat.id}}">{{cat.name}}</option>
+				<select class="select category" bind:value=row.group_id autofocus="autofocus">
+					{{#each categories as cat}}
+					<optgroup label="{{cat.name}}">
+						{{#if cat.groups}}
+						{{#each cat.groups as group}}
+						<option value="{{group.id}}">{{group.name}}</option>
 						{{/each}}
 						{{/if}}
 					</optgroup>

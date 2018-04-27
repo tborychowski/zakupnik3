@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "gulp test",
+    "import": "node ./scripts/import-data.js",
     "start:client": "gulp watch",
     "start:server": "gulp server",
     "start": "run-p start:server start:client"

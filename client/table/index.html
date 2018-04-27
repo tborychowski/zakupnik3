@@ -10,7 +10,7 @@
 			{{#each data as item, idx}}
 				<tr on:click="onRowClick(item)">
 					<td>{{item.date.substr(0, 7)}}</td>
-					<td class="desc">{{item.category.name}} - {{item.description}}</td>
+					<td class="desc">{{item.group.name}} - {{item.description}}</td>
 					<td class="amount">{{format(item.amount)}}</td>
 				</tr>
 			{{/each}}
