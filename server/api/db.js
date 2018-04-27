@@ -5,7 +5,7 @@ const dottie = require('dottie');
 const dbName = (process.env.NODE_ENV === 'test' ? ':memory:' : 'database.db');
 const sequelize = new Sequelize(`sqlite:${dbName}`, {
 	define: { timestamps: false, underscored: true },
-	logging: process.env.NODE_ENV !== 'test'
+	logging: false
 });
 
 
