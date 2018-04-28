@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
-const {init, Category, Group, Entry} = require('../server/api/db');
+const {init, Category, Group, Entry} = require('../server/lib/db');
 
 
 const categoriesJson = require('../_stuff/sql-categories.json');
@@ -10,7 +10,8 @@ const entriesJson = require('../_stuff/sql-entries.json');
 
 function removeDB () {
 	process.stdout.write('\nRemoving old DB........');
-	fs.unlinkSync('database.db');
+	try { fs.unlinkSync('database.db'); }
+	catch(e) {}
 	console.log('OK');
 	return Promise.resolve();
 }

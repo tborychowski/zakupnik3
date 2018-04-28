@@ -1,6 +1,6 @@
 const express = require('express');
 const api = express.Router();
-const {Entry, Group, Category, Op} = require('./db');
+const {Entry, Group, Category, Op} = require('../lib/db');
 
 
 function getOne (req, res) {
@@ -12,7 +12,11 @@ function getOne (req, res) {
 
 function get (req, res) {
 	if (req.params.id) return getOne(req, res);
-	const where = req.query.date ? {date: {[Op.like]: req.query.date + '%'}} : {};
+	const where = {};
+	if (req.query.date) where.date = {[Op.like]: req.query.date + '%'};
+	if (req.query.group) where.group_id = req.query.group;
+	if (req.query.category) where['$group.category_id$'] = req.query.category;
+
 	return Entry
 		.findAll({
 			order: [['date', 'DESC']],
