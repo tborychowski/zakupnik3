@@ -7,7 +7,7 @@
 			<td class="amount">Amount</td>
 		</tr></thead>
 		<tbody>
-			{{#each data as item, idx}}
+			{{#each filteredData as item, idx}}
 				<tr on:click="onRowClick(item)">
 					<td>{{item.date.substr(0, 7)}}</td>
 					<td class="desc">{{item.group.name}} - {{item.description}}</td>
@@ -16,9 +16,13 @@
 			{{/each}}
 		</tbody>
 		<tfoot><tr>
-			<td colspan="2">
-				<!-- <i class="ion-md-search"></i> -->
-				<input class="table-filter" type="search" placeholder="Filter">
+			<td colspan="2" class="table-filter-cell">
+				<div class="table-filter-cell-inner">
+					<i class="ion-md-search"></i>
+					<input class="table-filter" type="search" placeholder="Filter"
+					bind:value="filter"
+					on:keydown="onFilterKeyDown(event)">
+				</div>
 			</td>
 			<td class="amount">{{format(total)}}</td>
 		</tr></tfoot>
@@ -36,16 +40,31 @@ function formatNumber (num) {
 
 export default {
 	data () {
-		return { data: [] };
+		return { data: [], filter: '' };
 	},
 	computed: {
-		total (data) { return data.reduce((p, c) => p + c.amount, 0); },
+		filteredData (data, filter) {
+			if (!filter) return data;
+			filter = filter.toLowerCase();
+			return data.filter(item => {
+				let s = item.description + item.amount + item.date;
+				if (item.group) {
+					s += (item.group.name || '');
+					if (item.group.category) s += (item.group.category.name || '');
+				}
+				return (s.toLowerCase().indexOf(filter) > -1);
+			});
+		},
+		total (filteredData) { return filteredData.reduce((p, c) => p + c.amount, 0); },
 		format (data) { return formatNumber; }
 	},
 	oncreate () {
 	},
 
 	methods: {
+		onFilterKeyDown (e) {
+			if (e.key === 'Escape') this.set({ filter: '' });
+		},
 		onRowClick (item) {
 			this.fire('click', item);
 		}
