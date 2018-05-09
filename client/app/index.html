@@ -8,14 +8,14 @@
 import YearMonthPicker from '../year-month-picker';
 import Form from '../form';
 import Table from '../table';
-import {Categories, Expenses} from '../data';
+import {Groups, Expenses} from '../data';
 
 export default {
 	data () { return {}; },
 	components: { Form, Table, YearMonthPicker },
 	oncreate () {
 		const date = new Date().toISOString().substr(0, 7);
-		Categories.get().then(categories => this.refs.form.set({ date, categories }));
+		Groups.get().then(groups => this.refs.form.set({ date, groups }));
 		this.loadTable(date);
 
 		this.refs.form.on('change', this.onFormChange.bind(this));
@@ -46,9 +46,10 @@ export default {
 		},
 
 		onFormSubmit (data) {
-			Expenses.save(data).then(() => {
-				this.loadTable();
-			});
+			console.log(data);
+			// Expenses.save(data).then(() => {
+			// 	this.loadTable();
+			// });
 		},
 
 		onRemoveItem (item) {

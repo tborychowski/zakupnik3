@@ -1,42 +1,10 @@
-<form ref:form class="form {inEdit ? 'edit' : ''}" on:submit="onsubmit(event)" on:input="oninput(event)">
-	<div class="subforms">
-		{#each rows as row, idx}
-		<div class="form-row">
-			<input type="hidden" bind:value=row.id>
-			<input class="description" placeholder="description"
-				bind:value="row.description"
-				on:input="matchGroup(categories, row, this)"
-				autofocus="autofocus">
-			<div class="select-wrap">
-				<select class="select category" bind:value=row.group_id>
-					{#each categories as cat}
-					<optgroup label="{cat.name}">
-						{#if cat.groups}
-						{#each cat.groups as group}
-						<option value="{group.id}">{group.name}</option>
-						{/each}
-						{/if}
-					</optgroup>
-					{/each}
-				</select>
-			</div>
-			<input class="amount" placeholder="0.00" bind:value=row.amount on:keydown="onkeydown(event)">
-
-			{#if idx === 0}
-			<button type="button" title="Split" class="btn btn-split ion-md-swap" on:click="split()"></button>
-			{:else}
-			<button type="button" title="Remove" class="btn btn-unsplit ion-md-close" on:click="unsplit(idx)"></button>
-			{/if}
-		</div>
-		{/each}
-	</div>
-	<div class="form-row form-row-repeat">
-		<label>Repeat every month, for </label>
-		<input class="repeater" min="1" max="12" type="number" bind:value=repeat>
-		<label> months</label>
+<form ref:form class="form {inEdit ? 'edit' : ''}" on:submit="onsubmit(event)">
+	<div class="form-row">
+		<input type="hidden" name="id" bind:value="id">
+		<textarea ref:textbox on:input="oninput(this)" on:keydown="onkeydown(event)" bind:value="text" autofocus></textarea>
 	</div>
 	<div class="form-footer form-row">
-		<button type="button" class="btn btn-reset" on:click="reset()">Reset</button>
+		<button type="button" class="btn btn-reset" on:click="reset()">Clear</button>
 		<button type="button" class="btn danger btn-remove" on:click="remove()">Remove</button>
 		<div class="flex-filler"></div>
 		<button type="button" class="btn btn-cancel" on:click="reset()">Cancel</button>
@@ -46,113 +14,134 @@
 </form>
 
 <script>
-import util from './util.js';
-
-function matches (categories, txt) {
-	txt = txt.toLowerCase();
-	for (const c of categories) {
-		for (const g of c.groups) {
-			if (g.keywords && g.keywords.toLowerCase().indexOf(txt) > -1) return g.id;
-			if (g.name.toLowerCase().indexOf(txt) > -1) return g.id;
-		}
-	}
-	return;
-}
-
-
 export default {
 	data () {
 		return {
 			inEdit: false,
 			date: new Date().toISOString().substr(0, 7),
-			repeat: 1,
-			rows: [ {id: '', description: '', amount: ''} ],
-			categories: [],
+			id: null,
+			text: '',
+			groups: [],
+			rows: [],
 		};
 	},
-	computed: {},
+	computed: {
+		_groups ({groups}) {
+			return groups.map(g => {
+				const str = (g.name + ',' + g.keywords).toLowerCase().split(',');
+				return { id: g.id, str }
+			});
+		}
+	},
+
 	methods: {
-		matchGroup (categories, row, el) {
-			if (!categories || !categories.length) return;
-			const id = row.description ? matches(categories, row.description) : categories[0].groups[0].id;
-			if (id) el.parentNode.querySelector('.category').value = id;
-		},
-		getData () {
-			const date = this.get().date || new Date().toISOString().substr(0, 7);
-			const entries = util.deepCopyArray(this.get().rows)
-				.map(e => {
-					e.date = date;
-					e.amount = util.parseAmount(e.amount);
-					return e;
-				});
-
-			// subtract other amounts from the first row
-			const amounts = entries.map((item, i) => i > 0 ? item.amount : 0);
-			const sum = amounts.reduce((a, b) => a + b, 0);	// add all up
-			entries[0].amount -= sum;
-
-			// repeat monthly
-			const repeater = this.get().repeat;
-			return util.repeatEntries(entries, repeater);
+		oninput (el) {
+			this.toggleAmountError();
+			this.parseEntryText(el.value);
 		},
 
-		split () {
-			const rows = this.get().rows;
-			rows.push({id: '', description: rows[0].description, amount: ''});
-			this.set({ rows });
-		},
-
-		unsplit (idx) {
-			const rows = this.get().rows;
-			rows.splice(idx, 1);
-			this.set({ rows });
+		onkeydown (e) {
+			if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) this.onsubmit(e);
 		},
 
 		edit (data) {
 			this.reset();
-			this.set({ inEdit: true, rows: [data] });
-			this.fire('change', this.getData());
+			this.set({ inEdit: true, text: data });
+			this.fire('change', '');
 		},
 
 		reset () {
-			this.set({
-				inEdit: false,
-				repeat: 1,
-				rows: [ {id: '', description: '', amount: '' } ]
-			});
+			this.set({ inEdit: false, id: null, text: '', rows: [] });
 			this.toggleAmountError();
-			this.fire('change', this.getData());
-		},
-
-		oninput () {
-			this.toggleAmountError();
-			this.fire('change', this.getData());
+			this.fire('change', '');
+			this.refs.textbox.focus();
 		},
 
 		remove () {
-			this.fire('remove', { id: this.get().rows[0].id });
+			this.fire('remove', { id: null });
 			this.reset();
 		},
 
 		onsubmit (e) {
 			e.preventDefault();
-			const data = this.getData();
-			if (!data[0].amount) {
-				this.toggleAmountError('Please enter amount');
-				return this.fire('error', 'Please enter amount');
+			const data = this.get().rows;
+			if (!data.length) {
+				this.toggleAmountError('Please enter amount and category');
+				return this.fire('error', 'Please enter amount and category');
 			}
 			this.fire('submit', data);
 			this.reset();
 		},
 
-		onkeydown (e) {
-			if (util.isAllowedKey(e)) return true;
-			e.preventDefault();
+		toggleAmountError (msg = '') {
+			this.refs.textbox.setCustomValidity(msg);
 		},
 
-		toggleAmountError (err) {
-			this.refs.form.querySelector('.amount').setCustomValidity(err || '');
-		}
+		parseAmount (amount) {
+			/* eslint no-eval: 0 */
+			amount = ('' + amount).replace(/\s/g, '');
+			if (!(/^[+\-\\*/()\d.]+$/i).test(amount)) return 0;
+			if ((/[+\-\\*/.]+/i).test(amount)) {
+				try { amount = eval(amount); }
+				catch (e) { amount = 0; }
+			}
+			let num = parseFloat(amount);
+			if (num === Infinity || isNaN(num) || num < 0) num = 'error';
+			return num;
+		},
+
+		getGroup (value) {
+			value = value.toLowerCase().trim();
+			if (!value) return;
+			const groups = this.get()._groups;
+			for (const g of groups) {
+				if (g.str.indexOf(value) > -1) return g.id;
+			}
+			return;
+		},
+
+		parseWord (value) {
+			if (value.match(/^\d+$/)) return { type: 'amount', value: parseFloat(value), score: 8 };
+			if (value.match(/^\d+\.\d+$/)) return { type: 'amount', value: parseFloat(value), score: 9 };
+			if (value.match(/^[\d\.()+-/*]+$/)) return { type: 'amount', value: this.parseAmount(value), score: 10 };
+
+			const groupId = this.getGroup(value);
+			if (groupId) return { type: 'group', value: groupId, score: 10 };
+
+			return { type: 'description', value, score: 10 };
+		},
+
+		parseRow (row) {
+			row = row.replace(/\s+([+-/*()])\s+/g, '$1');  // remove spaces around ops
+			const words = row.split(' ').map(w => this.parseWord(w)).sort((a, b) => b.score - a.score);
+
+			const amountIdx = words.findIndex(w => w.type === 'amount');
+			const amount = amountIdx > -1 ? words.splice(amountIdx, 1)[0].value : '';
+
+			const groupIdx = words.findIndex(w => w.type === 'group');
+			const group_id = groupIdx > -1 ? words.splice(groupIdx, 1)[0].value : '';
+
+			const description = words.map(w => w.value).join(' ').trim();
+			return {amount, group_id, description};
+		},
+
+		parseEntryText (val) {
+			const rows = val
+				.split('\n')
+				.map(row => this.parseRow(row))
+				.filter(row => row.amount !== '' && row.group_id);
+
+			if (!rows.length) return;
+
+			const date = this.get().date;
+			rows.forEach(r => (r.date = date));
+
+			let sum = 0;
+			for (let i = 1; i < rows.length; i++) sum += rows[i].amount;
+			rows[0].amount -= sum;
+			this.set({ rows });
+			this.fire('change', rows);
+		},
 	}
 };
 </script>
