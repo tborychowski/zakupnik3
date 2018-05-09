@@ -31,10 +31,16 @@
 .form-row
 	display flex
 	align-items center
-	padding 10 20
+	padding 5px 20
+	border 1px solid form-element-border
+	border-width 0 0 1px
 
 
 .form-row-repeat
+	border none
+	padding-top 10px
+	padding-bottom 10px
+
 	input
 		width 30
 		margin 0 5
@@ -66,20 +72,14 @@
 
 
 .subforms
-	padding-top 10
+	.select-wrap
+		border 1px solid transparent;
+
+	input
+		border-color transparent
 
 	button
 		min-width 0
-
-	.form-row:first-child
-		padding-top 10
-		padding-bottom 10
-
-	.form-row:nth-child(2)
-		padding-top 10
-
-	.form-row:last-child
-		padding-bottom 10
 
 
 	.form-row

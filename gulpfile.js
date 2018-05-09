@@ -91,7 +91,7 @@ gulp.task('test-server', done => {
 
 
 gulp.task('server', done => {
-	env.set({ NODE_ENV: 'dev' });
+	env.set({ NODE_ENV: 'development' });
 	startServer(done);
 });
 

@@ -1,5 +1,5 @@
 <div class="table" ref:table>
-	{{#if data && data.length }}
+	{#if data && data.length}
 		<table>
 		<thead><tr>
 			<td class="date">Date</td>
@@ -7,13 +7,19 @@
 			<td class="amount">Amount</td>
 		</tr></thead>
 		<tbody>
-			{{#each filteredData as item, idx}}
+			{#if filteredData && filteredData.length}
+			{#each filteredData as item, idx}
 				<tr on:click="onRowClick(item)">
-					<td>{{item.date.substr(0, 7)}}</td>
-					<td class="desc">{{item.group.name}} - {{item.description}}</td>
-					<td class="amount">{{format(item.amount)}}</td>
+					<td>{item.date.substr(0, 7)}</td>
+					<td class="desc">{item.group.name} - {item.description}</td>
+					<td class="amount">{formatNumber(item.amount)}</td>
 				</tr>
-			{{/each}}
+			{/each}
+			{:else}
+				<tr class="empty-row">
+					<td colspan="3">No results</td>
+				</tr>
+			{/if}
 		</tbody>
 		<tfoot><tr>
 			<td colspan="2" class="table-filter-cell">
@@ -24,10 +30,10 @@
 					on:keydown="onFilterKeyDown(event)">
 				</div>
 			</td>
-			<td class="amount">{{format(total)}}</td>
+			<td class="amount">{formatNumber(total)}</td>
 		</tr></tfoot>
 		</table>
-	{{/if}}
+	{/if}
 </div>
 
 
@@ -42,8 +48,11 @@ export default {
 	data () {
 		return { data: [], filter: '' };
 	},
+	helpers: {
+		formatNumber
+	},
 	computed: {
-		filteredData (data, filter) {
+		filteredData ({data, filter}) {
 			if (!filter) return data;
 			filter = filter.toLowerCase();
 			return data.filter(item => {
@@ -55,8 +64,7 @@ export default {
 				return (s.toLowerCase().indexOf(filter) > -1);
 			});
 		},
-		total (filteredData) { return filteredData.reduce((p, c) => p + c.amount, 0); },
-		format (data) { return formatNumber; }
+		total ({filteredData}) { return filteredData.reduce((p, c) => p + c.amount, 0); }
 	},
 	oncreate () {
 	},

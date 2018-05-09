@@ -12,9 +12,10 @@
 	table
 		margin 0
 		width 100%
+		height 100%
 		border-collapse collapse
 	td
-		padding 8 20 6
+		padding 12 20 10
 
 	.amount
 		text-align right
@@ -22,6 +23,7 @@
 	thead
 	tfoot
 		position sticky
+		height 36px
 		td
 			background #ccc
 			font-weight 600
@@ -33,8 +35,8 @@
 
 	tfoot
 		bottom 0
-		position absolute
 		width 100%
+		position sticky
 
 	tbody
 	tfoot
@@ -48,6 +50,11 @@
 
 		tr:hover
 			background #aaa
+
+	.empty-row td
+		vertical-align top
+		padding-top 20%
+		text-align center
 
 
 .table-filter-cell

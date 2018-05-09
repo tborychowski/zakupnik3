@@ -1,0 +1,74 @@
+<div class="entry-parser">
+	<textarea on:input="oninput(this)" autofocus>{value}</textarea>
+</div>
+
+<script>
+export default {
+	data () {
+		return { value: '', groups: [] };
+	},
+	computed: {
+		_groups: ({groups}) => groups.join('+').toLowerCase().split('+')
+	},
+
+	onstate ({ changed, current, previous }) {
+		if (changed.value && current.value) this.parseEntryText(current.value);
+	},
+
+	methods: {
+		oninput (el) {
+			this.parseEntryText(el.value);
+		},
+
+		parseAmount (amount) {
+			/* eslint no-eval: 0 */
+			amount = ('' + amount).replace(/\s/g, '');
+			if (!(/^[+\-\\*/()\d.]+$/i).test(amount)) return 0;
+			if ((/[+\-\\*/.]+/i).test(amount)) {
+				try { amount = eval(amount); }
+				catch (e) { amount = 0; }
+			}
+			let num = parseFloat(amount);
+			if (num === Infinity || isNaN(num) || num < 0) num = 'error';
+			return num;
+		},
+
+		isGroup (value) {
+			return this.get()._groups.indexOf(value.toLowerCase()) > -1;
+		},
+
+		parseWord (value) {
+			if (value.match(/^\d+$/)) return { type: 'amount', value: parseFloat(value), score: 8 };
+			if (value.match(/^\d+\.\d+$/)) return { type: 'amount', value: parseFloat(value), score: 9 };
+			if (value.match(/^[\d\.()+-/*]+$/)) return { type: 'amount', value: this.parseAmount(value), score: 10 };
+			if (this.isGroup(value)) return { type: 'group', value, score: 10 };
+			return { type: 'description', value, score: 10 };
+		},
+
+		parseRow (row) {
+			row = row.replace(/\s+([+-/*()])\s+/g, '$1');  // remove spaces around ops
+			const words = row.split(' ').map(w => this.parseWord(w)).sort((a, b) => b.score - a.score);
+
+			const amountIdx = words.findIndex(w => w.type === 'amount');
+			const amount = amountIdx > -1 ? words.splice(amountIdx, 1)[0].value : '';
+
+			const groupIdx = words.findIndex(w => w.type === 'group');
+			const group = groupIdx > -1 ? words.splice(groupIdx, 1)[0].value : '';
+
+			const description = words.map(w => w.value).join(' ').trim();
+			return {amount, group, description};
+		},
+
+		parseEntryText (val) {
+			const rows = val.split('\n')
+			.map(row => this.parseRow(row))
+			.filter(row => row.amount !== '');
+			let sum = 0;
+			for (let i = 1; i < rows.length; i++) sum += rows[i].amount;
+			rows[0].amount -= sum;
+			this.fire('change', rows);
+		},
+
+	}
+};
+</script>

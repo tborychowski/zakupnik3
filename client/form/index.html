@@ -1,31 +1,34 @@
-<form ref:form class="form {{inEdit ? 'edit' : ''}}" on:submit="onsubmit(event)" on:input="oninput(event)">
+<form ref:form class="form {inEdit ? 'edit' : ''}" on:submit="onsubmit(event)" on:input="oninput(event)">
 	<div class="subforms">
-		{{#each rows as row, idx}}
+		{#each rows as row, idx}
 		<div class="form-row">
 			<input type="hidden" bind:value=row.id>
+			<input class="description" placeholder="description"
+				bind:value="row.description"
+				on:input="matchGroup(categories, row, this)"
+				autofocus="autofocus">
 			<div class="select-wrap">
-				<select class="select category" bind:value=row.group_id autofocus="autofocus">
-					{{#each categories as cat}}
-					<optgroup label="{{cat.name}}">
-						{{#if cat.groups}}
-						{{#each cat.groups as group}}
-						<option value="{{group.id}}">{{group.name}}</option>
-						{{/each}}
-						{{/if}}
+				<select class="select category" bind:value=row.group_id>
+					{#each categories as cat}
+					<optgroup label="{cat.name}">
+						{#if cat.groups}
+						{#each cat.groups as group}
+						<option value="{group.id}">{group.name}</option>
+						{/each}
+						{/if}
 					</optgroup>
-					{{/each}}
+					{/each}
 				</select>
 			</div>
-			<input class="description" placeholder="description" bind:value="row.description">
 			<input class="amount" placeholder="0.00" bind:value=row.amount on:keydown="onkeydown(event)">
 
-			{{#if idx === 0}}
+			{#if idx === 0}
 			<button type="button" title="Split" class="btn btn-split ion-md-swap" on:click="split()"></button>
-			{{else}}
+			{:else}
 			<button type="button" title="Remove" class="btn btn-unsplit ion-md-close" on:click="unsplit(idx)"></button>
-			{{/if}}
+			{/if}
 		</div>
-		{{/each}}
+		{/each}
 	</div>
 	<div class="form-row form-row-repeat">
 		<label>Repeat every month, for </label>
@@ -45,6 +48,18 @@
 <script>
 import util from './util.js';
 
+function matches (categories, txt) {
+	txt = txt.toLowerCase();
+	for (const c of categories) {
+		for (const g of c.groups) {
+			if (g.keywords && g.keywords.toLowerCase().indexOf(txt) > -1) return g.id;
+			if (g.name.toLowerCase().indexOf(txt) > -1) return g.id;
+		}
+	}
+	return;
+}
+
+
 export default {
 	data () {
 		return {
@@ -55,10 +70,16 @@ export default {
 			categories: [],
 		};
 	},
+	computed: {},
 	methods: {
+		matchGroup (categories, row, el) {
+			if (!categories || !categories.length) return;
+			const id = row.description ? matches(categories, row.description) : categories[0].groups[0].id;
+			if (id) el.parentNode.querySelector('.category').value = id;
+		},
 		getData () {
-			const date = this.get('date') || new Date().toISOString().substr(0, 7);
-			const entries = util.deepCopyArray(this.get('rows'))
+			const date = this.get().date || new Date().toISOString().substr(0, 7);
+			const entries = util.deepCopyArray(this.get().rows)
 				.map(e => {
 					e.date = date;
 					e.amount = util.parseAmount(e.amount);
@@ -71,18 +92,18 @@ export default {
 			entries[0].amount -= sum;
 
 			// repeat monthly
-			const repeater = this.get('repeat');
+			const repeater = this.get().repeat;
 			return util.repeatEntries(entries, repeater);
 		},
 
 		split () {
-			const rows = this.get('rows');
+			const rows = this.get().rows;
 			rows.push({id: '', description: rows[0].description, amount: ''});
 			this.set({ rows });
 		},
 
 		unsplit (idx) {
-			const rows = this.get('rows');
+			const rows = this.get().rows;
 			rows.splice(idx, 1);
 			this.set({ rows });
 		},
@@ -109,7 +130,7 @@ export default {
 		},
 
 		remove () {
-			this.fire('remove', { id: this.get('rows')[0].id });
+			this.fire('remove', { id: this.get().rows[0].id });
 			this.reset();
 		},
 

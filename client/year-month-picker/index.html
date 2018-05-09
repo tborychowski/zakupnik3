@@ -1,4 +1,4 @@
-<div class="year-month-picker {{isToday ? 'is-today': ''}}" on:wheel="onwheel(event)">
+<div class="year-month-picker {isToday ? 'is-today': ''}" on:wheel="onwheel(event)">
 	<button ref:leftButton class="btn-prev" title="Previous month"
 		on:keydown="keydown(event.key, -1)"
 		on:keyup="keyup(event.key)"
@@ -6,7 +6,7 @@
 		on:mouseout="mup()"
 		on:mouseup="mup()"><i class="ion-ios-arrow-back"></i></button>
 
-	<span class="day">{{months[month]}} {{year}}</span>
+	<span class="day">{months[month]} {year}</span>
 
 	<button ref:rightButton class="btn-next" title="Next month"
 		on:keydown="keydown(event.key, 1)"
@@ -30,8 +30,8 @@ function zeroState () {
 export default {
 	data () { return zeroState(); },
 	computed: {
-		isToday: (month, year, current) => (month === current.month && year === current.year),
-		dateStr: (month, year) => `${year}-${('0' + (month + 1)).substr(-2)}`
+		isToday: ({month, year, current}) => (month === current.month && year === current.year),
+		dateStr: ({month, year}) => `${year}-${('0' + (month + 1)).substr(-2)}`
 	},
 	methods: {
 		onwheel (e) {
@@ -85,7 +85,7 @@ export default {
 		tick (value, delay = 300) {
 			if (this.ticker) clearTimeout(this.ticker);
 			this.go(value);
-			if (this.get('isToday')) return this.notify();
+			if (this.get().isToday) return this.notify();
 			this.mouseIsDown = true;
 			this.ticker = setTimeout(() => {
 				delay = Math.max(60, delay - 40);
