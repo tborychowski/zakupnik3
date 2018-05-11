@@ -5,11 +5,6 @@
 	position relative
 	font inherit
 
-	.btn-split
-	.btn-unsplit
-		width 32
-		padding 5 0
-
 	.btn-remove
 	.btn-cancel
 	.btn-save
@@ -31,29 +26,15 @@
 .form-row
 	display flex
 	align-items center
+	justify-content stretch
 	padding 5px 20
-	border 1px solid form-element-border
-	border-width 0 0 1px
 
-
-.form-row-repeat
-	border none
-	padding-top 10px
-	padding-bottom 10px
-
-	input
-		width 30
-		margin 0 5
-		padding-left 0
-		padding-right 0
-		text-align center
-		-moz-appearance textfield
-		appearance textfield
-
-	label
-		line-height 20px
-		display block
-
+	textarea
+		flex 1
+		padding 10
+		margin 10 0
+		height 1.1em
+		box-sizing content-box
 
 
 .form-footer
@@ -68,33 +49,3 @@
 	.btn-remove
 	.btn-reset
 		margin-left 0
-
-
-
-.subforms
-	.select-wrap
-		border 1px solid transparent;
-
-	input
-		border-color transparent
-
-	button
-		min-width 0
-
-
-	.form-row
-		justify-content stretch
-
-		.select-wrap
-		input
-			margin-right 5
-
-	.category
-		width 140
-
-	.description
-		flex 1
-
-	.amount
-		width 100
-		text-align right

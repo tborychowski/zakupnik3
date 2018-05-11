@@ -44,12 +44,19 @@
 			content '€'
 			color #666
 			margin-right 5
-	tbody
-		tr:nth-child(odd)
+
+	tbody tr
+		&:nth-child(odd)
 			background #fcfcfc
 
-		tr:hover
+		&:hover
 			background #aaa
+
+		td
+			height 30px
+
+	.row-filler td
+		height auto
 
 	.empty-row td
 		vertical-align top

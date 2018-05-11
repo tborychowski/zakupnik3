@@ -23,7 +23,7 @@ const Category = sequelize.define('category', {
 const Group = sequelize.define('group', {
 	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
 	name: { type: Sequelize.TEXT, allowNull: false },
-	keywords: { type: Sequelize.TEXT },	// comma separated
+	keywords: { type: Sequelize.TEXT, allowNull: false, defaultValue: '' },	// comma separated
 });
 Category.hasMany(Group);
 Group.belongsTo(Category);

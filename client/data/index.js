@@ -18,6 +18,10 @@ const Categories = {
 	get: () => get('categories'),
 };
 
+const Groups = {
+	get: () => get('groups'),
+};
+
 const Expenses = {
 	get: (date = '') => get(`entries?date=${date}`),
 	save: data => {
@@ -29,5 +33,6 @@ const Expenses = {
 
 export {
 	Categories,
+	Groups,
 	Expenses,
 };
