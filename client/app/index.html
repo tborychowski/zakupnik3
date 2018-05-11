@@ -42,7 +42,8 @@ export default {
 		},
 
 		onFormChange (data) {
-			// console.log('form changed', data);
+			if (!data.length) this.refs.table.set({ data: this.lastTableData });
+			else this.refs.table.set({ data });
 		},
 
 		onFormSubmit (data) {

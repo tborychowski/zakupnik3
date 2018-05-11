@@ -10,8 +10,8 @@
 			{#if filteredData && filteredData.length}
 			{#each filteredData as item, idx}
 				<tr on:click="onRowClick(item)">
-					<td>{item.date.substr(0, 7)}</td>
-					<td class="desc">{item.group.name} - {item.description}</td>
+					<td class="date">{item.date.substr(0, 7)}</td>
+					<td class="desc">{getDescription(item)}</td>
 					<td class="amount">{formatNumber(item.amount)}</td>
 				</tr>
 			{/each}
@@ -50,7 +50,13 @@ export default {
 		return { data: [], filter: '' };
 	},
 	helpers: {
-		formatNumber
+		formatNumber,
+		getDescription (item) {
+			const desc = [];
+			if (item.group.name) desc.push(item.group.name);
+			if (item.description) desc.push(item.description);
+			return desc.join(' - ');
+		}
 	},
 	computed: {
 		filteredData ({data, filter}) {

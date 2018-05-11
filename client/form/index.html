@@ -1,15 +1,21 @@
 <form ref:form class="form {inEdit ? 'edit' : ''}" on:submit="onsubmit(event)">
 	<div class="form-row">
 		<input type="hidden" name="id" bind:value="id">
-		<textarea ref:textbox on:input="oninput(this)" on:keydown="onkeydown(event)" bind:value="text" autofocus></textarea>
+		<textarea autofocus
+			ref:textbox
+			tabindex="1"
+			placeholder="e.g. Tesco 12.50"
+			on:input="oninput(this)"
+			on:keydown="onkeydown(event)"
+			bind:value="text"></textarea>
 	</div>
 	<div class="form-footer form-row">
-		<button type="button" class="btn btn-reset" on:click="reset()">Clear</button>
-		<button type="button" class="btn danger btn-remove" on:click="remove()">Remove</button>
+		<button type="button" tabindex="3" class="btn btn-reset" on:click="reset()">Clear</button>
+		<button type="button" tabindex="4" class="btn danger btn-remove" on:click="remove()">Remove</button>
 		<div class="flex-filler"></div>
-		<button type="button" class="btn btn-cancel" on:click="reset()">Cancel</button>
-		<button type="submit" class="btn success btn-save">Save</button>
-		<button type="submit" class="btn success btn-add">Add</button>
+		<button type="button" tabindex="3" class="btn btn-cancel" on:click="reset()">Cancel</button>
+		<button type="submit" tabindex="2" class="btn success btn-save">Save</button>
+		<button type="submit" tabindex="2" class="btn success btn-add">Add</button>
 	</div>
 </form>
 
@@ -29,7 +35,7 @@ export default {
 		_groups ({groups}) {
 			return groups.map(g => {
 				const str = (g.name + ',' + g.keywords).toLowerCase().split(',');
-				return { id: g.id, str }
+				return { id: g.id, name: g.name, str }
 			});
 		}
 	},
@@ -38,43 +44,54 @@ export default {
 		oninput (el) {
 			this.toggleAmountError();
 			this.parseEntryText(el.value);
+			this.updateHeight();
 		},
 
 		onkeydown (e) {
 			if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) this.onsubmit(e);
+			else if (e.key === 'Escape') this.reset(e);
 		},
 
 		edit (data) {
 			this.reset();
 			this.set({ inEdit: true, text: data });
-			this.fire('change', '');
+			this.fire('change', this.get().rows);
 		},
 
 		reset () {
 			this.set({ inEdit: false, id: null, text: '', rows: [] });
 			this.toggleAmountError();
-			this.fire('change', '');
+			this.fire('change', []);
+			this.updateHeight();
 			this.refs.textbox.focus();
 		},
 
 		remove () {
-			this.fire('remove', { id: null });
+			this.fire('remove', { id: this.get().id });
 			this.reset();
 		},
 
 		onsubmit (e) {
 			e.preventDefault();
-			const data = this.get().rows;
-			if (!data.length) {
+			const data = this.get();
+			const rows = data.rows;
+			if (!rows.length) {
 				this.toggleAmountError('Please enter amount and category');
 				return this.fire('error', 'Please enter amount and category');
 			}
-			this.fire('submit', data);
+			// item was edited
+			if (data.id && rows.length === 1) rows[0].id = data.id;
+			this.fire('submit', rows);
 			this.reset();
 		},
 
 		toggleAmountError (msg = '') {
 			this.refs.textbox.setCustomValidity(msg);
+		},
+
+		updateHeight () {
+			const noLines = this.refs.textbox.value.split('\n').length;
+			this.refs.textbox.style.height = `${noLines * 1.1}em`;
 		},
 
 		parseAmount (amount) {
@@ -95,7 +112,7 @@ export default {
 			if (!value) return;
 			const groups = this.get()._groups;
 			for (const g of groups) {
-				if (g.str.indexOf(value) > -1) return g.id;
+				if (g.str.indexOf(value) > -1) return g;
 			}
 			return;
 		},
@@ -105,8 +122,8 @@ export default {
 			if (value.match(/^\d+\.\d+$/)) return { type: 'amount', value: parseFloat(value), score: 9 };
 			if (value.match(/^[\d\.()+-/*]+$/)) return { type: 'amount', value: this.parseAmount(value), score: 10 };
 
-			const groupId = this.getGroup(value);
-			if (groupId) return { type: 'group', value: groupId, score: 10 };
+			const group = this.getGroup(value);
+			if (group && group.id) return { type: 'group', value, group, score: 10 };
 
 			return { type: 'description', value, score: 10 };
 		},
@@ -119,10 +136,10 @@ export default {
 			const amount = amountIdx > -1 ? words.splice(amountIdx, 1)[0].value : '';
 
 			const groupIdx = words.findIndex(w => w.type === 'group');
-			const group_id = groupIdx > -1 ? words.splice(groupIdx, 1)[0].value : '';
+			const group = groupIdx > -1 ? words.splice(groupIdx, 1)[0].group : {};
 
 			const description = words.map(w => w.value).join(' ').trim();
-			return {amount, group_id, description};
+			return {amount, description, group, group_id: group.id };
 		},
 
 		parseEntryText (val) {
