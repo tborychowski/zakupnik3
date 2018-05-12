@@ -51,23 +51,24 @@
 			color #666
 			margin-right 5
 
-	tbody tr
-		&:nth-child(odd)
+	tbody
+		tr:nth-child(odd)
 			background #fcfcfc
 
-		&:hover
+		.table-row:hover
 			background #aaa
 
-		td
+		tr td
 			height 30px
 
 	.row-filler td
 		height auto
 
-	.empty-row td
-		vertical-align middle
-		text-align center
-		height auto
+	.empty-row
+		td
+			vertical-align middle
+			text-align center
+			height auto
 
 
 .table-filter-cell

@@ -8,7 +8,7 @@
 	<tbody>
 		{#if filteredData && filteredData.length}
 		{#each filteredData as item, idx}
-			<tr on:click="onRowClick(item)">
+			<tr class="table-row" on:click="onRowClick(item)">
 				<td class="date">{item.date.substr(0, 7)}</td>
 				<td class="desc">{getDescription(item)}</td>
 				<td class="amount">{formatNumber(item.amount)}</td>
@@ -45,7 +45,7 @@ function formatNumber (num) {
 
 export default {
 	data () {
-		return { data: [], filter: '' };
+		return { data: [], filter: '', isPreview: false };
 	},
 	helpers: {
 		formatNumber,
@@ -79,7 +79,7 @@ export default {
 			if (e.key === 'Escape') this.set({ filter: '' });
 		},
 		onRowClick (item) {
-			this.fire('click', item);
+			if (!this.get().isPreview) this.fire('click', item);
 		}
 	}
 };

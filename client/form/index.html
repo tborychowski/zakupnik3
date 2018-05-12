@@ -5,7 +5,8 @@
 			ref:textbox
 			tabindex="1"
 			placeholder="e.g. Tesco 12.50"
-			on:input="oninput(this)"
+			on:focus="onfocus()"
+			on:input="oninput()"
 			on:keydown="onkeydown(event)"
 			bind:value="text"></textarea>
 	</div>
@@ -50,19 +51,28 @@ export default {
 	},
 
 	methods: {
-		oninput (el) {
+		onfocus () {
+			this.parse();
+		},
+
+		oninput () {
 			this.toggleAmountError();
 			this.updateHeight();
-
-			// TODO: debounce this
-			const rows = Parser.parse(el.value, this.get());
-			this.set({ rows });
-			this.fire('change', rows);
+			this.parse();
 		},
 
 		onkeydown (e) {
 			if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) this.onsubmit(e);
 			else if (e.key === 'Escape') this.reset(e);
+		},
+
+		parse () {
+			if (this.parseTimer) clearTimeout(this.parseTimer);
+			this.parseTimer = setTimeout(() => {
+				const rows = Parser.parse(this.get().text, this.get());
+				this.set({ rows });
+				this.fire('change', rows);
+			}, 300);
 		},
 
 		edit (data) {
