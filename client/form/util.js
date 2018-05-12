@@ -1,4 +1,3 @@
-
 function parseAmount (amount) {
 	/* eslint no-eval: 0 */
 	amount = ('' + amount).replace(/\s/g, '');

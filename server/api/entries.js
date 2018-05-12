@@ -19,7 +19,7 @@ function get (req, res) {
 
 	return Entry
 		.findAll({
-			order: [['date', 'DESC']],
+			order: [['id', 'DESC'], ['date', 'DESC']],
 			where,
 			include: { model: Group, include: Category }
 		})
@@ -29,7 +29,8 @@ function get (req, res) {
 
 // add new
 function post (req, res) {
-	return Entry.create(req.body)
+	const createFn = Array.isArray(req.body) ? 'bulkCreate' : 'create';
+	return Entry[createFn](req.body)
 		.then(item => res.status(200).json(item))
 		.catch(e => res.status(500).json(e));
 }

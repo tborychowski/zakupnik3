@@ -47,14 +47,11 @@ export default {
 		},
 
 		onFormSubmit (data) {
-			console.log(data);
-			// Expenses.save(data).then(() => {
-			// 	this.loadTable();
-			// });
+			Expenses.save(data).then(() => this.loadTable());
 		},
 
 		onRemoveItem (item) {
-			console.log(item);
+			Expenses.del(item.id).then(() => this.loadTable());
 		},
 
 		onFormError (err) {
