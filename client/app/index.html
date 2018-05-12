@@ -42,8 +42,8 @@ export default {
 		},
 
 		onFormChange (data) {
-			if (!data.length) this.refs.table.set({ data: this.lastTableData });
-			else this.refs.table.set({ data });
+			if (data && data.length) this.refs.table.set({ data });
+			else this.refs.table.set({ data: this.lastTableData });
 		},
 
 		onFormSubmit (data) {
