@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const gulp = require('gulp');
 const cssmin = require('gulp-clean-css');
 const webpack = require('webpack-stream');
@@ -12,6 +14,7 @@ const env = require('gulp-env');
 const nodemon = require('gulp-nodemon');
 const noop = require('through2').obj;
 const sourcemaps = require('gulp-sourcemaps');
+const livereload = require('gulp-livereload');
 const isProd = require('minimist')(process.argv.slice(2)).prod;
 const webpackConfig = require('./webpack.config.js');
 const PUBLIC_PATH = 'public/';
@@ -67,7 +70,8 @@ gulp.task('js', ['eslint'], () => {
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(webpack(webpackConfig, null, wpErr))
 		.pipe(isProd ? uglify() : noop())
-		.pipe(gulp.dest(PUBLIC_PATH));
+		.pipe(gulp.dest(PUBLIC_PATH))
+		.pipe(livereload());
 });
 
 
@@ -79,7 +83,8 @@ gulp.task('styl', () => {
 		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
 		.pipe(concat('index.css'))
 		.pipe(isProd ? noop() : sourcemaps.write())
-		.pipe(gulp.dest(PUBLIC_PATH));
+		.pipe(gulp.dest(PUBLIC_PATH))
+		.pipe(livereload());
 });
 
 
@@ -107,6 +112,10 @@ gulp.task('test', ['test-server'], () => {
 
 gulp.task('watch', ['default'], () => {
 	if (isProd) return;
+	livereload.listen({
+		key: fs.readFileSync(path.join(__dirname, 'server', 'localhost.key'), 'utf-8'),
+		cert: fs.readFileSync(path.join(__dirname, 'server', 'localhost.crt'), 'utf-8'),
+	});
 	gulp.watch('client/**/*.styl', ['styl']);
 	gulp.watch('client/**/*.js', ['js']);
 	gulp.watch('client/**/*.html', ['js']);

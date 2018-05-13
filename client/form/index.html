@@ -4,7 +4,7 @@
 		<textarea autofocus
 			ref:textbox
 			tabindex="1"
-			placeholder="e.g. Tesco 12.50"
+			placeholder="e.g. tesco 12.50"
 			on:focus="onfocus()"
 			on:input="oninput()"
 			on:keydown="onkeydown(event)"
@@ -34,7 +34,7 @@ export default {
 			inEdit: false,
 			date: new Date().toISOString().substr(0, 7),
 			id: null,
-			text: 'Utilities (electricity, gas, internet) spotify 10',
+			text: '',
 			groups: [],
 			rows: [],
 		};
