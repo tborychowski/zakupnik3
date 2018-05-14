@@ -6,20 +6,22 @@
 	left 0
 	right 0
 	bottom 0
-	padding 0 0 20
-	display flex
-	flex-flow column
-	justify-content stretch
+	padding 20
 	overflow-y auto
+	display grid
+	grid-gap 20px
+	grid-template-columns 1fr 1fr
+	grid-template-rows 168px 1fr
+	grid-auto-flow column
 
+
+.categories
+.form-box
+.table
+.chart
+	box-shadow 0 1px 5px rgba(#000, .4)
+	background #eee
 
 .form-box
 .table
-	box-shadow 0 1px 5px rgba(#000, .4)
-	width 600
-	background #eee
-	margin-left 20
-
-.form-box
-	margin-top 20
-	margin-bottom 20
+	min-width 600px

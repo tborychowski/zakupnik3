@@ -3,19 +3,24 @@
 	<Form ref:form></Form>
 </div>
 <Table ref:table></Table>
+<Chart></Chart>
+<Categories ref:categories></Categories>
 
 <script>
 import YearMonthPicker from '../year-month-picker';
 import Form from '../form';
 import Table from '../table';
-import {Groups, Expenses} from '../data';
+import Categories from '../categories';
+import Chart from '../chart';
+import Data from '../data';
 
 export default {
 	data () { return {}; },
-	components: { Form, Table, YearMonthPicker },
+	components: { Form, Table, YearMonthPicker, Categories, Chart },
 	oncreate () {
 		const date = new Date().toISOString().substr(0, 7);
-		Groups.get().then(groups => this.refs.form.set({ date, groups }));
+		Data.Groups.get().then(groups => this.refs.form.set({ date, groups }));
+		Data.Categories.get().then(categories => this.refs.categories.set({ categories }));
 		this.loadTable(date);
 
 		this.refs.form.on('change', this.onFormChange.bind(this));
@@ -30,7 +35,7 @@ export default {
 		loadTable (date) {
 			if (!date) date = this.lastDate;
 			else this.lastDate = date;
-			Expenses.get(date).then(data => {
+			Data.Expenses.get(date).then(data => {
 				this.lastTableData = data;
 				this.refs.table.set({ data });
 			});

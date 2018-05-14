@@ -35,7 +35,7 @@ const Expenses = {
 };
 
 
-export {
+export default {
 	Categories,
 	Groups,
 	Expenses,
