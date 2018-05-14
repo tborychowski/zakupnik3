@@ -7,5 +7,4 @@ _stuff/
 
 *.db
 
-mongodb/
-
+public/

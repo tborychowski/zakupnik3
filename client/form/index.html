@@ -21,12 +21,8 @@
 </form>
 
 <script>
+import {$} from '../core';
 import Parser from './text-parser';
-
-function formatNumber (num) {
-	num = Math.round(0 + num * 100) / 100;
-	return num.toLocaleString('en-GB', { minimumFractionDigits: 2 })
-}
 
 export default {
 	data () {
@@ -77,7 +73,7 @@ export default {
 
 		edit (data) {
 			this.reset();
-			const text = `${data.group.name} ${data.description} ${formatNumber(data.amount)}`;
+			const text = `${data.group.name} ${data.description} ${$.formatNumber(data.amount)}`;
 			this.set({ inEdit: true, id: data.id, date: data.date, text });
 			this.fire('change', this.get().rows);
 		},
