@@ -2,12 +2,12 @@
 <div class="categories-wrap">
 	{#if categories && categories.length}
 		{#each categories as cat, idx}
-		<h2>{cat.name}</h2>
-		<ol>
-				{#each cat.groups as group}
-					<li>{group.name}</li>
-				{/each}
-			</ol>
+		<h2>{cat.name} <i class="ion-md-create"></i> <i class="ion-md-close"></i> <i class="ion-md-add"></i></h2>
+		<ul>
+			{#each cat.groups as group}
+				<li>{group.name} {group.keywords} <i class="ion-md-create"></i> <i class="ion-md-close"></i></li>
+			{/each}
+		</ul>
 		{/each}
 	{:else}
 	<div>No results</div>
