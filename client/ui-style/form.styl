@@ -1,5 +1,39 @@
 @import "lib"
 
+form
+	position relative
+	font inherit
+
+	.btn-remove
+	.btn-cancel
+	.btn-save
+		display none
+
+	&.add
+		.btn-add
+		.btn-reset
+			display block
+
+	&.edit
+		.btn-remove
+		.btn-cancel
+		.btn-save
+			display block
+
+		.btn-add
+		.btn-reset
+			display none
+
+.form-row
+	display flex
+	align-items center
+	justify-content stretch
+	padding 5px 20
+
+
+.flex-filler
+	flex 1
+
 
 .select-wrap
 	border-radius 5
@@ -11,8 +45,9 @@
 	transition background-color .3s ease-out, border-color .3s ease-out, box-shadow .3s ease-out
 	height 34
 	display inline-block
+	background-color rgba(form-element-bg, 0.8)
 	&:focus-within
-		background-color rgba(form-element-bg, 0.8)
+		background-color form-element-bg
 		border-color accent-color
 		shadow 0 0 2 1 accent-color
 
@@ -46,13 +81,15 @@ input
 	transition background-color .3s ease-out, border-color .3s ease-out, box-shadow .3s ease-out
 	border 1 form-element-border
 	color form-element-text
-	background-color rgba(form-element-bg, 0.1)
-
+	background-color rgba(form-element-bg, 0.8)
 
 	&:focus
-		background-color rgba(form-element-bg, 0.8)
+		background-color form-element-bg
 		border-color orange
 		shadow 0 0 2 1 orange
+
+	&:disabled
+		opacity 0.5
 
 
 label

@@ -1,18 +1,44 @@
 <div class="categories">
-<div class="categories-wrap">
-	{#if categories && categories.length}
-		{#each categories as cat, idx}
-		<h2>{cat.name} <i class="ion-md-create"></i> <i class="ion-md-close"></i> <i class="ion-md-add"></i></h2>
-		<ul>
-			{#each cat.groups as group}
-				<li>{group.name} {group.keywords} <i class="ion-md-create"></i> <i class="ion-md-close"></i></li>
+	<div class="categories-wrap">
+		<h1>Categories <button class="btn-outline ion-md-add" on:click="add()"></button></h1>
+		<form on:submit="onsubmit(event)" class="{mode}" on:input="oninput()">
+			<div class="form-row">
+				<input bind:value="form.id" type="hidden">
+				<div class="select-wrap">
+					<select bind:value="form.category_id">
+						<option value="0">MAIN CATEGORY</option>
+						{#each categories as cat, idx}
+						<option value="{cat.id}">{cat.name}</option>
+						{/each}
+					</select>
+				</div>
+				<input bind:value="form.name" class="name" placeholder="e.g. Groceries" ref:nameField>
+				<input bind:value="form.keywords" class="keywords" placeholder="e.g. tesco,supervalu"
+					disabled="{form.category_id === '0'}">
+			</div>
+			<div class="form-row">
+				<button type="button" tabindex="3" class="btn btn-reset" on:click="reset()">Reset</button>
+				<button type="button" tabindex="4" class="btn danger btn-remove" on:click="remove()">Remove</button>
+				<div class="flex-filler"></div>
+				<button type="button" tabindex="3" class="btn btn-cancel" on:click="reset()">Cancel</button>
+				<button type="submit" tabindex="2" class="btn success btn-save">Save</button>
+				<button type="submit" tabindex="2" class="btn success btn-add">Add</button>
+			</div>
+		</form>
+
+		{#if categories && categories.length}
+			{#each categories as cat, idx}
+			<h2 class="editable-cat" on:click="edit(cat, this)">{cat.name}</h2>
+			<ul>
+				{#each cat.groups as group}
+					<li class="editable-cat" on:click="edit(group, this)">{group.name} {group.keywords}</li>
+				{/each}
+			</ul>
 			{/each}
-		</ul>
-		{/each}
-	{:else}
-	<div>No results</div>
-	{/if}
-</div>
+		{:else}
+		<div>No results</div>
+		{/if}
+	</div>
 </div>
 
 
@@ -21,14 +47,63 @@ export default {
 	data () {
 		return {
 			categories: [],		// same as categories
-			inEdit: false
+			mode: 'view',		// view | edit | add
+			form: {category_id: '0', name: '', keywords: ''}
 		};
 	},
-	helpers: {
-	},
-	computed: {
-	},
 	methods: {
+		add () {
+			this.reset();
+			this.set({ mode: 'add' });
+		},
+
+		edit (item, el) {
+			this.reset();
+			const form = Object.assign({category_id: '0', keywords: ''}, item);
+			form.type = form.category_id === '0' ? 'category' : 'group';
+			this.set({ mode: 'edit', form });
+			this.elInEdit = el;
+			this.elInEdit.classList.add('in-edit');
+		},
+
+		reset (mode = 'view') {
+			this.set({ mode, form: {category_id: '0', name: '', keywords: ''} });
+			this.showError();
+			if (this.elInEdit) {
+				this.elInEdit.classList.remove('in-edit');
+				this.elInEdit = null;
+			}
+		},
+
+		remove () {
+			const form = this.get().form;
+			if (!form.id) return;
+			console.log(form.id, form.type);
+
+			//TODO: remove(form.id).then(reset).then(refreshList);
+		},
+
+		onsubmit (e) {
+			e.preventDefault();
+			const form = this.get().form;
+			delete form.type;
+			delete form.groups;
+			if (form.category_id === '0') delete form.category_id;
+			if (!form.name) return this.showError('Name is required');
+			console.log(form);
+
+			//TODO: save(form).then(reset).then(refreshList);
+
+		},
+
+		oninput () {
+			this.showError();
+		},
+
+		showError (err = '') {
+			this.refs.nameField.setCustomValidity(err);
+		}
+
 	}
 };
 </script>
