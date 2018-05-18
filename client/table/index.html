@@ -49,7 +49,7 @@ export default {
 		formatNumber: $.formatNumber,
 		getDescription (item) {
 			const desc = [];
-			if (item.group.name) desc.push(item.group.name);
+			if (item.group && item.group.name) desc.push(item.group.name);
 			if (item.description) desc.push(item.description);
 			return desc.join(' - ');
 		}

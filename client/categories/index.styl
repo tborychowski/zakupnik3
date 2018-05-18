@@ -22,7 +22,7 @@
 
 		button
 			position absolute
-			left 20px
+			right 10px
 			top 9px
 
 	.form-row
@@ -44,21 +44,35 @@
 		.btn-cancel
 			margin-right 10px
 
-.editable-cat
-	cursor pointer
+	.cat-groups
+		margin 0 0 0 0
+		padding 0
+		list-style none
 
-	&:hover
-		text-decoration underline
+	h2
+		margin 20px 0 5px
 
-	&.in-edit
-		background yellow
+	.editable-cat
+		padding 5px 20px
+		cursor default
 
+		em
+			color #666
+			margin-left 20px
 
-form
-	&.view
-		opacity 0.4
-		pointer-events none
 	&.add
 	&.edit
+		.editable-cat
+			cursor pointer
+			&:hover
+				background #aaa
+
+			&.in-edit
+				background #bdf
+
+	&.view form
+		display none
+
+	&.add form
+	&.edit form
 		display block
-		opacity 1

@@ -20,7 +20,6 @@ export default {
 	oncreate () {
 		const date = new Date().toISOString().substr(0, 7);
 		Data.Groups.get().then(groups => this.refs.form.set({ date, groups }));
-		Data.Categories.get().then(categories => this.refs.categories.set({ categories }));
 		this.loadTable(date);
 
 		this.refs.form.on('change', this.onFormChange.bind(this));
