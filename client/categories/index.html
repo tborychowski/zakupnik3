@@ -1,0 +1,145 @@
+<div class="categories {mode}" ref:main>
+	<div class="categories-wrap">
+		<h1>Categories
+			<button class="btn-outline ion-md-settings" on:click="toggleEdit()"></button>
+		</h1>
+		<form on:submit="onsubmit(event)" on:input="oninput()">
+			<div class="form-row">
+				<input bind:value="form.id" type="hidden">
+				<div class="select-wrap">
+					<select bind:value="form.category_id">
+						<option value="0">MAIN CATEGORY</option>
+						{#each categories as cat, idx}
+						<option value="{cat.id}">{cat.name}</option>
+						{/each}
+					</select>
+				</div>
+				<input bind:value="form.name" class="name" ref:nameField placeholder="e.g. Groceries">
+				<input bind:value="form.keywords" class="keywords" disabled="{form.category_id === '0'}" placeholder="e.g. tesco,supervalu">
+			</div>
+			<div class="form-row">
+				<button type="button" tabindex="3" class="btn btn-reset" on:click="reset()">Reset</button>
+				<button type="button" tabindex="4" class="btn danger btn-remove" on:click="remove()">Remove</button>
+				<div class="flex-filler"></div>
+				<button type="button" tabindex="3" class="btn btn-cancel" on:click="reset()">Cancel</button>
+				<button type="submit" tabindex="2" class="btn success btn-save">Save</button>
+				<button type="submit" tabindex="2" class="btn success btn-add">Add</button>
+			</div>
+		</form>
+
+		{#if categories && categories.length}
+			{#each categories as cat, idx}
+			<h2 class="editable-cat" on:click="onclick(cat, this)">{cat.name}</h2>
+			<ul class="cat-groups">
+				{#each cat.groups as group}
+					<li class="editable-cat" on:click="onclick(group, this)">
+						{group.name}
+						<em>{group.keywords}</em>
+					</li>
+				{/each}
+			</ul>
+			{/each}
+		{:else}
+		<div>No results</div>
+		{/if}
+	</div>
+</div>
+
+
+<script>
+import Data from '../data';
+
+export default {
+	data () {
+		return {
+			categories: [],		// same as categories
+			mode: 'view',		// view | edit | add
+			form: {category_id: '0', name: '', keywords: ''}
+		};
+	},
+	oncreate () {
+		this.load();
+	},
+
+	methods: {
+		load () {
+			Data.Categories.get().then(categories => this.set({ categories }));
+		},
+
+		toggleEdit () {
+			let mode = this.get().mode;
+			this.reset();
+			mode = (mode === 'view' ? 'add' : 'view');
+			this.set({ mode });
+		},
+
+		edit (item, el) {
+			this.reset();
+			const form = Object.assign({category_id: '0', keywords: ''}, item);
+			form.type = form.category_id === '0' ? 'category' : 'group';
+			this.set({ mode: 'edit', form });
+			this.elInEdit = el;
+			this.elInEdit.classList.add('in-edit');
+		},
+
+		reset () {
+			this.set({ mode: 'add', form: {category_id: '0', name: '', keywords: ''} });
+			this.showError();
+			if (this.elInEdit) {
+				this.elInEdit.classList.remove('in-edit');
+				this.elInEdit = null;
+			}
+		},
+
+		remove () {
+			const form = this.get().form;
+			const type = form.type;
+			if (!form.id) return;
+
+			const res = type === 'category' ? Data.Categories : Data.Groups;
+			res
+				.del(form.id)
+				.then(() => {
+					this.reset();
+					this.load();
+				});
+		},
+
+		onclick (item, el) {
+			if (this.get().mode === 'view') return;
+			this.edit(item, el);
+			this.refs.main.scrollTop = 0;
+		},
+
+		onsubmit (e) {
+			e.preventDefault();
+			const form = this.get().form;
+			const type = form.type;
+			delete form.type;
+			delete form.groups;
+			if (form.category_id === '0') {
+				delete form.category_id;
+				delete form.keywords;
+			}
+			if (!form.name) return this.showError('Name is required');
+
+			const res = type === 'category' ? Data.Categories : Data.Groups;
+			res
+				.save(form)
+				.then(() => {
+					this.reset();
+					this.load();
+				});
+		},
+
+		oninput () {
+			this.showError();
+		},
+
+		showError (err = '') {
+			this.refs.nameField.setCustomValidity(err);
+		}
+
+	}
+};
+</script>

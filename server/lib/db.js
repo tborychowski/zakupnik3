@@ -34,7 +34,7 @@ const Entry = sequelize.define('entry', {
 	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
 	date: { type: Sequelize.TEXT, allowNull: false },
 	amount: { type: Sequelize.REAL, allowNull: false },
-	description: { type: Sequelize.TEXT },
+	description: { type: Sequelize.TEXT, defaultValue: '' },
 });
 Group.hasMany(Entry);
 Entry.belongsTo(Group);

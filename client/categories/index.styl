@@ -1,0 +1,78 @@
+@import "lib"
+
+.categories
+	overflow-y auto
+
+	.categories-wrap
+		height 100%
+
+	h1
+	form
+		background #ccc
+		margin 0
+		padding 10px 0
+		border-bottom 1px solid #888
+		position sticky
+		top 0
+
+	h1
+		padding 12px 20px 10px
+		font-size 20px
+		text-align center
+
+		button
+			position absolute
+			right 10px
+			top 9px
+
+	.form-row
+		.select-wrap
+			min-width 140px
+			width 180px
+
+		input
+		.select-wrap
+			min-width 0
+
+		.select-wrap
+		.name
+			margin-right 5px
+
+		.keywords
+			flex 1
+
+		.btn-cancel
+			margin-right 10px
+
+	.cat-groups
+		margin 0 0 0 0
+		padding 0
+		list-style none
+
+	h2
+		margin 20px 0 5px
+
+	.editable-cat
+		padding 5px 20px
+		cursor default
+
+		em
+			color #666
+			margin-left 20px
+
+	&.add
+	&.edit
+		.editable-cat
+			cursor pointer
+			&:hover
+				background #aaa
+
+			&.in-edit
+				background #bdf
+
+	&.view form
+		display none
+
+	&.add form
+	&.edit form
+		display block

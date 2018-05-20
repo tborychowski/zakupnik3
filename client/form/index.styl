@@ -3,49 +3,27 @@
 
 .form
 	position relative
-	font inherit
+	box-shadow 0 2px 2px #0006
+	z-index 100
 
-	.btn-remove
-	.btn-cancel
-	.btn-save
-		display none
+	.form-row
+		background #fff
+		textarea
+			flex 1
+			padding 10
+			margin 10 0
+			height 1.1em
+			box-sizing content-box
 
-	&.edit
+	.form-footer
+		background #ccc
+		border-top #aaa
+		padding 10 20
+
+		button
+			margin-left 10
+
+
 		.btn-remove
-		.btn-cancel
-		.btn-save
-			display block
-
-		.btn-add
 		.btn-reset
-			display none
-
-.flex-filler
-	flex 1
-
-.form-row
-	display flex
-	align-items center
-	justify-content stretch
-	padding 5px 20
-
-	textarea
-		flex 1
-		padding 10
-		margin 10 0
-		height 1.1em
-		box-sizing content-box
-
-
-.form-footer
-	background #ccc
-	border-top #aaa
-	padding 10 20
-
-	button
-		margin-left 10
-
-
-	.btn-remove
-	.btn-reset
-		margin-left 0
+			margin-left 0

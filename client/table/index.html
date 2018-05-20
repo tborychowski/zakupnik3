@@ -16,9 +16,7 @@
 		{/each}
 			<tr class="row-filler"><td colspan="3"></td></tr>
 		{:else}
-			<tr class="empty-row">
-				<td colspan="3">No results</td>
-			</tr>
+			<tr class="empty-row"><td colspan="3">No results</td></tr>
 		{/if}
 	</tbody>
 	<tfoot><tr>
@@ -37,21 +35,21 @@
 
 
 <script>
-
-function formatNumber (num) {
-	num = Math.round(0 + num * 100) / 100;
-	return num.toLocaleString('en-GB', { minimumFractionDigits: 2 })
-}
+import {$} from '../core';
 
 export default {
 	data () {
-		return { data: [], filter: '', isPreview: false };
+		return {
+			data: [],
+			filter: '',
+			isPreview: false
+		};
 	},
 	helpers: {
-		formatNumber,
+		formatNumber: $.formatNumber,
 		getDescription (item) {
 			const desc = [];
-			if (item.group.name) desc.push(item.group.name);
+			if (item.group && item.group.name) desc.push(item.group.name);
 			if (item.description) desc.push(item.description);
 			return desc.join(' - ');
 		}
@@ -71,9 +69,6 @@ export default {
 		},
 		total ({filteredData}) { return filteredData.reduce((p, c) => p + c.amount, 0); }
 	},
-	oncreate () {
-	},
-
 	methods: {
 		onFilterKeyDown (e) {
 			if (e.key === 'Escape') this.set({ filter: '' });

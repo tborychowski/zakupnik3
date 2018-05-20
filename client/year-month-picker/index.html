@@ -1,5 +1,5 @@
 <div class="year-month-picker {isToday ? 'is-today': ''}" on:wheel="onwheel(event)">
-	<button ref:leftButton class="btn-prev" title="Previous month"
+	<button ref:leftButton class="btn-outline btn-prev" title="Previous month"
 		on:keydown="keydown(event.key, -1)"
 		on:keyup="keyup(event.key)"
 		on:mousedown="tick(-1)"
@@ -8,14 +8,14 @@
 
 	<span class="day">{months[month]} {year}</span>
 
-	<button ref:rightButton class="btn-next" title="Next month"
+	<button ref:rightButton class="btn-outline btn-next" title="Next month"
 		on:keydown="keydown(event.key, 1)"
 		on:keyup="keyup(event.key)"
 		on:mousedown="tick(1)"
 		on:mouseout="mup()"
 		on:mouseup="mup()"><i class="ion-ios-arrow-forward"></i></button>
 
-	<button title="Today" class="btn-today" on:click="reset()"><i class="ion-md-undo"></i></button>
+	<button title="Today" class="btn-outline btn-today" on:click="reset()"><i class="ion-md-undo"></i></button>
 </div>
 
 <script>
