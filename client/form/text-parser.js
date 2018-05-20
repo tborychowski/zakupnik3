@@ -70,7 +70,7 @@ function findGroup(s, groups) {
 	for (let w of words) {
 		for (let g of groups) {
 			if (g.keywords.indexOf(w) > -1) {
-				s = s.replace(w, '');
+				// s = s.replace(w, '');
 				return [g, s];
 			}
 		}
