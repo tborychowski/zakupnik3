@@ -42,15 +42,14 @@ form
 	background-repeat no-repeat
 	background-position right .75rem center
 	background-size 8px 10px
-	border 1 form-element-border
+	border border-dark
 	transition background-color .3s ease-out, border-color .3s ease-out, box-shadow .3s ease-out
 	height 34
 	display inline-block
-	background-color rgba(form-element-bg, 0.8)
+	background-color bg-light
 	&:focus-within
-		background-color form-element-bg
 		border-color accent-color
-		shadow 0 0 2 1 accent-color
+		box-shadow 0 0 2px 1px accent-color
 
 
 select
@@ -61,7 +60,7 @@ select
 	box-sizing border-box
 	vertical-align top
 	padding 2 22 0 10
-	color form-element-text
+	color text-dark
 	width 100%
 	height 100%
 	text-indent -2px
@@ -80,14 +79,14 @@ input
 	height 34
 	padding 2px 10 0
 	transition background-color .3s ease-out, border-color .3s ease-out, box-shadow .3s ease-out
-	border 1 form-element-border
-	color form-element-text
-	background-color rgba(form-element-bg, 0.8)
+
+	border border-dark
+	color text-dark
+	background-color bg-light
 
 	&:focus
-		background-color form-element-bg
-		border-color orange
-		shadow 0 0 2 1 orange
+		border-color accent-color
+		box-shadow 0 0 2px 1px accent-color
 
 	&:disabled
 		opacity 0.5

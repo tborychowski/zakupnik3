@@ -6,22 +6,27 @@
 	left 0
 	right 0
 	bottom 0
-	padding 20
+	background border-dark
+	color text-dark
+	padding 0 0 0 301px
 	overflow-y auto
-	display grid
-	grid-gap 20px
-	grid-template-columns 1fr 1fr
-	grid-template-rows 168px 1fr
-	grid-auto-flow column
+	display flex
+	flex-flow column
+
 
 
 .categories
-.form-box
-.table
-.chart
-	box-shadow 0 1px 5px rgba(#000, .4)
-	background #eee
+	position absolute
+	left 0
+	top 0
+	bottom 0
+	width 300px
+
 
 .form-box
 .table
 	min-width 600px
+
+.table
+	flex 1
+	margin-top 1px

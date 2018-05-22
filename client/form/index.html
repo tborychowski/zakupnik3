@@ -23,6 +23,8 @@
 <script>
 import {$} from '../core';
 import Parser from './text-parser';
+import Data from '../data';
+
 
 export default {
 	data () {
@@ -73,7 +75,7 @@ export default {
 
 		edit (data) {
 			this.reset();
-			const text = `${data.group.name} ${data.description} ${$.formatNumber(data.amount)}`;
+			const text = [data.group && data.group.name || '', data.description || '', $.formatNumber(data.amount)].join(' ');
 			this.set({ inEdit: true, id: data.id, date: data.date, text });
 			this.fire('change', this.get().rows);
 		},
@@ -87,8 +89,11 @@ export default {
 		},
 
 		remove () {
-			this.fire('remove', { id: this.get().id });
-			this.reset();
+			const id = this.get().id;
+			Data.Expenses.del(id).then(() => {
+				this.reset();
+				this.fire('remove');
+			});
 		},
 
 		onsubmit (e) {
@@ -97,13 +102,17 @@ export default {
 			const rows = data.rows;
 			if (!rows.length) {
 				this.toggleAmountError('Please enter amount and category');
+
+				// TODO: toast?
 				return this.fire('error', 'Please enter amount and category');
 			}
 			// item was edited
 			if (data.id && rows.length === 1) rows[0].id = data.id;
 			const items = rows.map(this.leanItemForSave);
-			this.fire('submit', items);
-			this.reset();
+			Data.Expenses.save(items).then(() => {
+				this.reset();
+				this.fire('submit');
+			});
 		},
 
 		leanItemForSave (item) {

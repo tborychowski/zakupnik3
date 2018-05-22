@@ -6,17 +6,21 @@
 		<td class="amount">Amount</td>
 	</tr></thead>
 	<tbody>
-		{#if filteredData && filteredData.length}
-		{#each filteredData as item, idx}
-			<tr class="table-row" on:click="onRowClick(item)">
-				<td class="date">{item.date.substr(0, 7)}</td>
-				<td class="desc">{getDescription(item)}</td>
-				<td class="amount">{formatNumber(item.amount)}</td>
-			</tr>
-		{/each}
-			<tr class="row-filler"><td colspan="3"></td></tr>
+		{#if isLoading}
+			<tr class="empty-row"><td colspan="3">Loading...</td></tr>
 		{:else}
-			<tr class="empty-row"><td colspan="3">No results</td></tr>
+			{#if filteredData.length}
+			{#each filteredData as item, idx}
+				<tr class="table-row" on:click="onRowClick(item)">
+					<td class="date">{item.date.substr(0, 7)}</td>
+					<td class="desc">{getDescription(item)}</td>
+					<td class="amount">{formatNumber(item.amount)}</td>
+				</tr>
+			{/each}
+				<tr class="row-filler"><td colspan="3"></td></tr>
+			{:else}
+				<tr class="empty-row"><td colspan="3">No results</td></tr>
+			{/if}
 		{/if}
 	</tbody>
 	<tfoot><tr>
@@ -36,14 +40,25 @@
 
 <script>
 import {$} from '../core';
+import Data from '../data';
 
 export default {
 	data () {
 		return {
+			isLoading: true,
 			data: [],
+			date: new Date().toISOString().substr(0, 7),
 			filter: '',
 			isPreview: false
 		};
+	},
+	oncreate () {
+		this.load();
+	},
+	onstate({ changed, current, previous }) {
+		if (previous && changed.date) {
+			this.load();
+		}
 	},
 	helpers: {
 		formatNumber: $.formatNumber,
@@ -70,11 +85,27 @@ export default {
 		total ({filteredData}) { return filteredData.reduce((p, c) => p + c.amount, 0); }
 	},
 	methods: {
+		load () {
+			this.set({ isLoading: true });
+			Data.Expenses.get(this.get().date).then(data => {
+				this.originalData = data;
+				this.set({ data, isLoading: false });
+			});
+		},
 		onFilterKeyDown (e) {
 			if (e.key === 'Escape') this.set({ filter: '' });
 		},
 		onRowClick (item) {
 			if (!this.get().isPreview) this.fire('click', item);
+		},
+
+		// temporary set data
+		preview (data) {
+			this.set({ data });
+		},
+
+		endPreview () {
+			this.set({ data: this.originalData });
 		}
 	}
 };
