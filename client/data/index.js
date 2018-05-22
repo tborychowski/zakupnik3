@@ -23,7 +23,7 @@ const save = (url, data) => {
 
 const Categories = {
 	base: 'categories',
-	get () { return get(this.base); },
+	get (date) { return get(`${this.base}?date=${date || ''}`); },
 	save (data) { return save(this.base, data); },
 	del (id) { return del(`${this.base}/${id}`); }
 };

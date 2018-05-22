@@ -37,12 +37,16 @@
 		{:else}
 			{#if categories.length}
 				{#each categories as cat, idx}
-				<h2 class="editable-cat" on:click="onclick(cat, this)">{cat.name}</h2>
+				<h2 class="editable-cat" on:click="onclick(cat, this)">
+					{cat.name}
+					<span class="sum">{formatNumber(cat.sum)}</span>
+				</h2>
 				<ul class="cat-groups">
 					{#each cat.groups as group}
 						<li class="editable-cat" on:click="onclick(group, this)">
 							{group.name}
-							<em>{group.keywords}</em>
+							<span class="sum">{formatNumber(group.sum)}</span>
+							<span class="keys">{group.keywords}</span>
 						</li>
 					{/each}
 				</ul>
@@ -56,6 +60,7 @@
 
 
 <script>
+import {$} from '../core';
 import Data from '../data';
 
 export default {
@@ -64,6 +69,7 @@ export default {
 			isLoading: true,
 			categories: [],		// same as categories
 			mode: 'view',		// view | edit | add
+			date: new Date().toISOString().substr(0, 7),
 			form: {category_id: '0', name: '', keywords: ''}
 		};
 	},
@@ -71,10 +77,24 @@ export default {
 		this.load();
 	},
 
+	onstate({ changed, current, previous }) {
+		if (previous && changed.date) {
+			this.load();
+		}
+	},
+	helpers: {
+		formatNumber (num) {
+			if (!num) return '';
+			return '€' + $.formatNumber(num);
+
+		}
+	},
+
 	methods: {
 		load () {
 			this.set({ isLoading: true });
-			Data.Categories.get().then(categories => {
+			const date = this.get().date;
+			Data.Categories.get(date).then(categories => {
 				this.set({ categories, isLoading: false });
 				return categories;
 			});

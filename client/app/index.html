@@ -24,6 +24,7 @@ export default {
 
 	methods: {
 		onDateChange (date) {
+			this.refs.categories.set({ date: date.dateStr });
 			this.refs.form.set({ date: date.dateStr });
 			this.refs.table.set({ date: date.dateStr });
 		},

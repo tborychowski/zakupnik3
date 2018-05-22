@@ -33,7 +33,7 @@ function getFreq (query) {
 
 function get (query) {
 	const where = {};
-	if (query.key) where.keywords = {[Op.like]: `%${query.key}%`};
+	if (query && query.key) where.keywords = {[Op.like]: `%${query.key}%`};
 	return Group.findAll({ where, order: [['name', 'ASC']] });
 }
 

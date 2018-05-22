@@ -33,19 +33,36 @@
 		list-style none
 
 	h2
-		margin 20px 0 5px
+		margin 20 0 5
 
 	.editable-cat
 		padding 5px 20px
 		cursor default
+		display flex
+		flex-wrap wrap
+		justify-content space-between
+		align-items center
 
-		em
-			color text-light
-			font-style normal
-			display block
-			margin-left 10px
-			font-size 13px
-			padding 5px 0 0
+	h2.editable-cat:not(:first-child)
+		padding-top 20px
+		border-top border-dark
+
+	.keys
+		color text-light
+		display block
+		width 100%
+		font-size 13px
+		padding 5px 0 0
+
+	.sum
+		bg bg-dark
+		border-radius 20px
+		font-weight normal
+		font-size .8em
+		padding 4 8 2
+
+		&:empty
+			display none
 
 
 	.categories-wrap

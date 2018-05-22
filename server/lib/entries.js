@@ -18,6 +18,15 @@ function get (query) {
 	});
 }
 
+function getSumsByDate (date) {
+	return Entry.sum('amount', {
+		plain: false,
+		where: { date: {[Op.like]: date + '%'} },
+		group: 'entry.group_id',
+		attributes: ['group_id']
+	});
+}
+
 // add new
 function post (data) {
 	const createFn = Array.isArray(data) ? 'bulkCreate' : 'create';
@@ -38,6 +47,7 @@ function del (id) {
 module.exports = {
 	getOne,
 	get,
+	getSumsByDate,
 	post,
 	put,
 	del
