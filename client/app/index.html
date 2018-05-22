@@ -4,15 +4,17 @@
 	<Form ref:form></Form>
 </div>
 <Table ref:table></Table>
+<Chart ref:chart></Chart>
 
 <script>
+import Categories from '../categories';
 import YearMonthPicker from '../year-month-picker';
 import Form from '../form';
 import Table from '../table';
-import Categories from '../categories';
+import Chart from '../chart';
 
 export default {
-	components: { Form, Table, YearMonthPicker, Categories },
+	components: { YearMonthPicker, Categories, Form, Table, Chart },
 	oncreate () {
 		this.refs.form.on('change', this.onFormChange.bind(this));
 		this.refs.form.on('remove', this.onFormSubmit.bind(this));
