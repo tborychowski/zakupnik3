@@ -10,15 +10,10 @@ function getOne (req, res) {
 }
 
 function getWithAmounts (req, res) {
-	// const cats = await Category.findAll({ order: ['name'], include: Group });
-	// const entries = await Entry
-
-	// return Category
-	// 	.findAll({ order: ['name'], include: Group })		// include: [{ model: Group }]
-	// 	.then(items => res.status(200).json(items))
-	// 	.catch(e => res.status(500).json(e));
-
-	res.status(200).json({});
+	return DB
+		.getWithAmounts(req.query)
+		.then(items => res.status(200).json(items))
+		.catch(e => res.status(500).json(e));
 }
 
 
