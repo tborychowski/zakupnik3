@@ -82,39 +82,44 @@
 	width 100%
 
 .table-filter-cell-inner
-	position relative
-	float left
+	position fixed
+	right 20px
+	top 12px
 
 	.ion-md-search
 		position absolute
-		top 2px
+		top 3px
 		left 7px
-		font-size 16px
+		font-size 20px
 		color #33333380
 
+	.table-clear-filter
+		color #33333380
+		position absolute
+		padding 3px 3px
+		right 4px
+		font-size 20px
+		display none
+		&:hover
+			color #333
 
 	.table-filter-input
-		size 160 20
+		size 200 26
 		font-weight normal
-		padding 1 18 0 24
-		font 13
+		padding 5 22 3 30
 		text-align center
-		text-indent -20px
+		text-indent -14px
+		bg #fff5
 
 		&:focus
 			text-indent 0
 			text-align left
+			bg bg-superlight
 
-	.table-clear-filter
-		position absolute
-		padding 3px 3px
-		right 4px
-		display none
 
 	&.filtered
 		.table-filter-input
-			bg rgba(accent-color, .3)
-			border 2px accent-color
+			bg bg-superlight
 			text-indent 0
 			text-align left
 
