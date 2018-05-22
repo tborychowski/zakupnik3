@@ -1,17 +1,10 @@
 const express = require('express');
 const api = express.Router();
-const {Group, Entry, Op, sequelize } = require('../lib/db');
-
-function last3months () {
-	const d = new Date();
-	d.setMonth(d.getMonth() - 3);
-	return d.toISOString().substr(0, 7);
-}
+const DB = require('../lib/groups');
 
 
 function getOne (req, res) {
-	return Group
-		.findById(req.params.id)
+	return DB.getOne(req.params.id)
 		.then(item => res.status(200).json(item))
 		.catch(e => res.status(500).json(e));
 }
@@ -22,17 +15,7 @@ function getOne (req, res) {
  * can be filtered by 'key'(words) field
  */
 function getFreq (req, res) {
-	const where = {};
-	if (req.query.key) where.keywords = {[Op.like]: `%${req.query.key}%`};
-	return Group
-		.findAll({
-			attributes: [ 'group.*', [sequelize.fn('COUNT', 'entries.id'), 'freq'] ],
-			include: { model: Entry, attributes: [], where: { date: { [Op.gt]: last3months() }} },
-			group: ['entries.group_id'],
-			order: [[sequelize.col('freq'), 'DESC']],
-			where,
-			raw: true
-		})
+	return DB.getFreq(req.query)
 		.then(items => res.status(200).json(items))
 		.catch(e => res.status(500).json(e));
 }
@@ -41,10 +24,7 @@ function getFreq (req, res) {
 function get (req, res) {
 	if (req.params.id) return getOne(req, res);
 	if (req.query.freq !== undefined) return getFreq(req, res);
-	const where = {};
-	if (req.query.key) where.keywords = {[Op.like]: `%${req.query.key}%`};
-	return Group
-		.findAll({ where, order: [['name', 'ASC']] })
+	return DB.get(req.query)
 		.then(items => res.status(200).json(items))
 		.catch(e => res.status(500).json(e));
 }
@@ -52,7 +32,7 @@ function get (req, res) {
 
 // new Group
 function post (req, res) {
-	return Group.create(req.body)
+	return DB.post(req.body)
 		.then(item => res.status(200).json(item))
 		.catch(e => res.status(500).json(e));
 }
@@ -60,15 +40,14 @@ function post (req, res) {
 
 // update
 function put (req, res) {
-	return Group
-		.update(req.body, { where: { id: req.params.id } })
+	return DB.put(req.params.id, req.body)
 		.then(result => res.status(200).json({ updated: result[0] }))
 		.catch(e => res.status(500).json(e));
 }
 
 
 function del (req, res) {
-	return Group.destroy({ where: { id: req.params.id } })
+	return DB.del(req.params.id)
 		.then(count => res.status(200).json({ deleted: count }))
 		.catch(e => res.status(500).json(e));
 }

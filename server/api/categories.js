@@ -1,40 +1,52 @@
 const express = require('express');
 const api = express.Router();
-const {Category, Group} = require('../lib/db');
+const DB = require('../lib/categories');
 
 
 function getOne (req, res) {
-	return Category
-		.findById(req.params.id)
+	return DB.getOne(req.params.id)
 		.then(item => res.status(200).json(item))
 		.catch(e => res.status(500).json(e));
 }
 
+function getWithAmounts (req, res) {
+	// const cats = await Category.findAll({ order: ['name'], include: Group });
+	// const entries = await Entry
+
+	// return Category
+	// 	.findAll({ order: ['name'], include: Group })		// include: [{ model: Group }]
+	// 	.then(items => res.status(200).json(items))
+	// 	.catch(e => res.status(500).json(e));
+
+	res.status(200).json({});
+}
+
+
 function get (req, res) {
 	if (req.params.id) return getOne(req, res);
-	return Category
-		.findAll({ order: ['name'], include: Group })		// include: [{ model: Group }]
+	if (req.query.date) return getWithAmounts(req, res);
+	return DB.get()
 		.then(items => res.status(200).json(items))
 		.catch(e => res.status(500).json(e));
 }
 
 // new category
 function post (req, res) {
-	return Category.create(req.body)
+	return DB.post(req.body)
 		.then(item => res.status(200).json(item))
 		.catch(e => res.status(500).json(e.errors));
 }
 
 // update
 function put (req, res) {
-	return Category
-		.update(req.body, { where: { id: req.params.id } })
+	return DB
+		.put(req.params.id, req.body)
 		.then(result => res.status(200).json({ updated: result[0] }))
 		.catch(e => res.status(500).json(e));
 }
 
 function del (req, res) {
-	return Category.destroy({ where: { id: req.params.id } })
+	return DB.del(req.params.id)
 		.then(count => res.status(200).json({ deleted: count }))
 		.catch(e => res.status(500).json(e));
 }
