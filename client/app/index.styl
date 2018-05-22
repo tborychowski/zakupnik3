@@ -8,10 +8,11 @@
 	bottom 0
 	background border-dark
 	color text-dark
-	padding 0 0 0 301px
+	padding 0 0 0 300px
 	overflow-y auto
 	display flex
 	flex-flow column
+	transition padding .3s ease-out
 
 
 
@@ -20,7 +21,9 @@
 	left 0
 	top 0
 	bottom 0
-	width 300px
+	width 299px
+	transform translateX(0)
+	transition transform .3s ease-out
 
 
 .form-box
@@ -30,3 +33,13 @@
 .table
 	flex 1
 	margin-top 1px
+
+
+
+
+@media (max-width: 900px)
+	.categories
+		transform translateX(-100%)
+
+	#app
+		padding-left 0
