@@ -10,26 +10,26 @@ import YearMonthPicker from '../year-month-picker';
 import Form from '../form';
 import Table from '../table';
 import Categories from '../categories';
-import Data from '../data';
 
 export default {
-	data () { return {}; },
 	components: { Form, Table, YearMonthPicker, Categories },
 	oncreate () {
-		const date = new Date().toISOString().substr(0, 7);
-		Data.Groups.get().then(groups => this.refs.form.set({ date, groups }));
-
 		this.refs.form.on('change', this.onFormChange.bind(this));
 		this.refs.form.on('remove', this.onFormSubmit.bind(this));
 		this.refs.form.on('submit', this.onFormSubmit.bind(this));
 		this.refs.picker.on('change', this.onDateChange.bind(this));
 		this.refs.table.on('click', this.onTableClick.bind(this));
+		this.refs.categories.on('updated', this.onCategoryUpdated.bind(this));
 	},
 
 	methods: {
 		onDateChange (date) {
 			this.refs.form.set({ date: date.dateStr });
 			this.refs.table.set({ date: date.dateStr });
+		},
+
+		onCategoryUpdated () {
+			this.refs.form.loadCategories();
 		},
 
 		onFormChange (data) {

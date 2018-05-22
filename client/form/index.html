@@ -37,6 +37,11 @@ export default {
 			rows: [],
 		};
 	},
+
+	oncreate () {
+		this.loadCategories();
+	},
+
 	computed: {
 		_groups ({groups}) {
 			return groups.map(g => {
@@ -49,6 +54,10 @@ export default {
 	},
 
 	methods: {
+		loadCategories () {
+			Data.Groups.get().then(groups => this.set({ groups }));
+		},
+
 		onfocus () {
 			this.parse();
 		},
