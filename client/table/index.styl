@@ -93,14 +93,30 @@
 		color #33333380
 
 
-.table-filter
-	size 160 20
-	font-weight normal
-	padding 1 8 0 24
-	font 13
-	text-align center
-	text-indent -20px
+	.table-filter-input
+		size 160 20
+		font-weight normal
+		padding 1 18 0 24
+		font 13
+		text-align center
+		text-indent -20px
 
-	&:focus
-		text-indent 0
-		text-align left
+		&:focus
+			text-indent 0
+			text-align left
+
+	.table-clear-filter
+		position absolute
+		padding 3px 3px
+		right 4px
+		display none
+
+	&.filtered
+		.table-filter-input
+			bg rgba(accent-color, .3)
+			border 2px accent-color
+			text-indent 0
+			text-align left
+
+		.table-clear-filter
+			display inline-block

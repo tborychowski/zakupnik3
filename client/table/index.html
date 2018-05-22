@@ -25,11 +25,12 @@
 	</tbody>
 	<tfoot><tr>
 		<td colspan="2" class="table-filter-cell">
-			<div class="table-filter-cell-inner">
+			<div class="table-filter-cell-inner {filter.length ? 'filtered' : ''}">
 				<i class="ion-md-search"></i>
-				<input class="table-filter" type="search" placeholder="Filter"
+				<input class="table-filter-input" type="search" placeholder="Filter"
 				bind:value="filter"
 				on:keydown="onFilterKeyDown(event)">
+				<i class="ion-md-close table-clear-filter" on:click="clearFilter()"></i>
 			</div>
 		</td>
 		<td class="amount">{formatNumber(total)}</td>
@@ -92,11 +93,17 @@ export default {
 				this.set({ data, isLoading: false });
 			});
 		},
+
 		onFilterKeyDown (e) {
 			if (e.key === 'Escape') this.set({ filter: '' });
 		},
+
 		onRowClick (item) {
 			if (!this.get().isPreview) this.fire('click', item);
+		},
+
+		clearFilter () {
+			this.set({ filter: '' });
 		},
 
 		// temporary set data

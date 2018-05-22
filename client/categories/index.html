@@ -140,8 +140,8 @@ export default {
 		},
 
 		onclick (item, el) {
-			if (this.get().mode === 'view') return;
-			this.edit(item, el);
+			if (this.get().mode === 'view') this.fire('click', item);
+			else this.edit(item, el);
 		},
 
 		onsubmit (e) {
