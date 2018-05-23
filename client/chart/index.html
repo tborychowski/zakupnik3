@@ -1,0 +1,47 @@
+<div class="chart"><canvas ref:canvas width="100%" height="130"></canvas></div>
+
+<script>
+import {$} from '../core';
+import Data from '../data';
+import Chart from './chart';
+
+export default {
+	data () {
+		return {
+			date: new Date().toISOString().substr(0, 7),
+			category: null,
+			group: null,
+			isLoading: true
+		};
+	},
+	oncreate () {
+		this.init();
+	},
+
+	onstate({ changed, current, previous }) {
+		if (previous && changed.date) this.load();
+		if (previous && changed.category) this.load();
+		if (previous && changed.group) this.load();
+	},
+
+	methods: {
+		init () {
+			if (!this.chart) this.chart = new Chart(this.refs.canvas);
+			this.load();
+		},
+
+		load () {
+			this.set({ isLoading: true });
+			const data = this.get();
+			data.year = data.date.split('-')[0];
+			const month = parseInt(data.date.split('-')[1], 10) - 1;
+
+			Data.Stats.get(data).then(expenses => {
+				this.chart.set(expenses, month);
+				this.set({ isLoading: false });
+			});
+		},
+
+	}
+};
+</script>
