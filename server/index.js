@@ -43,8 +43,8 @@ app.use('/', isAuthenticated, express.static(path.join(__dirname, '..', 'public'
 // app.listen(3000, () => console.log('Server started.'));
 
 
-const key = readFileSync('./server/localhost.key');
-const cert = readFileSync('./server/localhost.crt');
+const key = readFileSync('./cert.key');
+const cert = readFileSync('./cert.crt');
 spdy
 	.createServer({key, cert}, app)
 	.listen(3000, err => {

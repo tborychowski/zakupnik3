@@ -111,8 +111,8 @@ gulp.task('test', ['test-server'], () => {
 gulp.task('watch', ['default'], () => {
 	if (isProd) return;
 	livereload.listen({
-		key: fs.readFileSync(path.join(__dirname, 'server', 'localhost.key'), 'utf-8'),
-		cert: fs.readFileSync(path.join(__dirname, 'server', 'localhost.crt'), 'utf-8'),
+		key: fs.readFileSync(path.join(__dirname, 'cert.key'), 'utf-8'),
+		cert: fs.readFileSync(path.join(__dirname, 'cert.crt'), 'utf-8'),
 	});
 	gulp.watch('client/**/*.styl', ['styl']);
 	gulp.watch('client/**/*.js', ['js']);
