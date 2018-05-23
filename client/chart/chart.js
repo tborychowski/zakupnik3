@@ -1,5 +1,5 @@
 import {$} from '../core';
-import CHART from 'chart.js';
+import CHART from 'chart.js/dist/Chart.js';
 
 const monthColors = (col = new Date().getMonth()) => {
 	const cols = Array(12).fill('#ddd');

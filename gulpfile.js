@@ -8,7 +8,6 @@ const stylus = require('gulp-stylus');
 const notify = require('gulp-notify');
 const plumber = require('gulp-plumber');
 const eslint = require('gulp-eslint');
-const uglify = require('gulp-uglify');
 const mocha = require('gulp-mocha');
 const env = require('gulp-env');
 const nodemon = require('gulp-nodemon');
@@ -69,7 +68,6 @@ gulp.task('js', ['eslint'], () => {
 	return gulp.src(['client/index.js'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(webpack(webpackConfig, null, wpErr))
-		.pipe(isProd ? uglify() : noop())
 		.pipe(gulp.dest(PUBLIC_PATH))
 		.pipe(livereload());
 });

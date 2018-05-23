@@ -10,7 +10,7 @@ module.exports = {
 		publicPath: './public/',
 	},
 	resolve: { extensions: ['.js', '.json', '.html'] },
-	stats: 'minimal',
+	stats: 'normal',	// minimal
 	module: {
 		rules: [
 			{ test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
