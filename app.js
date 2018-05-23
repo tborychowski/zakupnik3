@@ -3,12 +3,15 @@ const path = require('path');
 const spdy = require('spdy');
 const express = require('express');
 const bodyParser = require('body-parser');
-const passport = require('./lib/passport');
-const session = require('./lib/session');
+const passport = require('./server/lib/passport');
+const session = require('./server/lib/session');
 const app = express();
 
-//FIXME: remove for production!
-const DEV = true;
+const DEV = app.get('env') !== 'production';
+const root = path.join(__dirname, 'public');
+const maxAge = DEV ? 0 : '30 days';
+
+if (DEV) app.use(require('connect-livereload')());
 
 app.use(session);
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,8 +20,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+
 function sendView (res, view) {
-	res.sendFile(view, { root: path.join(__dirname, '..', 'public') });
+	res.sendFile(view, { root });
 }
 
 function isAuthenticated (req, res, next) {
@@ -34,8 +38,8 @@ function isApiAuthenticated (req, res, next) {
 app.get('/login', (req, res) => sendView(res, 'login.html'));
 app.get('/logout', (req, res) => { req.logout(); res.redirect('/'); });
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
-app.use('/api/', isApiAuthenticated, require('./api/'));
-app.use('/', isAuthenticated, express.static(path.join(__dirname, '..', 'public')));
+app.use('/api/', isApiAuthenticated, require('./server/api/'));
+app.use('/', isAuthenticated, express.static(root, { maxAge }));
 
 
 
@@ -49,5 +53,5 @@ spdy
 	.createServer({key, cert}, app)
 	.listen(3000, err => {
 		if (err) throw new Error(err);
-		console.log('https://localhost:3000');
+		if (DEV) console.log('https://localhost:3000');
 	});

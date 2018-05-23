@@ -9,11 +9,11 @@ const notify = require('gulp-notify');
 const plumber = require('gulp-plumber');
 const eslint = require('gulp-eslint');
 const mocha = require('gulp-mocha');
-const env = require('gulp-env');
 const nodemon = require('gulp-nodemon');
 const noop = require('through2').obj;
 const sourcemaps = require('gulp-sourcemaps');
 const livereload = require('gulp-livereload');
+const env = require('gulp-env');
 const isProd = require('minimist')(process.argv.slice(2)).prod;
 const webpackConfig = require('./webpack.config.js');
 const PUBLIC_PATH = 'public/';
@@ -26,7 +26,7 @@ const wpErr = (err, stats) => {
 
 let serverStarted = false;
 const startServer = done =>
-	nodemon({ script: './server/index.js', watch: ['./server'], ext: 'js', })
+	nodemon({ script: './app.js', watch: ['./app.js', './server'], ext: 'js', })
 		.on('start', () => {
 			if (serverStarted) return;
 			serverStarted = true;
@@ -35,6 +35,7 @@ const startServer = done =>
 
 
 env.set({ NODE_TLS_REJECT_UNAUTHORIZED: 0 });
+env.set({ NODE_ENV: isProd ? 'production' : 'development' });
 
 
 gulp.task('help', () => {
@@ -65,6 +66,11 @@ gulp.task('html', () => {
 
 
 gulp.task('js', ['eslint'], () => {
+	if (!isProd) webpackConfig.devtool = 'inline-source-map';
+	else {
+		const MinifyPlugin = require('babel-minify-webpack-plugin');
+		webpackConfig.plugins = [ new MinifyPlugin() ];
+	}
 	return gulp.src(['client/index.js'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(webpack(webpackConfig, null, wpErr))
@@ -94,7 +100,6 @@ gulp.task('test-server', done => {
 
 
 gulp.task('server', done => {
-	env.set({ NODE_ENV: 'development' });
 	startServer(done);
 });
 

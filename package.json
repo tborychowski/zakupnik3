@@ -7,11 +7,14 @@
     "url": "https://github.com/tborychowski/zakupnik3.git"
   },
   "scripts": {
-    "test": "gulp test",
+    "cert": "./scripts/generate-localhost-cert.sh",
     "import-data": "node ./scripts/import-data.js",
+    "test": "gulp test",
     "start:client": "gulp watch",
     "start:server": "gulp server",
-    "start": "run-p start:server start:client"
+    "dist": "gulp --prod",
+    "start": "run-p start:server start:client",
+    "startProd": "gulp default server --prod"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -28,9 +31,11 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.2",
+    "babel-minify-webpack-plugin": "^0.3.1",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "chart.js": "^2.7.2",
+    "connect-livereload": "^0.6.0",
     "gulp": "^3.9.1",
     "gulp-clean-css": "^3.9.4",
     "gulp-concat": "^2.6.1",

@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-	devtool: 'inline-source-map',
+	// devtool: 'inline-source-map',
 	// mode: 'development',
 	entry: { index: './client/index.js' },
 	output: {
@@ -10,7 +10,7 @@ module.exports = {
 		publicPath: './public/',
 	},
 	resolve: { extensions: ['.js', '.json', '.html'] },
-	stats: 'normal',	// minimal
+	stats: 'minimal',	// normal
 	module: {
 		rules: [
 			{ test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
