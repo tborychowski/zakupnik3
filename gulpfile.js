@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const gulp = require('gulp');
 const cssmin = require('gulp-clean-css');
 const webpack = require('webpack-stream');
@@ -26,7 +24,7 @@ const wpErr = (err, stats) => {
 
 let serverStarted = false;
 const startServer = done =>
-	nodemon({ script: './app.js', watch: ['./app.js', './server'], ext: 'js', })
+	nodemon({ script: './app.js', watch: ['./', './server'], ext: 'js html', })
 		.on('start', () => {
 			if (serverStarted) return;
 			serverStarted = true;
@@ -57,11 +55,6 @@ gulp.task('fonts', () => {
 	const out = `${PUBLIC_PATH}fonts/`;
 	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest(out));
 	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(out));
-});
-
-
-gulp.task('html', () => {
-	gulp.src(['client/*.html']).pipe(gulp.dest(PUBLIC_PATH));
 });
 
 
@@ -115,15 +108,11 @@ gulp.task('test', ['test-server'], () => {
 
 gulp.task('watch', ['default'], () => {
 	if (isProd) return;
-	livereload.listen({
-		key: fs.readFileSync(path.join(__dirname, 'cert.key'), 'utf-8'),
-		cert: fs.readFileSync(path.join(__dirname, 'cert.crt'), 'utf-8'),
-	});
+	livereload.listen();
 	gulp.watch('client/**/*.styl', ['styl']);
 	gulp.watch('client/**/*.js', ['js']);
 	gulp.watch('client/**/*.html', ['js']);
-	gulp.watch('client/*.html', ['html']);
 });
 
 
-gulp.task('default', [ 'js', 'styl', 'fonts', 'html', 'eslint' ]);
+gulp.task('default', [ 'js', 'styl', 'fonts', 'eslint' ]);

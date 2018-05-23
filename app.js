@@ -1,6 +1,4 @@
-const {readFileSync} = require('fs');
 const path = require('path');
-const spdy = require('spdy');
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('./server/lib/passport');
@@ -8,8 +6,6 @@ const session = require('./server/lib/session');
 const app = express();
 
 const DEV = app.get('env') !== 'production';
-const root = path.join(__dirname, 'public');
-const maxAge = DEV ? 0 : '30 days';
 
 if (DEV) app.use(require('connect-livereload')());
 
@@ -22,7 +18,7 @@ app.use(passport.session());
 
 
 function sendView (res, view) {
-	res.sendFile(view, { root });
+	res.sendFile(view, { root: path.join(__dirname, 'server') });
 }
 
 function isAuthenticated (req, res, next) {
@@ -39,19 +35,10 @@ app.get('/login', (req, res) => sendView(res, 'login.html'));
 app.get('/logout', (req, res) => { req.logout(); res.redirect('/'); });
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
 app.use('/api/', isApiAuthenticated, require('./server/api/'));
-app.use('/', isAuthenticated, express.static(root, { maxAge }));
+if (DEV) app.use('/', isAuthenticated, express.static(path.join(__dirname, 'public')));
+app.use('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
 
 
 
 // old - expressjs way
-// app.listen(3000, () => console.log('Server started.'));
-
-
-const key = readFileSync('./cert.key');
-const cert = readFileSync('./cert.crt');
-spdy
-	.createServer({key, cert}, app)
-	.listen(3000, err => {
-		if (err) throw new Error(err);
-		if (DEV) console.log('https://localhost:3000');
-	});
+app.listen(3000, () => console.log('Server started.'));
