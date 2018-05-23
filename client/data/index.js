@@ -42,9 +42,23 @@ const Expenses = {
 	del (id) { return del(`${this.base}/${id}`); }
 };
 
+const Stats = {
+	base: 'stats',
+	get (date) {
+		const year = date.year || new Date().getFullYear();
+		let url = `${this.base}/${year}`;
+
+		if (date.group) url += `?group=${date.group}`;
+		else if (date.category) url += `?category=${date.category}`;
+
+		return get(url);
+	},
+};
+
 
 export default {
 	Categories,
 	Groups,
 	Expenses,
+	Stats,
 };

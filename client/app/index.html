@@ -21,6 +21,7 @@ export default {
 		this.refs.form.on('submit', this.onFormSubmit.bind(this));
 		this.refs.picker.on('change', this.onDateChange.bind(this));
 		this.refs.table.on('click', this.onTableClick.bind(this));
+		this.refs.table.on('filter', this.onFilterUpdated.bind(this));
 		this.refs.categories.on('click', this.onCategoryClick.bind(this));
 		this.refs.categories.on('updated', this.onCategoryUpdated.bind(this));
 	},
@@ -30,10 +31,18 @@ export default {
 			this.refs.categories.set({ date: date.dateStr });
 			this.refs.form.set({ date: date.dateStr });
 			this.refs.table.set({ date: date.dateStr });
+			this.refs.chart.set({ date: date.dateStr });
+		},
+
+		onFilterUpdated (val) {
+			if (val === '') this.refs.chart.set({ category: null, group: null });
 		},
 
 		onCategoryClick (item) {
 			this.refs.table.set({ filter: item.name });
+
+			if (item.category_id) this.refs.chart.set({ group: item.id });
+			else this.refs.chart.set({ category: item.id });
 		},
 
 		onCategoryUpdated () {

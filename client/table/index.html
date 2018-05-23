@@ -57,9 +57,8 @@ export default {
 		this.load();
 	},
 	onstate({ changed, current, previous }) {
-		if (previous && changed.date) {
-			this.load();
-		}
+		if (previous && changed.date) this.load();
+		if (changed.filter && current.filter === '') this.fire('filter', '');
 	},
 	helpers: {
 		formatNumber: $.formatNumber,
@@ -104,6 +103,7 @@ export default {
 
 		clearFilter () {
 			this.set({ filter: '' });
+			this.fire('filter', '');
 		},
 
 		// temporary set data

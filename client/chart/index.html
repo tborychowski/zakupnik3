@@ -3,45 +3,43 @@
 <script>
 import {$} from '../core';
 import Data from '../data';
-import Chart from 'chart.js';
-import chartCfg from './chart-cfg';
+import Chart from './chart';
 
 export default {
 	data () {
 		return {
+			date: new Date().toISOString().substr(0, 7),
+			category: null,
+			group: null,
 			isLoading: true
 		};
 	},
 	oncreate () {
-		this.load();
+		this.init();
 	},
+
 	onstate({ changed, current, previous }) {
-		if (previous && changed.date) {
-			this.load();
-		}
+		if (previous && changed.date) this.load();
+		if (previous && changed.category) this.load();
+		if (previous && changed.group) this.load();
 	},
-	computed: {
-	},
+
 	methods: {
+		init () {
+			if (!this.chart) this.chart = new Chart(this.refs.canvas);
+			this.load();
+		},
+
 		load () {
 			this.set({ isLoading: true });
-			this.chart = new Chart(this.refs.canvas, chartCfg);
+			const data = this.get();
+			data.year = data.date.split('-')[0];
+			const month = parseInt(data.date.split('-')[1], 10) - 1;
 
-			this.chart.data.datasets[0] = {
-				label: 'Expenses',
-				borderWidth: 1,
-				borderColor: '#888',
-				pointBackgroundColor: '#888',
-				data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3]
-			};
-			this.chart.options.scales.xAxes[0].gridLines.color = [
-				'#ddd', 'orange', '#ddd', '#ddd', '#ddd', '#ddd', '#ddd', '#ddd', '#ddd', '#ddd', '#ddd', '#ddd'
-			];
-			this.chart.update();
-			// Data.Expenses.get(this.get().date).then(data => {
-			// 	this.originalData = data;
-			// 	this.set({ data, isLoading: false });
-			// });
+			Data.Stats.get(data).then(expenses => {
+				this.chart.set(expenses, month);
+				this.set({ isLoading: false });
+			});
 		},
 
 	}
