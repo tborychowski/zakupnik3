@@ -8,6 +8,4 @@ _stuff/
 *.db
 
 public/
-
-*.crt
-*.key
+tmp/
