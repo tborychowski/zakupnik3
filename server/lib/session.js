@@ -1,7 +1,6 @@
 const session = require('cookie-session');
 const util = require('./util');
-const config = require('../../.config');
-
+const config = require('./util').getConfig();
 
 //openssl rand -base64 32
 const secret = 'fX5uuWQMpb/z2+yYGfBvfC/ovgpNpPf/7KNUznBGwpg=';

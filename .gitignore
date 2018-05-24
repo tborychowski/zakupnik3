@@ -10,4 +10,4 @@ tmp/
 
 *.db
 
-.config.js
+.config-prod.js

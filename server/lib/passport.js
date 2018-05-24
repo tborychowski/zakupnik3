@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const config = require('../../.config');
+const config = require('./util').getConfig();
 
 
 passport.serializeUser((user, cb) => cb(null, user));
