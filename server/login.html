@@ -2,21 +2,17 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Zakupnik</title>
+	<link rel="stylesheet" href="app.css">
+	<link rel="stylesheet" href="fonts/ionicons.min.css">
+
+	<link rel="icon" type="image/png" href="favicon-128x128.png" sizes="128x128">
+	<link rel="apple-touch-icon" sizes="128x128" href="apple-touch-icon-128x128.png">
+	<link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
-
 	<form action="/login" method="post">
-		<div>
-			<label>Username:</label>
-			<input type="text" name="username"/>
-		</div>
-		<div>
-			<label>Password:</label>
-			<input type="password" name="password"/>
-		</div>
-		<div>
-			<input type="submit" value="Log In"/>
-		</div>
+		<label>Username: </label><input type="text" name="username" autofocus><br>
+		<label>Password: </label><input type="password" name="password"><br>
+		<button>Log In</button>
 	</form>
-
 </body>

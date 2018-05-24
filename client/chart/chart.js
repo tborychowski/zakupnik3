@@ -16,6 +16,9 @@ const cfg = {
 			borderWidth: 1,
 			borderColor: '#888',
 			pointBackgroundColor: '#888',
+			pointRadius: 5,
+			pointHoverRadius: 5,
+			backgroundColor: '#ffa50033',
 			data: [0,0,0,0,0,0,0,0,0,0,0,0]
 		}]
 	},

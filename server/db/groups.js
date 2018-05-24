@@ -1,4 +1,4 @@
-const {Group, Entry, Op, sequelize } = require('../lib/db');
+const {Group, Entry, Op, sequelize } = require('./db');
 
 function last3months () {
 	const d = new Date();

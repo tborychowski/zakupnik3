@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
-const {init, Category, Group, Entry} = require('../server/lib/db');
+const {init, Category, Group, Entry} = require('../server/db/db');
 
 
 const categoriesJson = require('../_stuff/sql-categories.json');

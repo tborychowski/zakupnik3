@@ -5,7 +5,7 @@ module.exports = {
 	// mode: 'development',
 	entry: { index: './client/index.js' },
 	output: {
-		filename: '[name].js',
+		filename: 'app.js',
 		path: path.join(__dirname, 'public'),
 		publicPath: './public/',
 	},

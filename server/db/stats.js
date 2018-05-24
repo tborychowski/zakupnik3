@@ -1,4 +1,4 @@
-const {Entry, Group, Op, sequelize} = require('../lib/db');
+const {Entry, Group, Op, sequelize} = require('./db');
 
 
 function get (year, query) {

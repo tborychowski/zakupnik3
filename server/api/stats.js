@@ -1,6 +1,6 @@
 const express = require('express');
 const api = express.Router();
-const DB = require('../lib/stats');
+const DB = require('../db/stats');
 
 
 function get (req, res) {
