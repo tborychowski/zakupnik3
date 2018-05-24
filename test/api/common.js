@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const api = supertest('https://localhost:3000/api');
+const api = supertest('http://localhost:3000/api');
 const expect = require('chai').expect;
 
 

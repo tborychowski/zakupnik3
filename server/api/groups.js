@@ -1,6 +1,6 @@
 const express = require('express');
 const api = express.Router();
-const DB = require('../lib/groups');
+const DB = require('../db/groups');
 
 
 function getOne (req, res) {

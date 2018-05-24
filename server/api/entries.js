@@ -1,6 +1,6 @@
 const express = require('express');
 const api = express.Router();
-const DB = require('../lib/entries');
+const DB = require('../db/entries');
 
 
 function getOne (req, res) {

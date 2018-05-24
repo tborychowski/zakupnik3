@@ -24,7 +24,7 @@ const wpErr = (err, stats) => {
 
 let serverStarted = false;
 const startServer = done =>
-	nodemon({ script: './app.js', watch: ['./', './server'], ext: 'js html', })
+	nodemon({ script: './server/index.js', watch: ['./server'], ext: 'js html' })
 		.on('start', () => {
 			if (serverStarted) return;
 			serverStarted = true;
@@ -50,11 +50,13 @@ gulp.task('eslint', () => {
 });
 
 
-gulp.task('fonts', () => {
+gulp.task('assets', () => {
 	const pth = 'node_modules/ionicons/dist/';
 	const out = `${PUBLIC_PATH}fonts/`;
 	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest(out));
 	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(out));
+
+	gulp.src(['assets/*.*']).pipe(gulp.dest(`${PUBLIC_PATH}`));
 });
 
 
@@ -78,7 +80,7 @@ gulp.task('styl', () => {
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(stylus({ paths: ['client', 'client/core'], 'include css': true }))
 		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
-		.pipe(concat('index.css'))
+		.pipe(concat('app.css'))
 		.pipe(isProd ? noop() : sourcemaps.write())
 		.pipe(gulp.dest(PUBLIC_PATH))
 		.pipe(livereload());
@@ -115,4 +117,4 @@ gulp.task('watch', ['default'], () => {
 });
 
 
-gulp.task('default', [ 'js', 'styl', 'fonts', 'eslint' ]);
+gulp.task('default', [ 'js', 'styl', 'assets', 'eslint' ]);

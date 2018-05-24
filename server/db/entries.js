@@ -1,4 +1,4 @@
-const {Entry, Group, Category, Op} = require('../lib/db');
+const {Entry, Group, Category, Op} = require('./db');
 
 
 function getOne (id) {
