@@ -8,7 +8,7 @@ const secret = 'fX5uuWQMpb/z2+yYGfBvfC/ovgpNpPf/7KNUznBGwpg=';
 const sessionCfg = {
 	name: 'zakupnik',
 	secret: config.secret || secret,
-	secure: util.isProd,
+	// secure: util.isProd,
 	sameSite: true,
 	maxAge: 3600000 * 24 * 30 /* 30 days */
 };
