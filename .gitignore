@@ -10,4 +10,4 @@ tmp/
 
 *.db
 
-.secret.js
+.config.js
