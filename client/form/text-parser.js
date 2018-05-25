@@ -1,7 +1,12 @@
-// yyyy-mm
-const getStrDate = (y, m) => `${y}-${('0' + m).substr(-2)}`;
-
 const deepCopyArray = arr => arr.map(o => Object.assign({}, o));
+
+
+// yyyy-mm-dd
+function getStrDate (y, m) {
+	m = ('0' + m).substr(-2);
+	const d = new Date().toISOString().substr(8, 2);
+	return `${y}-${m}-${d}`;
+}
 
 function parseDateStr (dateStr) {
 	let [year, month] = dateStr.split('-');
