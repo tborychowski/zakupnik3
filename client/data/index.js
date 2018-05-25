@@ -11,6 +11,7 @@ function req (url, method = 'GET', params) {
 	return fetch(`api/${url}`, opts).then(res => res.json());
 }
 
+const trimDate = date => ('' + date).substr(0, 7);
 const get = url => req(url);
 const post = (url, params) => req(url, 'POST', params);
 const put = (url, params) => req(url, 'PUT', params);
@@ -23,7 +24,7 @@ const save = (url, data) => {
 
 const Categories = {
 	base: 'categories',
-	get (date) { return get(`${this.base}?date=${date || ''}`); },
+	get (date) { return get(`${this.base}?date=${trimDate(date)}`); },
 	save (data) { return save(this.base, data); },
 	del (id) { return del(`${this.base}/${id}`); }
 };
@@ -37,10 +38,7 @@ const Groups = {
 
 const Expenses = {
 	base: 'entries',
-	get (date = '') {
-		date = date.substr(0, 7);
-		return get(`${this.base}?date=${date}`);
-	},
+	get (date) { return get(`${this.base}?date=${trimDate(date)}`); },
 	save (data) { return save(this.base, data); },
 	del (id) { return del(`${this.base}/${id}`); }
 };
