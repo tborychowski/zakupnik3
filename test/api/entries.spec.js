@@ -1,51 +1,36 @@
-/* global describe, it */
-const {req, expect} = require('./common');
+/* global describe, it, before, after */
+
+const {req, expect} = require('./_common');
+const {seed, unseed} = require('./_seed');
 const base = '/entries';
 
 describe('Entries', () => {
-	let itemId, categoryId, groupId;
+
+	before(() => seed());
+	after(() => unseed());
+
+
+	let itemId;
 
 	const entry = {
-		date: '2018-04-01',
-		group_id: groupId,
+		date: '2018-05-01',
+		group_id: 1,
 		description: 'local store',
 		amount: 100
 	};
 
 
-	it('- shoud be empty', done => {
+	it('- shoud be seeded', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(0);
+			expect(res.body.length).to.eq(1);
 			done();
 		});
 	});
-
-
-	it('- add a category for reference', done => {
-		const params = { name: 'Entries test category' };
-		req('/categories', { method: 'post', params }, res => {
-			expect(res.body.name).to.eq(params.name);
-			categoryId = res.body.id;
-			done();
-		});
-	});
-
-	it('- add a group for reference', done => {
-		const params = { name: 'Entries test group', category_id: categoryId };
-		req('/groups', { method: 'post', params }, res => {
-			expect(res.body.name).to.eq(params.name);
-			groupId = res.body.id;
-			entry.group_id = groupId;
-			done();
-		});
-	});
-
-
 
 
 	it('- add an entry', done => {
 		req(base, { method: 'post', params: entry }, res => {
-			expect(res.body.category).to.eq(entry.category);
+			expect(res.body.group_id).to.eq(entry.group_id);
 			expect(res.body.date).to.eq(entry.date);
 			expect(res.body.amount).to.eq(entry.amount);
 			itemId = res.body.id;
@@ -53,9 +38,9 @@ describe('Entries', () => {
 		});
 	});
 
-	it('- shoud NOT be empty', done => {
+	it('- shoud be added', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(1);
+			expect(res.body.length).to.eq(2);
 			done();
 		});
 	});
@@ -68,6 +53,7 @@ describe('Entries', () => {
 		});
 	});
 
+
 	it('- shoud NOT find by date', done => {
 		req(`${base}?date=2000-00-00`, res => {
 			expect(res.body.length).to.eq(0);
@@ -76,10 +62,9 @@ describe('Entries', () => {
 	});
 
 
-
 	it('- shoud find by group', done => {
-		req(`${base}?group=${groupId}`, res => {
-			expect(res.body.length).to.eq(1);
+		req(`${base}?group=1`, res => {
+			expect(res.body.length).to.not.eq(0);
 			done();
 		});
 	});
@@ -94,11 +79,12 @@ describe('Entries', () => {
 
 
 	it('- shoud find by category', done => {
-		req(`${base}?category=${categoryId}`, res => {
-			expect(res.body.length).to.eq(1);
+		req(`${base}?category=1`, res => {
+			expect(res.body.length).to.not.eq(0);
 			done();
 		});
 	});
+
 
 	it('- shoud NOT find by category', done => {
 		req(`${base}?category=x`, res => {
@@ -108,16 +94,16 @@ describe('Entries', () => {
 	});
 
 
-
 	it('- shoud find by group, category and date', done => {
-		req(`${base}?date=${entry.date}&category=${categoryId}&group=${groupId}`, res => {
-			expect(res.body.length).to.eq(1);
+		req(`${base}?date=${entry.date}&category=1&group=1`, res => {
+			expect(res.body.length).to.not.eq(0);
 			done();
 		});
 	});
 
+
 	it('- shoud NOT find by group, category and date', done => {
-		req(`${base}?group=${groupId}&category=${categoryId}&date=2000-00-00`, res => {
+		req(`${base}?group=1&category=1&date=2000-00-00`, res => {
 			expect(res.body.length).to.eq(0);
 			done();
 		});
@@ -140,28 +126,12 @@ describe('Entries', () => {
 		});
 	});
 
-	it('- shoud be empty again', done => {
+	it('- shoud be removed', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(0);
+			expect(res.body.length).to.eq(1);
 			done();
 		});
 	});
 
-
-	// CLEAN UP
-
-	it('- remove group', done => {
-		req(`/groups/${groupId}`, { method: 'delete' }, res => {
-			expect(res.body.deleted).to.eq(1);
-			done();
-		});
-	});
-
-	it('- remove category', done => {
-		req(`/categories/${categoryId}`, { method: 'delete' }, res => {
-			expect(res.body.deleted).to.eq(1);
-			done();
-		});
-	});
 
 });
