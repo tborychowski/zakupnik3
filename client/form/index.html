@@ -45,7 +45,6 @@ export default {
 	computed: {
 		_groups ({groups}) {
 			return groups.map(g => {
-				// const str = (g.name + ',' + g.keywords).toLowerCase().split(',');
 				const escaped = g.name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
 				g._name = new RegExp(escaped, 'i');
 				return g;

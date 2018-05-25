@@ -39,13 +39,13 @@
 				{#each categories as cat, idx}
 				<h2 class="editable-cat" on:click="onclick(cat, this)">
 					{cat.name}
-					<span class="sum">{formatNumber(cat.sum)}</span>
+					<span class="pill">{formatNumber(cat.sum)}</span>
 				</h2>
 				<ul class="cat-groups">
 					{#each cat.groups as group}
 						<li class="editable-cat" on:click="onclick(group, this)">
 							{group.name}
-							<span class="sum">{formatNumber(group.sum)}</span>
+							<span class="pill">{formatNumber(group.sum)}</span>
 							<span class="keys">{group.keywords}</span>
 						</li>
 					{/each}
