@@ -5,6 +5,8 @@
 			ref:textbox
 			tabindex="1"
 			placeholder="e.g. tesco 12.50"
+			autocapitalize="off"
+			autocorrect="off"
 			on:focus="onfocus()"
 			on:input="oninput()"
 			on:keydown="onkeydown(event)"
@@ -30,7 +32,7 @@ export default {
 	data () {
 		return {
 			inEdit: false,
-			date: new Date().toISOString().substr(0, 7),
+			date: new Date().toISOString().substr(0, 10),
 			id: null,
 			text: '',
 			groups: [],

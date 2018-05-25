@@ -60,6 +60,7 @@ function parseAmount (amount) {
 
 
 function findGroup(s, groups) {
+	s = s.toLowerCase();
 	for (let g of groups) {
 		if (s.match(g._name)) {
 			s = s.replace(g._name, '');

@@ -31,7 +31,11 @@ export default {
 	data () { return zeroState(); },
 	computed: {
 		isToday: ({month, year, current}) => (month === current.month && year === current.year),
-		dateStr: ({month, year}) => `${year}-${('0' + (month + 1)).substr(-2)}`
+		dateStr: ({month, year}) => {
+			const m = ('0' + (month + 1)).substr(-2);
+			const d = new Date().toISOString().substr(8, 2);
+			return `${year}-${m}-${d}`;
+		}
 	},
 	methods: {
 		onwheel (e) {

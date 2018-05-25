@@ -16,11 +16,11 @@ import Chart from '../chart';
 export default {
 	components: { YearMonthPicker, Categories, Form, Table, Chart },
 	oncreate () {
+		this.refs.picker.on('change', this.onDateChange.bind(this));
+
 		this.refs.form.on('change', this.onFormChange.bind(this));
 		this.refs.form.on('remove', this.onFormSubmit.bind(this));
 		this.refs.form.on('submit', this.onFormSubmit.bind(this));
-
-		this.refs.picker.on('change', this.onDateChange.bind(this));
 
 		this.refs.table.on('click', this.onTableClick.bind(this));
 		this.refs.table.on('filter', this.onFilterUpdated.bind(this));
