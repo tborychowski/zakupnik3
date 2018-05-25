@@ -12,7 +12,7 @@
 		{:else}
 			{#if filteredData.length}
 			{#each filteredData as item, idx}
-				<tr class="table-row" on:click="onRowClick(item)">
+				<tr class="table-row" on:dblclick="onRowClick(item)">
 					<td class="date">{item.date}</td>
 					<td class="cat"><span class="pill">{getCategory(item)}</span></td>
 					<td class="desc">{getDescription(item)}</td>
