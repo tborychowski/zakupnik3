@@ -37,7 +37,10 @@ const Groups = {
 
 const Expenses = {
 	base: 'entries',
-	get (date) { return get(`${this.base}?date=${date || ''}`); },
+	get (date = '') {
+		date = date.substr(0, 7);
+		return get(`${this.base}?date=${date}`);
+	},
 	save (data) { return save(this.base, data); },
 	del (id) { return del(`${this.base}/${id}`); }
 };

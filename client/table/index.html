@@ -46,8 +46,9 @@ export default {
 	data () {
 		return {
 			isLoading: true,
+			isPreview: false,
 			data: [],
-			date: new Date().toISOString().substr(0, 7),
+			date: new Date().toISOString().substr(0, 10),
 			filter: '',
 			isPreview: false
 		};
@@ -88,8 +89,10 @@ export default {
 	},
 	methods: {
 		load () {
-			if (!this.get().data.length) this.set({ isLoading: true });
-			Data.Expenses.get(this.get().date).then(data => {
+			const data = this.get();
+			if (data.isPreview) return;
+			if (!data.data.length) this.set({ isLoading: true });
+			Data.Expenses.get(data.date).then(data => {
 				this.originalData = data;
 				this.set({ data, isLoading: false });
 			});
@@ -110,11 +113,11 @@ export default {
 
 		// temporary set data
 		preview (data) {
-			this.set({ data });
+			this.set({ data, isPreview: true });
 		},
 
 		endPreview () {
-			this.set({ data: this.originalData });
+			this.set({ data: this.originalData, isPreview: false });
 		}
 	}
 };

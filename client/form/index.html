@@ -43,6 +43,9 @@ export default {
 	oncreate () {
 		this.loadCategories();
 	},
+	onstate({ changed, current, previous }) {
+		if (previous && changed.date) this.parse();
+	},
 
 	computed: {
 		_groups ({groups}) {
