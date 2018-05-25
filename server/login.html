@@ -8,11 +8,22 @@
 	<link rel="icon" type="image/png" href="favicon-128x128.png" sizes="128x128">
 	<link rel="apple-touch-icon" sizes="128x128" href="apple-touch-icon-128x128.png">
 	<link rel="shortcut icon" href="favicon.ico">
+	<style>
+		body { text-align: center; }
+		form { display: block; margin: 30vh auto 0; width: 210px; }
+		.buttons-row { justify-content: center; }
+	</style>
 </head>
 <body>
 	<form action="/login" method="post">
-		<label>Username: </label><input type="text" name="username" autofocus><br>
-		<label>Password: </label><input type="password" name="password"><br>
-		<button>Log In</button>
+		<div class="form-row">
+			<input type="text" name="username" placeholder="Login" autofocus><br>
+		</div>
+		<div class="form-row">
+			<input type="password" name="password" placeholder="Password"><br>
+		</div>
+		<div class="form-row buttons-row">
+			<button class="btn success">Log In</button>
+		</div>
 	</form>
 </body>
