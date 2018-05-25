@@ -12,14 +12,17 @@ function req (url, options, cb) {
 
 	const {method, params, code, type} = Object.assign({}, defaults, options || {});
 
-	api[method](url)
-		.send(params)
-		.expect(code)
-		.expect('Content-Type', new RegExp(type))
-		.end((err, res) => {
-			if (err) throw err;
-			cb(res);
-		});
+	return new Promise(resolve => {
+		api[method](url)
+			.send(params)
+			.expect(code)
+			.expect('Content-Type', new RegExp(type))
+			.end((err, res) => {
+				if (err) throw err;
+				if (cb) cb(res);
+				else resolve(res);
+			});
+	});
 }
 
 

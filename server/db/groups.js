@@ -1,33 +1,8 @@
-const {Group, Entry, Op, sequelize } = require('./db');
-
-function last3months () {
-	const d = new Date();
-	d.setMonth(d.getMonth() - 3);
-	return d.toISOString().substr(0, 7);
-}
+const {Group, Op } = require('./db');
 
 
 function getOne (id) {
 	return Group.findById(id);
-}
-
-
-/**
- * Get groups and count entries (within the last 3 months) as 'freq'
- * can be filtered by 'key'(words) field
- */
-function getFreq (query) {
-	const where = {};
-	if (query.key) where.keywords = {[Op.like]: `%${query.key}%`};
-	return Group
-		.findAll({
-			attributes: [ 'group.*', [sequelize.fn('COUNT', 'entries.id'), 'freq'] ],
-			include: { model: Entry, attributes: [], where: { date: { [Op.gt]: last3months() }} },
-			group: ['entries.group_id'],
-			order: [[sequelize.col('freq'), 'DESC']],
-			where,
-			raw: true
-		});
 }
 
 
@@ -57,7 +32,6 @@ function del (id) {
 
 module.exports = {
 	getOne,
-	getFreq,
 	get,
 	post,
 	put,

@@ -1,14 +1,20 @@
-/* global describe, it */
+/* global describe, it, before, after */
 
-const {req, expect} = require('./common');
+const {req, expect} = require('./_common');
+const {seed, unseed, entry} = require('./_seed');
 const base = '/categories';
 
 describe('Categories', () => {
+
+	before(() => seed());
+	after(() => unseed());
+
+
 	let itemId;
 
-	it('- shoud be empty', done => {
+	it('- shoud be seeded', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(0);
+			expect(res.body.length).to.eq(1);
 			done();
 		});
 	});
@@ -18,6 +24,16 @@ describe('Categories', () => {
 			done();
 		});
 	});
+
+
+	it('- should count sum', done => {
+		req(`${base}?date=${entry.date.substr(0, 7)}`, res => {
+			expect(res.body[0].sum).to.eq(entry.amount);
+			expect(res.body[0].groups[0].sum).to.eq(entry.amount);
+			done();
+		});
+	});
+
 
 	it('- add', done => {
 		const params = { name: 'TEST', parent_id: 0 };
@@ -29,9 +45,9 @@ describe('Categories', () => {
 	});
 
 
-	it('- shoud not be empty', done => {
+	it('- shoud be added', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(1);
+			expect(res.body.length).to.eq(2);
 			done();
 		});
 	});
@@ -51,9 +67,9 @@ describe('Categories', () => {
 		});
 	});
 
-	it('- shoud be empty again', done => {
+	it('- shoud be removed', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(0);
+			expect(res.body.length).to.eq(1);
 			done();
 		});
 	});

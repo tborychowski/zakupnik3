@@ -1,30 +1,26 @@
-/* global describe, it */
+/* global describe, it, before, after */
 
-const {req, expect} = require('./common');
+const {req, expect} = require('./_common');
+const {seed, unseed} = require('./_seed');
 const base = '/groups';
 
 describe('Groups', () => {
-	let categoryId, itemId, entryId;
 
-	it('- shoud be empty', done => {
+	before(() => seed());
+	after(() => unseed());
+
+
+	let itemId;
+
+	it('- shoud be seeded', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(0);
+			expect(res.body.length).to.eq(1);
 			done();
 		});
 	});
-
-	it('- add a category for reference', done => {
-		const params = { name: 'Groups test category' };
-		req('/categories', { method: 'post', params }, res => {
-			expect(res.body.name).to.eq(params.name);
-			categoryId = res.body.id;
-			done();
-		});
-	});
-
 
 	it('- add', done => {
-		const params = { name: 'TEST', category_id: categoryId, keywords: 'test,key1,dupa' };
+		const params = { name: 'group 2', category_id: 1, keywords: 'test,key1,dupa' };
 		req(base, { method: 'post', params }, res => {
 			expect(res.body.name).to.eq(params.name);
 			itemId = res.body.id;
@@ -32,10 +28,9 @@ describe('Groups', () => {
 		});
 	});
 
-
-	it('- shoud not be empty', done => {
+	it('- shoud be added', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(1);
+			expect(res.body.length).to.eq(2);
 			done();
 		});
 	});
@@ -43,30 +38,6 @@ describe('Groups', () => {
 	it('- shoud find by key', done => {
 		req(`${base}?key=dupa`, res => {
 			expect(res.body.length).to.eq(1);
-			done();
-		});
-	});
-
-	it('- add an entry for reference', done => {
-		const params = { date: '2018-04-01', group_id: itemId, amount: 100 };
-		req('/entries', { method: 'post', params }, res => {
-			entryId = res.body.id;
-			done();
-		});
-	});
-
-	it('- shoud find by key and order by freq', done => {
-		req(`${base}?freq&key=dupa`, res => {
-			expect(res.body.length).to.eq(1);
-			expect(res.body[0].freq).to.eq(1);
-			done();
-		});
-	});
-
-
-	it('- remove an entry', done => {
-		req(`/entries/${entryId}`, { method: 'delete' }, res => {
-			expect(res.body.deleted).to.eq(1);
 			done();
 		});
 	});
@@ -86,20 +57,9 @@ describe('Groups', () => {
 		});
 	});
 
-	it('- shoud be empty again', done => {
+	it('- shoud be removed', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(0);
-			done();
-		});
-	});
-
-
-	// CLEAN UP
-
-
-	it('- remove category', done => {
-		req(`/categories/${categoryId}`, { method: 'delete' }, res => {
-			expect(res.body.deleted).to.eq(1);
+			expect(res.body.length).to.eq(1);
 			done();
 		});
 	});

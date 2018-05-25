@@ -10,20 +10,8 @@ function getOne (req, res) {
 }
 
 
-/**
- * Get groups and count entries (within the last 3 months) as 'freq'
- * can be filtered by 'key'(words) field
- */
-function getFreq (req, res) {
-	return DB.getFreq(req.query)
-		.then(items => res.status(200).json(items))
-		.catch(e => res.status(500).json(e));
-}
-
-
 function get (req, res) {
 	if (req.params.id) return getOne(req, res);
-	if (req.query.freq !== undefined) return getFreq(req, res);
 	return DB.get(req.query)
 		.then(items => res.status(200).json(items))
 		.catch(e => res.status(500).json(e));
