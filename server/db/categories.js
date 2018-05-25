@@ -20,6 +20,7 @@ async function getWithAmounts (query) {
 		if (e.group_id) groupAmounts[e.group_id] = e.sum;
 	});
 
+	let total = 0;
 	cats.forEach(cat => {
 		let sum = 0;
 		if (cat.groups) cat.groups.forEach(g => {
@@ -27,8 +28,11 @@ async function getWithAmounts (query) {
 			sum += g.sum;
 		});
 		cat.sum = sum;
+		total += sum;
 	});
-
+	cats.forEach(cat => {
+		cat.percent = Math.round(cat.sum / total * 100);
+	});
 	return cats;
 }
 
