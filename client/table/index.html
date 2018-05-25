@@ -88,7 +88,7 @@ export default {
 	},
 	methods: {
 		load () {
-			this.set({ isLoading: true });
+			if (!this.get().data.length) this.set({ isLoading: true });
 			Data.Expenses.get(this.get().date).then(data => {
 				this.originalData = data;
 				this.set({ data, isLoading: false });

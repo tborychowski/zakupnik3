@@ -19,9 +19,12 @@ export default {
 		this.refs.form.on('change', this.onFormChange.bind(this));
 		this.refs.form.on('remove', this.onFormSubmit.bind(this));
 		this.refs.form.on('submit', this.onFormSubmit.bind(this));
+
 		this.refs.picker.on('change', this.onDateChange.bind(this));
+
 		this.refs.table.on('click', this.onTableClick.bind(this));
 		this.refs.table.on('filter', this.onFilterUpdated.bind(this));
+
 		this.refs.categories.on('click', this.onCategoryClick.bind(this));
 		this.refs.categories.on('updated', this.onCategoryUpdated.bind(this));
 	},
@@ -54,7 +57,11 @@ export default {
 			else this.refs.table.endPreview();
 		},
 
-		onFormSubmit () { this.refs.table.load(); },
+		onFormSubmit () {
+			this.refs.categories.load();
+			this.refs.table.load();
+			this.refs.chart.load();
+		},
 
 		onTableClick (item) { this.refs.form.edit(item); },
 	}

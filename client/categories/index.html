@@ -86,7 +86,7 @@ export default {
 
 	methods: {
 		load () {
-			this.set({ isLoading: true });
+			if (!this.get().categories.length) this.set({ isLoading: true });
 			const date = this.get().date;
 			Data.Categories.get(date).then(categories => {
 				this.set({ categories, isLoading: false });

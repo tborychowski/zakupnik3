@@ -83,7 +83,7 @@ export default {
 
 		edit (data) {
 			this.reset();
-			const text = [data.group && data.group.name || '', data.description || '', $.formatNumber(data.amount)].join(' ');
+			const text = [data.group && data.group.name || '', data.description || '', data.amount].join(' ');
 			this.set({ inEdit: true, id: data.id, date: data.date, text });
 			this.fire('change', this.get().rows);
 		},
