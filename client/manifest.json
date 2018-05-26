@@ -1,0 +1,16 @@
+{
+	"short_name": "Zakupnik",
+	"name": "Zakupnik",
+	"icons": [
+	  {
+		"src": "apple-touch-icon-128x128.png",
+		"type": "image/png",
+		"sizes": "128x128"
+	  }
+	],
+	"start_url": "/",
+	"background_color": "#ccc",
+	"display": "standalone",
+	"scope": "/",
+	"theme_color": "#ccc"
+  }

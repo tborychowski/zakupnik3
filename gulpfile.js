@@ -57,6 +57,7 @@ gulp.task('assets', () => {
 	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(out));
 
 	gulp.src(['assets/*.*']).pipe(gulp.dest(`${PUBLIC_PATH}`));
+	gulp.src(['client/manifest.json']).pipe(gulp.dest(`${PUBLIC_PATH}`));
 });
 
 

@@ -1,7 +1,7 @@
 <div class="categories {mode}">
 	<h1>Categories
-		<button class="btn-outline ion-md-settings" on:click="toggleEdit()"></button>
-		<button class="btn-outline ion-md-close" on:click="toggleEdit()"></button>
+		<button class="btn-outline ion-md-settings" title="Edit" on:click="toggleEdit()"></button>
+		<button class="btn-outline ion-md-close" title="Done" on:click="toggleEdit()"></button>
 	</h1>
 	<form on:submit="onsubmit(event)" on:input="oninput()">
 		<div class="form-row">
@@ -40,7 +40,7 @@
 				<h2 class="editable-cat" on:click="onclick(cat, this)">
 					{cat.name}
 					<span class="pill">{formatNumber(cat.sum)}</span>
-					<span class="cat-percent" style="width: {cat.percent}%"></span>
+					<span class="cat-percent" title="{cat.percent}%" style="width: {cat.percent}%"></span>
 				</h2>
 				<ul class="cat-groups">
 					{#each cat.groups as group}
