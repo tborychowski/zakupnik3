@@ -54,6 +54,7 @@ gulp.task('assets', () => {
 	const pth = 'node_modules/ionicons/dist/';
 	const out = `${PUBLIC_PATH}fonts/`;
 	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest(out));
+	gulp.src([pth + 'css/ionicons.min.css.map']).pipe(gulp.dest(out));
 	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(out));
 
 	gulp.src(['assets/*.*']).pipe(gulp.dest(`${PUBLIC_PATH}`));
