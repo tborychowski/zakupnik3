@@ -57,7 +57,6 @@ gulp.task('assets', () => {
 	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(out));
 
 	gulp.src(['assets/*.*']).pipe(gulp.dest(`${PUBLIC_PATH}`));
-	gulp.src(['client/manifest.json']).pipe(gulp.dest(`${PUBLIC_PATH}`));
 });
 
 
@@ -67,11 +66,15 @@ gulp.task('js', ['eslint'], () => {
 		const MinifyPlugin = require('babel-minify-webpack-plugin');
 		webpackConfig.plugins = [ new MinifyPlugin() ];
 	}
+
+	gulp.src(['client/sw.js']).pipe(gulp.dest(`${PUBLIC_PATH}`));
+
 	return gulp.src(['client/index.js'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(webpack(webpackConfig, null, wpErr))
 		.pipe(gulp.dest(PUBLIC_PATH))
 		.pipe(livereload());
+
 });
 
 
@@ -115,6 +118,7 @@ gulp.task('watch', ['default'], () => {
 	gulp.watch('client/**/*.styl', ['styl']);
 	gulp.watch('client/**/*.js', ['js']);
 	gulp.watch('client/**/*.html', ['js']);
+	gulp.watch('assets/**/*.*', ['assets']);
 });
 
 
