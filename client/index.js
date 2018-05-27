@@ -11,5 +11,5 @@ function registerSW () {
 		.catch(err => console.log('SW failed: ', err));
 }
 
-if ('serviceWorker' in navigator) window.addEventListener('load', registerSW());
+if ('serviceWorker' in navigator) window.addEventListener('load', registerSW);
 
