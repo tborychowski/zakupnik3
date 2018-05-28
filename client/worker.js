@@ -1,5 +1,6 @@
-const CACHE_NAME = 'zakupnik-cache-v2.0';
-const urlsToCache = [ 'index.html', 'app.css', 'app.js', 'fonts/' ];
+const CACHE_NAME = 'zakupnik-cache-v2.4';
+const urlsToCache = ['/'];
+const isAPI = url => (url.indexOf('/api/') > -1);
 
 function onInstall (ev) {
 	const cachesOpened = caches
@@ -8,7 +9,7 @@ function onInstall (ev) {
 	ev.waitUntil(cachesOpened);
 }
 
-function request (ev) {
+async function request (ev) {
 	const req = ev.request.clone();
 	return fetch(req)
 		.then(res => {
@@ -24,7 +25,13 @@ function request (ev) {
 function onFetch (ev) {
 	const cached = caches
 		.match(ev.request)
-		.then(found => found ? found : request(ev));
+		.then(async found => {
+			if (found && !isAPI(ev.request.url)) return found;
+			let res;
+			try { res = await request(ev); }
+			catch (e) { res = found; }
+			return res;
+		});
 	ev.respondWith(cached);
 }
 
