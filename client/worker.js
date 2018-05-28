@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zakupnik-cache-v1';
+const CACHE_NAME = 'zakupnik-cache-v1.1';
 const urlsToCache = [ '/', 'app.css', 'app.js' ];
 
 function onInstall (ev) {
