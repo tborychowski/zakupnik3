@@ -1,5 +1,5 @@
-const CACHE_NAME = 'zakupnik-cache-v1.1';
-const urlsToCache = [ '/', 'app.css', 'app.js' ];
+const CACHE_NAME = 'zakupnik-cache-v2.0';
+const urlsToCache = [ 'index.html', 'app.css', 'app.js', 'fonts/' ];
 
 function onInstall (ev) {
 	const cachesOpened = caches
