@@ -30,7 +30,7 @@
 
 	<div class="table-filter-box {filter.length ? 'filtered' : ''}">
 		<i class="ion-md-search"></i>
-		<input class="table-filter-input" type="search" placeholder="Filter"
+		<input class="table-filter-input" placeholder="Filter"
 		bind:value="filter"
 		on:keydown="onFilterKeyDown(event)">
 		<i class="ion-md-close table-clear-filter" on:click="clearFilter()"></i>
