@@ -29,17 +29,17 @@
 	</table>
 
 	<div class="table-filter-box {filter.length ? 'filtered' : ''}">
-		<i class="ion-md-search"></i>
+		<i class="btn-search">⚲</i>
 		<input class="table-filter-input" placeholder="Filter"
 		bind:value="filter"
 		on:keydown="onFilterKeyDown(event)">
-		<i class="ion-md-close table-clear-filter" on:click="clearFilter()"></i>
+		<i class="btn-clear" on:click="clearFilter()">×</i>
 	</div>
 </div>
 
 
 <script>
-import {$} from '../core';
+import {formatNumber} from '../util';
 import Data from '../data';
 
 export default {
@@ -61,7 +61,7 @@ export default {
 		if (changed.filter && current.filter === '') this.fire('filter', '');
 	},
 	helpers: {
-		formatNumber: $.formatNumber,
+		formatNumber,
 		getCategory (item) {
 			return item && item.group && item.group.category && item.group.category.name || '';
 		},

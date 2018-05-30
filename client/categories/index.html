@@ -1,7 +1,7 @@
 <div class="categories {mode}">
 	<h1>Categories
-		<button class="btn-outline ion-md-settings" title="Edit" on:click="toggleEdit()"></button>
-		<button class="btn-outline ion-md-close" title="Done" on:click="toggleEdit()"></button>
+		<button class="btn-outline btn-settings" title="Edit" on:click="toggleEdit()">⚙</button>
+		<button class="btn-outline btn-close" title="Done" on:click="toggleEdit()">×</button>
 	</h1>
 	<form on:submit="onsubmit(event)" on:input="oninput()">
 		<div class="form-row">
@@ -61,7 +61,7 @@
 
 
 <script>
-import {$} from '../core';
+import {formatNumber} from '../util';
 import Data from '../data';
 
 export default {
@@ -82,7 +82,7 @@ export default {
 		if (previous && changed.date) this.load();
 	},
 	helpers: {
-		formatNumber: num => (num ? '€' + $.formatNumber(num) : '')
+		formatNumber: num => (num ? '€' + formatNumber(num) : '')
 	},
 
 	methods: {

@@ -1,5 +1,4 @@
-import {$} from '../core';
-import CHART from 'chart.js/dist/Chart.js';
+import {formatNumber} from '../util';
 
 const monthColors = (col = new Date().getMonth()) => {
 	const cols = Array(12).fill('#ddd');
@@ -30,7 +29,7 @@ const cfg = {
 		},
 		tooltips: {
 			intersect: false,
-			callbacks: { label: tt => '€' + $.formatNumber(tt.yLabel) }
+			callbacks: { label: tt => '€' + formatNumber(tt.yLabel) }
 		},
 		layout: { padding: { top: 10, left: 15, right: 15 }}
 	}
@@ -41,7 +40,7 @@ const cfg = {
 class Chart {
 
 	constructor (el) {
-		this.chart = new CHART(el, cfg);
+		this.chart = new window.Chart(el, cfg);
 		return this;
 	}
 

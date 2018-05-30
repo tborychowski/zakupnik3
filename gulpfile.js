@@ -51,12 +51,6 @@ gulp.task('eslint', () => {
 
 
 gulp.task('assets', () => {
-	const pth = 'node_modules/ionicons/dist/';
-	const out = `${PUBLIC_PATH}fonts/`;
-	gulp.src([pth + 'css/ionicons.min.css']).pipe(gulp.dest(out));
-	gulp.src([pth + 'css/ionicons.min.css.map']).pipe(gulp.dest(out));
-	gulp.src([pth + 'fonts/*.*']).pipe(gulp.dest(out));
-
 	gulp.src(['assets/*.*']).pipe(gulp.dest(`${PUBLIC_PATH}`));
 });
 
@@ -83,7 +77,7 @@ gulp.task('styl', () => {
 	return gulp.src(['client/index.styl', 'client/**/*.styl'])
 		.pipe(isProd ? noop() : sourcemaps.init())
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-		.pipe(stylus({ paths: ['client', 'client/core'], 'include css': true }))
+		.pipe(stylus({ paths: ['client'], 'include css': true }))
 		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
 		.pipe(concat('app.css'))
 		.pipe(isProd ? noop() : sourcemaps.write())
