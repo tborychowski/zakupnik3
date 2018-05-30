@@ -6,7 +6,7 @@ function registerSW () {
 	navigator.serviceWorker
 		.register('worker.js')
 		// .then(registration => console.log('SW scope: ', registration.scope))
-		.catch(err => console.log('Worker failed: ', err));
+		.catch();
 }
 
 if ('serviceWorker' in navigator) window.addEventListener('load', registerSW);

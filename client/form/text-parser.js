@@ -64,7 +64,7 @@ function parseAmount (amount) {
 }
 
 
-function findGroup(s, groups) {
+function findGroup (s, groups) {
 	s = s.toLowerCase();
 	for (let g of groups) {
 		if (s.match(g._name)) {
@@ -85,7 +85,7 @@ function findGroup(s, groups) {
 }
 
 
-function findAmount(s) {
+function findAmount (s) {
 	let amount, cer = 0;
 	s = s.replace(/\s+([+-/*()])\s+/g, '$1');	// remove spaces around ops
 	const words = s.split(' ');

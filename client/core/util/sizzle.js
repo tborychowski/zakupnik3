@@ -149,7 +149,7 @@ sizzle.fn.attr = function (attr, value) {
 
 
 function animateElement (from, to, opts) {
-	return el => new Promise (resolve => {
+	return el => new Promise(resolve => {
 		const anim = el.animate([from, to], opts);
 		anim.oncancel = resolve;
 		anim.onfinish = resolve;

@@ -37,4 +37,4 @@ app.use('/api/', isApiAuthenticated, api);
 app.use('/', express.static(path.join(__dirname, '..', 'public')));
 app.use('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
 
-app.listen(3000, () => console.log('Server started.'));
+app.listen(3000);
