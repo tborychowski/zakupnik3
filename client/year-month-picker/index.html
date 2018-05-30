@@ -4,7 +4,7 @@
 		on:keyup="keyup(event.key)"
 		on:mousedown="tick(-1)"
 		on:mouseout="mup()"
-		on:mouseup="mup()"><i class="ion-ios-arrow-back"></i></button>
+		on:mouseup="mup()">‹</button>
 
 	<span class="day">{months[month]} {year}</span>
 
@@ -13,9 +13,9 @@
 		on:keyup="keyup(event.key)"
 		on:mousedown="tick(1)"
 		on:mouseout="mup()"
-		on:mouseup="mup()"><i class="ion-ios-arrow-forward"></i></button>
+		on:mouseup="mup()">›</button>
 
-	<button title="Today" class="btn-outline btn-today" on:click="reset()"><i class="ion-md-undo"></i></button>
+	<button title="Today" class="btn-outline btn-today" on:click="reset()">↩</button>
 </div>
 
 <script>

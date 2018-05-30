@@ -1,4 +1,4 @@
-const CACHE_NAME = 'zakupnik-cache-v2.5';
+const CACHE_NAME = 'zakupnik-cache-v2.6';
 const urlsToCache = ['/'];
 const isAPI = url => (url.indexOf('/api/') > -1);
 

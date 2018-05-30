@@ -1,9 +1,8 @@
 <div class="chart"><canvas ref:canvas width="100%" height="200"></canvas></div>
 
 <script>
-import {$} from '../core';
 import Data from '../data';
-import Chart from './chart';
+import MyChart from './chart';
 
 export default {
 	data () {
@@ -15,7 +14,9 @@ export default {
 		};
 	},
 	oncreate () {
-		this.init();
+		setTimeout(() => {
+			this.init();
+		}, 1000);
 	},
 
 	onstate({ changed, current, previous }) {
@@ -26,7 +27,7 @@ export default {
 
 	methods: {
 		init () {
-			if (!this.chart) this.chart = new Chart(this.refs.canvas);
+			if (!this.chart) this.chart = new MyChart(this.refs.canvas);
 			this.load();
 		},
 
