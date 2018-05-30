@@ -14,9 +14,7 @@ export default {
 		};
 	},
 	oncreate () {
-		setTimeout(() => {
-			this.init();
-		}, 1000);
+		setTimeout(() => this.init(), 300);
 	},
 
 	onstate({ changed, current, previous }) {
