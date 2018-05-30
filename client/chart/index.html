@@ -14,7 +14,7 @@ export default {
 		};
 	},
 	oncreate () {
-		setTimeout(() => this.init(), 300);
+		this.init();
 	},
 
 	onstate({ changed, current, previous }) {
@@ -24,7 +24,12 @@ export default {
 	},
 
 	methods: {
+		isChartLoaded () {
+
+		},
+
 		init () {
+			if (!window.Chart) return setTimeout(() => this.init(), 200);
 			if (!this.chart) this.chart = new MyChart(this.refs.canvas);
 			this.load();
 		},
