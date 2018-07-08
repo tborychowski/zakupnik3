@@ -62,7 +62,7 @@ gulp.task('js', ['eslint'], () => {
 		webpackConfig.plugins = [ new MinifyPlugin() ];
 	}
 
-	gulp.src(['client/worker.js']).pipe(gulp.dest(`${PUBLIC_PATH}`));
+	// gulp.src(['client/worker.js']).pipe(gulp.dest(`${PUBLIC_PATH}`));
 
 	return gulp.src(['client/index.js'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
