@@ -85,7 +85,10 @@ export default {
 				return (s.toLowerCase().indexOf(filter) > -1);
 			});
 		},
-		total ({filteredData}) { return filteredData.reduce((p, c) => p + c.amount, 0); }
+		total ({filteredData}) {
+			if (!Array.isArray(filteredData)) return 0;
+			return filteredData.reduce((p, c) => p + c.amount, 0);
+		}
 	},
 	methods: {
 		load () {
