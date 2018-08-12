@@ -22,7 +22,7 @@ function addMonthsToDate (date, monthDiff) {
 	let month = dateObj.month + monthDiff;
 	if (month >= 13) {
 		year = year + Math.floor(month / 12);
-		month = (month % 12) + 1;
+		month = (month % 12);
 	}
 	return getStrDate(year, month);
 }
