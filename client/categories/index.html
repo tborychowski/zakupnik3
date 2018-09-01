@@ -40,7 +40,7 @@
 				<h2 class="editable-cat" on:click="onclick(cat, this)">
 					{cat.name}
 					<span class="pill">{formatNumber(cat.sum)}</span>
-					<span class="cat-percent" title="{cat.percent}%" style="width: calc({cat.percent}% - 40px)"></span>
+					<span class="cat-percent" title="{cat.percent}%" style="width: {cat.percent}%"></span>
 				</h2>
 				<ul class="cat-groups">
 					{#each cat.groups as group}
