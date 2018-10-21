@@ -57,12 +57,19 @@
 		.pill
 			page-break-after always
 
-		.cat-percent
+		.cat-percent-wrapper
 			height 7px
 			margin 10 0 0
-			border-radius 0 10px 10px 0
-			background darken(accent-color, 10%)
-			box-shadow 0 2px 1px rgba(#000, .3) inset
+			width 100%
+			bg #ccc
+
+		.cat-percent
+			height 100%
+			display block
+			background darken(accent-color, 15%)
+
+		.cat-linebreak
+			width 100%
 
 	li.editable-cat
 		padding 5 20 5 20
@@ -101,6 +108,10 @@
 
 		.btn-settings
 			display block
+			padding-top 6px
+
+			svg
+				width 22px
 
 		.btn-close
 			display none
