@@ -1,35 +1,30 @@
 const gulp = require('gulp');
-const cssmin = require('gulp-clean-css');
-const webpack = require('webpack-stream');
-const concat = require('gulp-concat');
-const stylus = require('gulp-stylus');
-const notify = require('gulp-notify');
-const plumber = require('gulp-plumber');
-const eslint = require('gulp-eslint');
-const mocha = require('gulp-mocha');
-const nodemon = require('gulp-nodemon');
-const noop = require('through2').obj;
-const sourcemaps = require('gulp-sourcemaps');
 const livereload = require('gulp-livereload');
 const env = require('gulp-env');
 const isProd = require('minimist')(process.argv.slice(2)).prod;
-const webpackConfig = require('./webpack.config.js');
 const PUBLIC_PATH = 'public/';
 
-const wpErr = (err, stats) => {
-	if (err) notify.onError('Error: ' + err);
-	err = stats.compilation.errors;
-	if (err.length) notify.onError('Error: ' + err[0].message);
-};
+
+function webpackLogger (err) {
+	const chalk = require('chalk');
+	let time = new Date().toTimeString().substr(0,8);
+	let message = 'Finished ' + chalk.green('webpack') + ' build';
+	if (err) { message = chalk.red(err); time = chalk.red(time); }
+	else time = chalk.grey(time);
+	console.log(`[${time}] ${message}`); /* eslint no-console: 0 */
+}
+
 
 let serverStarted = false;
-const startServer = done =>
-	nodemon({ script: './server/index.js', watch: ['./server'], ext: 'js html' })
+function startServer (done) {
+	const nodemon = require('gulp-nodemon');
+	return nodemon({ script: './server/index.js', watch: ['./server'], ext: 'js html' })
 		.on('start', () => {
 			if (serverStarted) return;
 			serverStarted = true;
 			setTimeout(done, 500);
 		});
+}
 
 
 env.set({ NODE_TLS_REJECT_UNAUTHORIZED: 0 });
@@ -43,6 +38,7 @@ gulp.task('help', () => {
 
 
 gulp.task('eslint', () => {
+	const eslint = require('gulp-eslint');
 	return gulp.src(['client/**/*.js', 'server/**/*.js'])
 		.pipe(eslint())
 		.pipe(eslint.format())
@@ -56,6 +52,32 @@ gulp.task('assets', () => {
 
 
 gulp.task('js', ['eslint'], () => {
+	const path = require('path');
+	const webpack = require('webpack');
+	const webpackStream = require('webpack-stream');
+	const webpackConfig = {
+		// devtool: 'inline-source-map',
+		// mode: 'development',
+		entry: { index: './client/index.js' },
+		output: {
+			filename: 'app.js',
+			path: path.join(__dirname, 'public'),
+			publicPath: './public/',
+		},
+		resolve: { extensions: ['.js', '.json', '.html'] },
+		stats: 'normal',	// minimal
+		module: {
+			rules: [
+				{ test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
+				{
+					test: /\.html$/,
+					exclude: /node_modules/,
+					use: { loader: 'svelte-loader', options: { css: false } },
+				},
+			]
+		}
+	};
+
 	if (!isProd) webpackConfig.devtool = 'inline-source-map';
 	else {
 		const MinifyPlugin = require('babel-minify-webpack-plugin');
@@ -65,8 +87,8 @@ gulp.task('js', ['eslint'], () => {
 	// gulp.src(['client/worker.js']).pipe(gulp.dest(`${PUBLIC_PATH}`));
 
 	return gulp.src(['client/index.js'])
-		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-		.pipe(webpack(webpackConfig, null, wpErr))
+		.pipe(webpackStream(webpackConfig, webpack, webpackLogger))
+		.on('error', function () { this.emit('end'); })
 		.pipe(gulp.dest(PUBLIC_PATH))
 		.pipe(livereload());
 
@@ -74,9 +96,14 @@ gulp.task('js', ['eslint'], () => {
 
 
 gulp.task('styl', () => {
+	const cssmin = require('gulp-clean-css');
+	const sourcemaps = require('gulp-sourcemaps');
+	const concat = require('gulp-concat');
+	const stylus = require('gulp-stylus');
+	const noop = require('through2').obj;
+
 	return gulp.src(['client/index.styl', 'client/**/*.styl'])
 		.pipe(isProd ? noop() : sourcemaps.init())
-		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(stylus({ paths: ['client'], 'include css': true }))
 		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
 		.pipe(concat('app.css'))
@@ -99,6 +126,7 @@ gulp.task('server', done => {
 
 
 gulp.task('test', ['test-server'], () => {
+	const mocha = require('gulp-mocha');
 	return gulp
 		.src(['./test/**/*.spec.js'], { read: false })
 		.pipe(mocha({ reporter: 'list' }))
