@@ -91,12 +91,15 @@ export default {
 	methods: {
 		load () {
 			if (!this.store.get().categories.length) this.set({ isLoading: true });
-			const date = this.store.get().date;
-			Data.Categories.get(date).then(categories => {
-				this.store.set({ categories });
-				this.set({ isLoading: false });
-				return categories;
-			});
+			const {dateStr} = this.store.get();
+			Data.Categories
+				.get(dateStr)
+				.then(categories => {
+					this.store.set({ categories });
+					this.set({ isLoading: false });
+					return categories;
+				});
+			Data.Groups.get().then(groups => this.store.set({ groups }));
 		},
 
 		toggleEdit () {
@@ -139,7 +142,7 @@ export default {
 		},
 
 		onclick (item, el) {
-			if (this.get().mode === 'view') this.fire('click', item);
+			if (this.get().mode === 'view') this.store.set({ category: item });
 			else this.edit(item, el);
 		},
 
@@ -161,7 +164,6 @@ export default {
 				.then(() => {
 					this.reset();
 					this.load();
-					this.fire('updated');
 				});
 		},
 
