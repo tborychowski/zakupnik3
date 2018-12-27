@@ -19,6 +19,8 @@
 </div>
 
 <script>
+import {EVENT, Store} from '../data';
+
 function zeroState () {
 	const d = new Date();
 	const month = d.getMonth();
@@ -28,6 +30,7 @@ function zeroState () {
 }
 
 export default {
+	store: () => Store,
 	data () { return zeroState(); },
 	computed: {
 		isToday: ({month, year, current}) => (month === current.month && year === current.year),
@@ -107,7 +110,7 @@ export default {
 
 		notify () {
 			const {month, year, dateStr} = this.get();
-			this.fire('change', { month, year, dateStr });
+			this.store.set({ date: { month, year, dateStr } });
 		},
 
 		reset () {

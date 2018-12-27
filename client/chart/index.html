@@ -1,33 +1,23 @@
 <div class="chart"><canvas ref:canvas width="100%" height="200"></canvas></div>
 
 <script>
-import {Data} from '../data';
+import {Data, Store} from '../data';
 import MyChart from './chart';
 
 export default {
-	data () {
-		return {
-			date: new Date().toISOString().substr(0, 7),
-			category: null,
-			group: null,
-			isLoading: true
-		};
-	},
+	store: () => Store,
+	data () { return { isLoading: true }; },
 	oncreate () {
 		this.init();
-	},
 
-	onstate({ changed, current, previous }) {
-		if (previous && changed.date) this.load();
-		if (previous && changed.category) this.load();
-		if (previous && changed.group) this.load();
+		this.store.on('state', ({ current, changed, previous }) => {
+			if (previous && changed.date) this.load();
+			if (previous && changed.category) this.load();
+			if (previous && changed.group) this.load();
+		});
 	},
 
 	methods: {
-		isChartLoaded () {
-
-		},
-
 		init () {
 			if (!window.Chart) return setTimeout(() => this.init(), 200);
 			if (!this.chart) this.chart = new MyChart(this.refs.canvas);
@@ -36,12 +26,9 @@ export default {
 
 		load () {
 			this.set({ isLoading: true });
-			const data = this.get();
-			data.year = data.date.split('-')[0];
-			const month = parseInt(data.date.split('-')[1], 10) - 1;
-
-			Data.Stats.get(data).then(expenses => {
-				this.chart.set(expenses, month);
+			const {date} = this.store.get();
+			Data.Stats.get(date).then(expenses => {
+				this.chart.set(expenses, date.month);
 				this.set({ isLoading: false });
 			});
 		},

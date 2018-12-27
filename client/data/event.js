@@ -5,5 +5,4 @@ export default {
 	off,
 	fire,
 
-
 };
