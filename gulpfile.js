@@ -1,8 +1,11 @@
-const gulp = require('gulp');
+const { series, parallel, src, dest, watch } = require('gulp');
 const livereload = require('gulp-livereload');
 const env = require('gulp-env');
 const isProd = require('minimist')(process.argv.slice(2)).prod;
 const PUBLIC_PATH = 'public/';
+
+env.set({ NODE_TLS_REJECT_UNAUTHORIZED: 0 });
+env.set({ NODE_ENV: isProd ? 'production' : 'development' });
 
 
 function webpackLogger (err) {
@@ -16,7 +19,7 @@ function webpackLogger (err) {
 
 
 let serverStarted = false;
-function startServer (done) {
+function server (done) {
 	const nodemon = require('gulp-nodemon');
 	return nodemon({ script: './server/index.js', watch: ['./server'], ext: 'js html' })
 		.on('start', () => {
@@ -27,37 +30,43 @@ function startServer (done) {
 }
 
 
-env.set({ NODE_TLS_REJECT_UNAUTHORIZED: 0 });
-env.set({ NODE_ENV: isProd ? 'production' : 'development' });
+function eslint () {
+	const gulpEslint = require('gulp-eslint');
+	return src(['client/**/*.js', 'server/**/*.js'])
+		.pipe(gulpEslint())
+		.pipe(gulpEslint.format())
+		.pipe(gulpEslint.failAfterError());
+}
+
+function assets () {
+	return src(['assets/*.*']).pipe(dest(`${PUBLIC_PATH}`));
+}
 
 
-gulp.task('help', () => {
-	const tasks = '  ' + Object.keys(gulp.tasks).sort().join('\n  ');
-	console.log(`\nAvailable tasks:\n${tasks}\n`);
-});
+
+function styl () {
+	const cssmin = require('gulp-clean-css');
+	const sourcemaps = require('gulp-sourcemaps');
+	const concat = require('gulp-concat');
+	const stylus = require('gulp-stylus');
+	const noop = require('through2').obj;
+
+	return src(['client/index.styl', 'client/**/*.styl'])
+		.pipe(isProd ? noop() : sourcemaps.init())
+		.pipe(stylus({ paths: ['client'], 'include css': true }))
+		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
+		.pipe(concat('app.css'))
+		.pipe(isProd ? noop() : sourcemaps.write())
+		.pipe(dest(PUBLIC_PATH))
+		.pipe(livereload());
+}
 
 
-gulp.task('eslint', () => {
-	const eslint = require('gulp-eslint');
-	return gulp.src(['client/**/*.js', 'server/**/*.js'])
-		.pipe(eslint())
-		.pipe(eslint.format())
-		.pipe(eslint.failAfterError());
-});
-
-
-gulp.task('assets', () => {
-	gulp.src(['assets/*.*']).pipe(gulp.dest(`${PUBLIC_PATH}`));
-});
-
-
-gulp.task('js', ['eslint'], () => {
+function js () {
 	const path = require('path');
 	const webpack = require('webpack');
 	const webpackStream = require('webpack-stream');
 	const webpackConfig = {
-		// devtool: 'inline-source-map',
-		// mode: 'development',
 		entry: { index: './client/index.js' },
 		output: {
 			filename: 'app.js',
@@ -78,71 +87,55 @@ gulp.task('js', ['eslint'], () => {
 		}
 	};
 
-	if (!isProd) webpackConfig.devtool = 'inline-source-map';
+	if (!isProd) {
+		webpackConfig.devtool = 'inline-source-map';
+		webpackConfig.mode = 'development';
+	}
 	else {
 		const MinifyPlugin = require('babel-minify-webpack-plugin');
 		webpackConfig.plugins = [ new MinifyPlugin() ];
 	}
 
-	// gulp.src(['client/worker.js']).pipe(gulp.dest(`${PUBLIC_PATH}`));
-
-	return gulp.src(['client/index.js'])
+	return src(['client/index.js'])
 		.pipe(webpackStream(webpackConfig, webpack, webpackLogger))
 		.on('error', function () { this.emit('end'); })
-		.pipe(gulp.dest(PUBLIC_PATH))
+		.pipe(dest(PUBLIC_PATH))
 		.pipe(livereload());
-
-});
-
-
-gulp.task('styl', () => {
-	const cssmin = require('gulp-clean-css');
-	const sourcemaps = require('gulp-sourcemaps');
-	const concat = require('gulp-concat');
-	const stylus = require('gulp-stylus');
-	const noop = require('through2').obj;
-
-	return gulp.src(['client/index.styl', 'client/**/*.styl'])
-		.pipe(isProd ? noop() : sourcemaps.init())
-		.pipe(stylus({ paths: ['client'], 'include css': true }))
-		.pipe(isProd ? cssmin({ keepSpecialComments: 0 }) : noop())
-		.pipe(concat('app.css'))
-		.pipe(isProd ? noop() : sourcemaps.write())
-		.pipe(gulp.dest(PUBLIC_PATH))
-		.pipe(livereload());
-});
+}
 
 
 
-gulp.task('test-server', done => {
+function testServer (cb) {
 	env.set({ NODE_ENV: 'test' });
-	startServer(done);
-});
+	server(cb);
+}
 
-
-gulp.task('server', done => {
-	startServer(done);
-});
-
-
-gulp.task('test', ['test-server'], () => {
+function runTests (cb) {
 	const mocha = require('gulp-mocha');
-	return gulp
-		.src(['./test/**/*.spec.js'], { read: false })
+	return src(['./test/**/*.spec.js'], { read: false })
 		.pipe(mocha({ reporter: 'list' }))
-		.on('error', () => process.exit(1))
-		.on('end', () => process.exit(0));
-});
+		.on('error', () => { cb(); process.exit(1); })
+		.on('end', () => { cb(); process.exit(0); });
+}
 
 
-gulp.task('watch', ['default'], () => {
+function watchTask () {
 	if (isProd) return;
 	livereload.listen();
-	gulp.watch('client/**/*.styl', ['styl']);
-	gulp.watch('client/**/*.js', ['js']);
-	gulp.watch('client/**/*.html', ['js']);
-	gulp.watch('assets/**/*.*', ['assets']);
-});
+	watch('client/**/*.styl', styl);
+	watch('client/**/*.js', js);
+	watch('client/**/*.html', js);
+	watch('assets/**/*.*', assets);
+}
 
+const defaultTask = parallel(assets, styl, eslint, js);
 
-gulp.task('default', [ 'js', 'styl', 'assets', 'eslint' ]);
+exports.styl = styl;
+exports.eslint = eslint;
+exports.assets = assets;
+exports.js = js;
+exports.server = server;
+exports.test = series(testServer, runTests);
+
+exports.default = defaultTask;
+exports.watch = series(defaultTask, watchTask);

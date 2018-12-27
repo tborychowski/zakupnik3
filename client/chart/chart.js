@@ -18,14 +18,14 @@ const cfg = {
 			pointRadius: 5,
 			pointHoverRadius: 5,
 			backgroundColor: '#ffa50033',
-			data: [0,0,0,0,0,0,0,0,0,0,0,0]
+			data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		}]
 	},
 	options: {
 		legend: { display: false },
 		scales: {
-			yAxes: [{ display: false }],
-			xAxes: [{ gridLines: { color: monthColors() }}]
+			yAxes: [{ display: false, ticks: { beginAtZero: true } }],
+			xAxes: [{ gridLines: { color: monthColors() }, }]
 		},
 		tooltips: {
 			intersect: false,
@@ -38,7 +38,6 @@ const cfg = {
 
 
 class Chart {
-
 	constructor (el) {
 		this.chart = new window.Chart(el, cfg);
 		return this;
@@ -49,7 +48,6 @@ class Chart {
 		this.chart.options.scales.xAxes[0].gridLines.color = monthColors(month);
 		this.chart.update();
 	}
-
 }
 
 
