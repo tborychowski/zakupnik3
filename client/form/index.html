@@ -13,9 +13,9 @@
 			bind:value="text"></textarea>
 	</div>
 	<div class="form-footer form-row">
-		<button type="button" tabindex="3" class="btn btn-reset" on:click="reset()">Clear</button>
 		<button type="button" tabindex="4" class="btn danger btn-remove" on:click="remove()">Remove</button>
 		<div class="flex-filler"></div>
+		<button type="button" tabindex="3" class="btn btn-reset" on:click="reset()">Clear</button>
 		<button type="button" tabindex="3" class="btn btn-cancel" on:click="reset()">Cancel</button>
 		<button type="submit" tabindex="2" class="btn success btn-save">Save</button>
 		<button type="submit" tabindex="2" class="btn success btn-add">Add</button>
@@ -31,7 +31,7 @@ export default {
 	store: () => Store,
 	data () {
 		return {
-			inEdit: false,
+			inEdit: false,  // editing old entry
 			id: null,
 			text: '',
 			rows: [],
@@ -79,7 +79,9 @@ export default {
 		parse () {
 			if (this.parseTimer) clearTimeout(this.parseTimer);
 			this.parseTimer = setTimeout(() => {
-				const rows = Parser.parse(this.get().text, this.get());
+				const {text, _groups} = this.get();
+				const {date} = this.store.get();
+				const rows = Parser.parse(text, _groups, date);
 				this.set({ rows });
 				this.fire('change', rows);
 			}, 300);

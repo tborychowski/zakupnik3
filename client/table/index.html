@@ -43,24 +43,27 @@
 
 <script>
 import {formatNumber} from '../util';
-import {Data} from '../data';
+import {Data, Store} from '../data';
 
 export default {
+	store: () => Store,
 	data () {
 		return {
 			isLoading: true,
 			isPreview: false,
 			data: [],
-			date: new Date().toISOString().substr(0, 10),
 			filter: '',
 			isPreview: false
 		};
 	},
 	oncreate () {
+		this.store.on('state', ({ current, changed, previous }) => {
+			if (previous && changed.date) this.load();
+		});
+
 		this.load();
 	},
 	onstate({ changed, current, previous }) {
-		if (previous && changed.date) this.load();
 		if (changed.filter && current.filter === '') this.fire('filter', '');
 	},
 	helpers: {
@@ -98,9 +101,10 @@ export default {
 			const data = this.get();
 			if (data.isPreview) return;
 			if (!data.data.length) this.set({ isLoading: true });
-			Data.Expenses.get(data.date).then(data => {
-				this.originalData = data;
-				this.set({ data, isLoading: false });
+			const {date} = this.store.get();
+			Data.Expenses.get(date).then(res => {
+				this.originalData = res;
+				this.set({ data: res, isLoading: false });
 			});
 		},
 

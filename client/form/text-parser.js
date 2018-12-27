@@ -111,7 +111,7 @@ function findAmount (s) {
 
 
 
-function parse (val, {date, _groups}) {
+function parse (val, _groups, date) {
 	let repeat = 1;
 	const rows = val
 		.split('\n')
