@@ -26,7 +26,7 @@ export default {
 
 		load () {
 			this.set({ isLoading: true });
-			const {date, category, group} = this.store.get();
+			let {date, category, group} = this.store.get();
 			if (category) category = category.id;
 			if (group) group = group.id;
 			Data.Stats.get({ year: date.y, group, category }).then(expenses => {

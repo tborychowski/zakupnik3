@@ -42,8 +42,6 @@ export default {
 		this.store.on('state', ({ current, changed, previous }) => {
 			if (previous && changed.date) this.parse();
 		});
-
-		this.loadGroups();
 	},
 
 	computed: {
@@ -57,10 +55,6 @@ export default {
 	},
 
 	methods: {
-		loadGroups () {
-			Data.Groups.get().then(groups => this.store.set({ groups }));
-		},
-
 		onfocus () {
 			this.parse();
 		},
@@ -80,10 +74,14 @@ export default {
 			if (this.parseTimer) clearTimeout(this.parseTimer);
 			this.parseTimer = setTimeout(() => {
 				const {text, _groups} = this.get();
-				const {date} = this.store.get();
-				const rows = Parser.parse(text, _groups, date);
+				const {dateStr} = this.store.get();
+				const rows = Parser.parse(text, _groups, dateStr);
 				this.set({ rows });
-				this.fire('change', rows);
+
+				if (rows.length) {
+					const group = rows[0].group;
+					this.store.set({ group });
+				}
 			}, 300);
 		},
 
@@ -99,35 +97,41 @@ export default {
 			this.set({ inEdit: false, id: null, text: '', rows: [] });
 			this.toggleAmountError();
 			this.fire('change', []);
+
+			this.store.set({ group: null });
+
 			this.updateHeight();
 			this.refs.textbox.focus();
 		},
 
 		remove () {
 			const id = this.get().id;
-			Data.Expenses.del(id).then(() => {
-				this.reset();
-				this.fire('remove');
-			});
+			Data.Expenses
+				.del(id)
+				.then(() => {
+					this.reset();
+					this.fire('remove');
+				});
 		},
 
 		onsubmit (e) {
 			e.preventDefault();
-			const data = this.get();
-			const rows = data.rows;
-			if (!rows.length) {
+			const {id, rows} = this.get();
+			if (!rows || !rows.length) {
 				this.toggleAmountError('Please enter amount and category');
 
 				// TODO: toast?
 				return this.fire('error', 'Please enter amount and category');
 			}
 			// item was edited
-			if (data.id && rows.length === 1) rows[0].id = data.id;
+			if (id && rows.length === 1) rows[0].id = id;
 			const items = rows.map(this.leanItemForSave);
-			Data.Expenses.save(items).then(() => {
-				this.reset();
-				this.fire('submit');
-			});
+			Data.Expenses
+				.save(items)
+				.then(() => {
+					this.reset();
+					this.fire('submit');
+				});
 		},
 
 		leanItemForSave (item) {

@@ -2,11 +2,15 @@ import { Store } from 'svelte/store.js';
 
 const store = new Store({
 	dateStr: new Date().toISOString().substr(0, 10),
-	category: null,
-	group: null,
 	categories: [],
 	groups: [],
-	input: { group: null, text: null, amount: 0 }
+	desc: '',
+	amount: 0,
+
+	// selected stuff
+	category: null,
+	group: null,
+	item: null,
 });
 
 

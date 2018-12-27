@@ -75,10 +75,7 @@ function findGroup (s, groups) {
 	const words = s.split(' ').filter(w => w.length);
 	for (let w of words) {
 		for (let g of groups) {
-			if (g.keywords.indexOf(w) > -1) {
-				// s = s.replace(w, '');
-				return [g, s];
-			}
+			if (g.keywords.indexOf(w) > -1) return [g, s];
 		}
 	}
 	return [{}, s];
@@ -116,7 +113,7 @@ function parse (val, _groups, date) {
 	const rows = val
 		.split('\n')
 		.map(row => {
-			if (row.toLowerCase().indexOf('repeat') > -1) {
+			if (row.toLowerCase().includes('repeat')) {
 				const m = row.match(/\d{1,2}/);
 				if (m && m.length) {
 					repeat = parseInt(m[0], 10);
@@ -131,7 +128,7 @@ function parse (val, _groups, date) {
 		})
 		.filter(row => row.amount !== '' && row.group_id);
 
-	if (!rows.length) return;
+	if (!rows.length) return [];
 
 	rows.forEach(r => (r.date = date));
 

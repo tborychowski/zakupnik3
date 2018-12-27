@@ -30,14 +30,6 @@
 		<th class="amount">{formatNumber(total)}</th>
 	</tr></tfoot>
 	</table>
-
-	<div class="table-filter-box {filter.length ? 'filtered' : ''}">
-		<i class="btn-search">⚲</i>
-		<input class="table-filter-input" placeholder="Filter"
-		bind:value="filter"
-		on:keydown="onFilterKeyDown(event)">
-		<i class="btn-clear" on:click="clearFilter()">×</i>
-	</div>
 </div>
 
 
@@ -52,8 +44,6 @@ export default {
 			isLoading: true,
 			isPreview: false,
 			data: [],
-			filter: '',
-			isPreview: false
 		};
 	},
 	oncreate () {
@@ -62,9 +52,6 @@ export default {
 		});
 
 		this.load();
-	},
-	onstate({ changed, current, previous }) {
-		if (changed.filter && current.filter === '') this.fire('filter', '');
 	},
 	helpers: {
 		formatNumber,
@@ -79,17 +66,17 @@ export default {
 		}
 	},
 	computed: {
-		filteredData ({data, filter}) {
-			if (!filter) return data;
-			filter = filter.toLowerCase();
-			return data.filter(item => {
-				let s = item.description + item.amount + item.date;
-				if (item.group) {
-					s += (item.group.name || '');
-					if (item.group.category) s += (item.group.category.name || '');
-				}
-				return (s.toLowerCase().indexOf(filter) > -1);
-			});
+		filteredData ({data, $desc, $amount, $category, $group}) {
+			if ($group) return data.filter(item => item.group.id === $group.id);
+			if ($category) return data.filter(item => item.group.category.id === $category.id);
+			if ($amount) return data.filter(item => item.amount === $amount);
+			if ($desc) {
+				$desc = $desc.toLowerCase();
+				return data.filter(item => {
+					return item.description.toLowerCase().includes($desc);
+				});
+			}
+			return data;
 		},
 		total ({filteredData}) {
 			if (!Array.isArray(filteredData)) return 0;
@@ -101,24 +88,17 @@ export default {
 			const data = this.get();
 			if (data.isPreview) return;
 			if (!data.data.length) this.set({ isLoading: true });
-			const {date} = this.store.get();
-			Data.Expenses.get(date).then(res => {
-				this.originalData = res;
-				this.set({ data: res, isLoading: false });
-			});
-		},
-
-		onFilterKeyDown (e) {
-			if (e.key === 'Escape') this.set({ filter: '' });
+			const {dateStr} = this.store.get();
+			Data.Expenses
+				.get(dateStr)
+				.then(res => {
+					this.originalData = res;
+					this.set({ data: res, isLoading: false });
+				});
 		},
 
 		onRowClick (item) {
-			if (!this.get().isPreview) this.fire('click', item);
-		},
-
-		clearFilter () {
-			this.set({ filter: '' });
-			this.fire('filter', '');
+			if (!this.get().isPreview) this.store.set({ item });
 		},
 
 		// temporary set data

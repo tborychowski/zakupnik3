@@ -37,7 +37,7 @@
 		{:else}
 			{#if $categories.length}
 				{#each $categories as cat, idx}
-				<h2 class="editable-cat" on:click="onclick(cat, this)">
+				<h2 class="editable-cat {isSelected(cat, $category)}" on:click="onclick(cat, this)">
 					<span>{cat.name}</span>
 					<span class="flex-filler"></span>
 					<span class="pill">{formatNumber(cat.sum)}</span>
@@ -48,7 +48,7 @@
 				</h2>
 				<ul class="cat-groups">
 					{#each cat.groups as group}
-						<li class="editable-cat" on:click="onclick(group, this)">
+						<li class="editable-cat {isSelected(group, $group)}" on:click="onclick(group, this)">
 							{group.name}
 							<span class="pill">{formatNumber(group.sum)}</span>
 							<span class="keys">{group.keywords}</span>
@@ -78,7 +78,11 @@ export default {
 		};
 	},
 	helpers: {
-		formatNumber: num => (num ? '€' + formatNumber(num) : '')
+		formatNumber: num => (num ? '€' + formatNumber(num) : ''),
+		isSelected (item, storeItem) {
+			if (storeItem && storeItem.id === item.id) return 'selected';
+			return '';
+		}
 	},
 
 	oncreate () {
@@ -142,7 +146,10 @@ export default {
 		},
 
 		onclick (item, el) {
-			if (this.get().mode === 'view') this.store.set({ category: item });
+			const type = (typeof item.category_id !== 'undefined' ? 'group' : 'category');
+			const data = { category: null, group: null };
+			data[type] = item;
+			if (this.get().mode === 'view') this.store.set(data);
 			else this.edit(item, el);
 		},
 
