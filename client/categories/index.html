@@ -9,7 +9,7 @@
 			<div class="select-wrap">
 				<select bind:value="form.category_id">
 					<option value="0">MAIN CATEGORY</option>
-					{#each categories as cat, idx}
+					{#each $categories as cat, idx}
 					<option value="{cat.id}">{cat.name}</option>
 					{/each}
 				</select>
@@ -35,8 +35,8 @@
 		{#if isLoading}
 			<div class="no-results">Loading...</div>
 		{:else}
-			{#if categories.length}
-				{#each categories as cat, idx}
+			{#if $categories.length}
+				{#each $categories as cat, idx}
 				<h2 class="editable-cat" on:click="onclick(cat, this)">
 					<span>{cat.name}</span>
 					<span class="flex-filler"></span>
@@ -66,35 +66,35 @@
 
 <script>
 import {formatNumber} from '../util';
-import {Data} from '../data';
+import {Data, Store} from '../data';
 
 export default {
+	store: () => Store,
 	data () {
 		return {
 			isLoading: true,
-			categories: [],		// same as categories
 			mode: 'view',		// view | edit | add
-			date: new Date().toISOString().substr(0, 7),
 			form: {category_id: '0', name: '', keywords: ''}
 		};
-	},
-	oncreate () {
-		this.load();
-	},
-
-	onstate({ changed, current, previous }) {
-		if (previous && changed.date) this.load();
 	},
 	helpers: {
 		formatNumber: num => (num ? '€' + formatNumber(num) : '')
 	},
 
+	oncreate () {
+		this.store.on('state', ({ current, changed, previous }) => {
+			if (previous && changed.date) this.load();
+		});
+		this.load();
+	},
+
 	methods: {
 		load () {
-			if (!this.get().categories.length) this.set({ isLoading: true });
-			const date = this.get().date;
+			if (!this.store.get().categories.length) this.set({ isLoading: true });
+			const date = this.store.get().date.dateStr;
 			Data.Categories.get(date).then(categories => {
-				this.set({ categories, isLoading: false });
+				this.store.set({ categories });
+				this.set({ isLoading: false });
 				return categories;
 			});
 		},
