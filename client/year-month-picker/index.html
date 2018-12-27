@@ -109,8 +109,8 @@ export default {
 		},
 
 		notify () {
-			const {month, year, dateStr} = this.get();
-			this.store.set({ date: { month, year, dateStr } });
+			const {dateStr} = this.get();
+			this.store.set({ date: dateStr });
 		},
 
 		reset () {

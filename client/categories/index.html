@@ -91,7 +91,7 @@ export default {
 	methods: {
 		load () {
 			if (!this.store.get().categories.length) this.set({ isLoading: true });
-			const date = this.store.get().date.dateStr;
+			const date = this.store.get().date;
 			Data.Categories.get(date).then(categories => {
 				this.store.set({ categories });
 				this.set({ isLoading: false });

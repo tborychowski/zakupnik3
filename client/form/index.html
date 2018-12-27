@@ -24,31 +24,31 @@
 
 <script>
 import Parser from './text-parser';
-import {Data} from '../data';
+import {Data, Store} from '../data';
 
 
 export default {
+	store: () => Store,
 	data () {
 		return {
 			inEdit: false,
-			date: new Date().toISOString().substr(0, 10),
 			id: null,
 			text: '',
-			groups: [],
 			rows: [],
 		};
 	},
 
 	oncreate () {
-		this.loadCategories();
-	},
-	onstate({ changed, current, previous }) {
-		if (previous && changed.date) this.parse();
+		this.store.on('state', ({ current, changed, previous }) => {
+			if (previous && changed.date) this.parse();
+		});
+
+		this.loadGroups();
 	},
 
 	computed: {
-		_groups ({groups}) {
-			return groups.map(g => {
+		_groups ({$groups}) {
+			return $groups.map(g => {
 				const escaped = g.name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
 				g._name = new RegExp(escaped, 'i');
 				return g;
@@ -57,8 +57,8 @@ export default {
 	},
 
 	methods: {
-		loadCategories () {
-			Data.Groups.get().then(groups => this.set({ groups }));
+		loadGroups () {
+			Data.Groups.get().then(groups => this.store.set({ groups }));
 		},
 
 		onfocus () {
@@ -88,7 +88,8 @@ export default {
 		edit (data) {
 			this.reset();
 			const text = [data.group && data.group.name || '', data.description || '', data.amount].join(' ');
-			this.set({ inEdit: true, id: data.id, date: data.date, text });
+			this.set({ inEdit: true, id: data.id, text });
+			this.store.set({ date: data.date })
 			this.fire('change', this.get().rows);
 		},
 

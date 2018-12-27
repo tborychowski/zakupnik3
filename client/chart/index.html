@@ -26,9 +26,13 @@ export default {
 
 		load () {
 			this.set({ isLoading: true });
-			const {date} = this.store.get();
-			Data.Stats.get(date).then(expenses => {
-				this.chart.set(expenses, date.month);
+			const {date, category, group} = this.store.get();
+			const year = parseInt(date.split('-')[0], 10);
+			const month = parseInt(date.split('-')[1], 10) - 1;
+			if (category) category = category.id;
+			if (group) group = group.id;
+			Data.Stats.get({ year, group, category }).then(expenses => {
+				this.chart.set(expenses, month);
 				this.set({ isLoading: false });
 			});
 		},
