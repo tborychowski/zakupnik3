@@ -5,7 +5,6 @@ const store = new Store({
 	categories: [],
 	groups: [],
 	desc: '',
-	amount: 0,
 
 	// selected stuff
 	category: null,

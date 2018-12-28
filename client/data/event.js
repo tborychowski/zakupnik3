@@ -5,4 +5,9 @@ export default {
 	off,
 	fire,
 
+	item: {
+		updated: 'item-updated',
+	},
+
+
 };

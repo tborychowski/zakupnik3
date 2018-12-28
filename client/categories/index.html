@@ -66,7 +66,7 @@
 
 <script>
 import {formatNumber} from '../util';
-import {Data, Store} from '../data';
+import {Data, Store, EVENT} from '../data';
 
 export default {
 	store: () => Store,
@@ -89,6 +89,8 @@ export default {
 		this.store.on('state', ({ current, changed, previous }) => {
 			if (previous && changed.date) this.load();
 		});
+		EVENT.on(EVENT.item.updated, this.load.bind(this));
+
 		this.load();
 	},
 

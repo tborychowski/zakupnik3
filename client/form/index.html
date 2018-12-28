@@ -24,7 +24,7 @@
 
 <script>
 import Parser from './text-parser';
-import {Data, Store} from '../data';
+import {Data, Store, EVENT} from '../data';
 
 
 export default {
@@ -41,6 +41,7 @@ export default {
 		this.store.on('state', ({ current, previous, changed }) => {
 			if (!previous) return;
 			if (changed.date) return this.parse();
+			if (changed.item && current.item) return this.edit(current.item);
 			if (changed.group || changed.category) {
 				const text = this.get().text;
 				let newText = text;
@@ -89,18 +90,18 @@ export default {
 		},
 
 		edit (data) {
-			this.reset();
+			this.reset(true);
 			const text = [data.group && data.group.name || '', data.description || '', data.amount].join(' ');
 			this.set({ inEdit: true, id: data.id, text });
-			this.store.set({ date: data.date })
+			this.store.set({ dateStr: data.date })
 		},
 
-		reset () {
-			this.set({ inEdit: false, id: null, text: '' });
-			this.store.set({ desc: '', rows: [] });
+		reset (prereset) {
+			if (!prereset) {
+				this.set({ inEdit: false, id: null, text: '' });
+				this.store.set({ desc: '', rows: [], group: null, item: null });
+			}
 			this.toggleAmountError();
-			this.store.set({ group: null });
-
 			this.updateHeight();
 			this.refs.textbox.focus();
 		},
@@ -111,6 +112,7 @@ export default {
 				.del(id)
 				.then(() => {
 					this.reset();
+					EVENT.fire(EVENT.item.updated);
 				});
 		},
 
@@ -131,6 +133,7 @@ export default {
 				.save(items)
 				.then(() => {
 					this.reset();
+					EVENT.fire(EVENT.item.updated);
 				});
 		},
 

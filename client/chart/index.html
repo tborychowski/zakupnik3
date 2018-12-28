@@ -1,20 +1,22 @@
 <div class="chart"><canvas ref:canvas width="100%" height="200"></canvas></div>
 
 <script>
-import {Data, Store} from '../data';
+import {Data, Store, EVENT} from '../data';
 import MyChart from './chart';
 
 export default {
 	store: () => Store,
 	data () { return { isLoading: true }; },
 	oncreate () {
-		this.init();
-
 		this.store.on('state', ({ current, changed, previous }) => {
 			if (previous && changed.date) this.load();
 			if (previous && changed.category) this.load();
 			if (previous && changed.group) this.load();
 		});
+
+		EVENT.on(EVENT.item.updated, this.load.bind(this));
+
+		this.init();
 	},
 
 	methods: {
