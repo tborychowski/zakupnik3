@@ -75,7 +75,10 @@ function findGroup (s, groups) {
 	const words = s.split(' ').filter(w => w.length);
 	for (let w of words) {
 		for (let g of groups) {
-			if (g.keywords.indexOf(w) > -1) return [g, s];
+			const keywords = g.keywords.split(/\s*,\s*/);
+			for (let k of keywords) {
+				if (k.startsWith(w)) return [g, s];
+			}
 		}
 	}
 	return [{}, s];
@@ -107,9 +110,19 @@ function findAmount (s) {
 }
 
 
+function parseGroups (groups = []) {
+	return groups.map(g => {
+		const escaped = g.name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
+		g._name = new RegExp(escaped, 'i');
+		return g;
+	});
+}
 
-function parse (val, _groups, date) {
+
+
+function parse (val, groups, date) {
 	let repeat = 1;
+	groups = parseGroups(groups);
 	const rows = val
 		.split('\n')
 		.map(row => {
@@ -121,7 +134,7 @@ function parse (val, _groups, date) {
 				}
 			}
 			let group, amount, description;
-			[group, row] = findGroup(row, _groups);
+			[group, row] = findGroup(row, groups);
 			[amount, row] = findAmount(row);
 			description = row.trim();
 			return {amount, description, group_id: group.id, group};

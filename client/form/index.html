@@ -34,24 +34,26 @@ export default {
 			inEdit: false,  // editing old entry
 			id: null,
 			text: '',
-			rows: [],
 		};
 	},
 
 	oncreate () {
-		this.store.on('state', ({ current, changed, previous }) => {
-			if (previous && changed.date) this.parse();
-		});
-	},
+		this.store.on('state', ({ current, previous, changed }) => {
+			if (!previous) return;
+			if (changed.date) return this.parse();
+			if (changed.group || changed.category) {
+				const text = this.get().text;
+				let newText = text;
+				if (previous.group && text === previous.group.name) newText = '';
+				else if (previous.category && text === previous.category.name) newText = '';
 
-	computed: {
-		_groups ({$groups}) {
-			return $groups.map(g => {
-				const escaped = g.name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
-				g._name = new RegExp(escaped, 'i');
-				return g;
-			});
-		}
+				if (newText) return;
+				if (changed.group && current.group) newText = current.group.name;
+				else if (changed.category && current.category) newText = current.category.name;
+
+				this.set({ text: newText });
+			}
+		});
 	},
 
 	methods: {
@@ -73,15 +75,16 @@ export default {
 		parse () {
 			if (this.parseTimer) clearTimeout(this.parseTimer);
 			this.parseTimer = setTimeout(() => {
-				const {text, _groups} = this.get();
-				const {dateStr} = this.store.get();
-				const rows = Parser.parse(text, _groups, dateStr);
-				this.set({ rows });
-
+				const {text} = this.get();
+				const {dateStr, groups} = this.store.get();
+				const rows = Parser.parse(text, groups, dateStr);
+				this.store.set({ rows });
 				if (rows.length) {
 					const group = rows[0].group;
-					this.store.set({ group });
+					const desc = rows[0].description;
+					this.store.set({ group, desc });
 				}
+				else this.store.set({ group: null, desc: text });
 			}, 300);
 		},
 
@@ -90,14 +93,12 @@ export default {
 			const text = [data.group && data.group.name || '', data.description || '', data.amount].join(' ');
 			this.set({ inEdit: true, id: data.id, text });
 			this.store.set({ date: data.date })
-			this.fire('change', this.get().rows);
 		},
 
 		reset () {
-			this.set({ inEdit: false, id: null, text: '', rows: [] });
+			this.set({ inEdit: false, id: null, text: '' });
+			this.store.set({ desc: '', rows: [] });
 			this.toggleAmountError();
-			this.fire('change', []);
-
 			this.store.set({ group: null });
 
 			this.updateHeight();
@@ -110,18 +111,18 @@ export default {
 				.del(id)
 				.then(() => {
 					this.reset();
-					this.fire('remove');
 				});
 		},
 
 		onsubmit (e) {
 			e.preventDefault();
-			const {id, rows} = this.get();
+			const {id} = this.get();
+			const {rows} = this.store.get();
 			if (!rows || !rows.length) {
 				this.toggleAmountError('Please enter amount and category');
 
 				// TODO: toast?
-				return this.fire('error', 'Please enter amount and category');
+				// return this.fire('error', 'Please enter amount and category');
 			}
 			// item was edited
 			if (id && rows.length === 1) rows[0].id = id;
@@ -130,7 +131,6 @@ export default {
 				.save(items)
 				.then(() => {
 					this.reset();
-					this.fire('submit');
 				});
 		},
 

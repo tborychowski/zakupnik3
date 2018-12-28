@@ -11,6 +11,7 @@ const store = new Store({
 	category: null,
 	group: null,
 	item: null,
+	rows: [],
 });
 
 
@@ -18,6 +19,13 @@ store.compute('date', ['dateStr'], dateStr  => {
 	let [y, m, d] = dateStr.split('-');
 	m -= 1;
 	return {y, m, d};
+});
+
+store.compute('rowsWithCategories', ['rows', 'categories'], (rows, categories)  => {
+	return rows.map(r => {
+		r.group.category = categories.find(c => c.id === r.group.category_id);
+		return r;
+	});
 });
 
 
