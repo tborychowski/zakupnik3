@@ -2,15 +2,17 @@
 
 
 .table
+	flex 1
+	margin-top 1px
 	overflow-y auto
 	padding 0
 	cursor default
 	font 14/1
 	position relative
-	bg bg-light
+	bg color-bg-dark0
 	-webkit-overflow-scrolling touch
 	user-select none
-	border-bottom border-light
+	border-bottom color-bg-dark3
 
 	table
 		margin 0 0 -1
@@ -42,7 +44,7 @@
 		th
 			position sticky
 			height 36px
-			background bg-dark
+			background color-bg-dark1
 			font-weight 600
 			text-align left
 
@@ -52,32 +54,29 @@
 			top 0
 			padding-top 13
 			padding-bottom 10
-			box-shadow 0 1px 0 border-light
+			box-shadow 0 1px 0 color-bg-dark3
 
 	tfoot
 		td
 		th
 			bottom -1
 			border-top transparent
-			box-shadow 0 1px 0 border-light inset
+			box-shadow 0 1px 0 color-bg-dark3 inset
 
 
 	tbody
 	tfoot
 		.amount::before
 			content '€'
-			color #666
+			color color-text-lighgt0
 			margin-right 5
 
 	tbody
-		tr:nth-child(odd)
-			background bg-superlight
-
 		.table-row:hover
-			background accent-light
+			background color-highlight
 
 		tr.table-row-edited
-			background accent-color
+			background color-accent
 
 		tr td
 			height 30px

@@ -1,17 +1,21 @@
 @import "lib"
 
-default-color = #666
-info-color = #1a82fb
-success-color = #57901D
-danger-color = #9a1616
-warning-color = #fa6800
+color-default = nord3
+
+
+button::-moz-focus-inner
+	padding 0 !important
+	border 0
 
 
 .btn
-	show 1;
-	padding 3 10 4
-	min-width 80px
-	margin-bottom 0;
+	font inherit
+	show 1
+	line-height 1
+	padding 5 15
+	min-width 24px
+	min-height 24px
+	margin-bottom 0
 	font 14/1.4
 	height auto;
 	text-align center
@@ -19,88 +23,126 @@ warning-color = #fa6800
 	vertical-align middle
 	cursor default
 	border transparent
-	border-radius 6
-	shadow 0 1 1 #000 .06;
-	color #fff
+	border-radius 3
 	transition background-color .2s, border-color .2s
 	user-select none
-	overflow hidden
+	shadow 0 1 1 #000 .06;
+	color color-text-light2
 
 
-
-	// default
-	border-color lighten(default-color, 15%)
-	border-bottom-color darken(default-color, 15%)
-	background linear-gradient(lighten(default-color, 10%), darken(default-color, 10%))
+	// &.info
+	border-color lighten(color-info, 20%)
+	border-bottom-color lighten(color-info, 10%)
+	background color-info
 
 	&:focus
-		box-shadow 0 0 1px 1px darken(default-color, 50%)
+		box-shadow 0 0 1px lighten(color-info, 50%)
 
 	&:active
-		background linear-gradient(default-color, darken(default-color, 15%))
-		color #fff8
+		background darken(color-info, 15%)
+
 
 
 
 	&.success
-		border-color lighten(success-color, 15%)
-		border-bottom-color darken(success-color, 15%)
-		background linear-gradient(lighten(success-color, 10%), darken(success-color, 10%))
+		border-color color-success
+		border-bottom-color darken(color-success, 5%)
+		background darken(color-success, 30%)
 
 		&:focus
-			box-shadow 0 0 1px 1px darken(success-color, 50%)
+			box-shadow 0 0 1px lighten(color-success, 50%)
 
 		&:active
-			background linear-gradient(success-color, darken(success-color, 15%))
-
-
-	&.info
-		border-color lighten(info-color, 15%)
-		border-bottom-color darken(info-color, 15%)
-		background linear-gradient(lighten(info-color, 10%), darken(info-color, 10%))
-
-		&:focus
-			box-shadow 0 0 1px 1px darken(info-color, 50%)
-
-		&:active
-			background linear-gradient(info-color, darken(info-color, 15%))
-
-
-	&.danger
-		border-color lighten(danger-color, 15%)
-		border-bottom-color darken(danger-color, 15%)
-		background linear-gradient(lighten(danger-color, 10%), darken(danger-color, 10%))
-
-		&:focus
-			box-shadow 0 0 1px 1px darken(danger-color, 50%)
-
-		&:active
-			background linear-gradient(danger-color, darken(danger-color, 15%))
+			background darken(color-success, 15%)
 
 
 	&.warning
-		border-color lighten(warning-color, 15%)
-		border-bottom-color darken(warning-color, 15%)
-		background linear-gradient(lighten(warning-color, 10%), darken(warning-color, 10%))
+		border-color lighten(color-warning, 20%)
+		border-bottom-color lighten(color-warning, 10%)
+		background color-warning
 
 		&:focus
-			box-shadow 0 0 1px 1px darken(warning-color, 50%)
+			box-shadow 0 0 1px lighten(color-warning, 50%)
 
 		&:active
-			background linear-gradient(warning-color, darken(warning-color, 15%))
+			background darken(color-warning, 15%)
+
+
+	&.danger
+		border-color lighten(color-danger, 20%)
+		border-bottom-color lighten(color-danger, 10%)
+		background color-danger
+
+		&:focus
+			box-shadow 0 0 1px lighten(color-danger, 50%)
+
+		&:active
+			background darken(color-danger, 15%)
+
+
+
+
+// .btn-outline
+// 	background none
+// 	border-radius 4
+// 	font-size inherit
+// 	color color-text-light2
+// 	border lighten(color-default, 20%)
+
+// 	&:focus
+// 		outline none
+// 		box-shadow 0 0 1px lighten(color-default, 50%)
+
+// 	&:hover
+// 		border-color darken(color-default, 15%)
+// 		color darken(color-text-light2, 40%)
 
 
 
 
 .btn-outline
-	border transparent
+.btn-icon
+.btn-icon-big
 	background none
-	border-radius 4
-	font-size inherit
-	color border-dark
-	overflow hidden
+	border-radius 10px
+	font-size 20px
+	line-height 20px
+	size 30px
+	margin 0 5
+	color color-accent
+	border color-accent
+
+	&-big
+		size 38px
+		font-size  26px
+
+
+	&.success
+		border-color color-success
+		color color-success
+	&.warning
+		border-color color-warning
+		color color-warning
+	&.danger
+		border-color color-danger
+		color color-danger
 
 	&:focus
 	&:hover
-		border-color #333
-		color #333
+		outline none
+		border-color color-text-light0
+		color color-text-light0
+
+	&:active
+		border-color color-text-dark0
+		color color-text-dark0
+
+
+.btn-outline
+	border-color transparent
+	width auto
+	font-family inherit
+	font-size 18px
+	font-weight 400
+	padding 0 20px
+	height 38px

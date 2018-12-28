@@ -1,8 +1,14 @@
 import {formatNumber} from '../util';
 
+const colorAccent = '#d08770';
+const colorAccentDark = '#ffa50033';
+const colorBgDark3 = '#4c566a';
+const colorTextLight0 = '#d8dee9';
+
+
 const monthColors = (col = new Date().getMonth()) => {
-	const cols = Array(12).fill('#ddd');
-	if (typeof col !== 'undefined') cols[col] = 'orange';
+	const cols = Array(12).fill(colorBgDark3);
+	if (typeof col !== 'undefined') cols[col] = colorAccent;
 	return cols;
 };
 
@@ -13,11 +19,11 @@ const cfg = {
 		datasets: [{
 			label: 'Expenses',
 			borderWidth: 1,
-			borderColor: '#888',
-			pointBackgroundColor: '#888',
+			borderColor: colorTextLight0,
+			pointBackgroundColor: colorTextLight0,
 			pointRadius: 5,
 			pointHoverRadius: 5,
-			backgroundColor: '#ffa50033',
+			backgroundColor: colorAccentDark,
 			data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		}]
 	},
@@ -25,7 +31,7 @@ const cfg = {
 		legend: { display: false },
 		scales: {
 			yAxes: [{ display: false, ticks: { beginAtZero: true } }],
-			xAxes: [{ gridLines: { color: monthColors() }, }]
+			xAxes: [{ gridLines: { color: monthColors() }, ticks: { fontColor: colorTextLight0 } }]
 		},
 		tooltips: {
 			intersect: false,
