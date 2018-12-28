@@ -12,9 +12,9 @@
 		{:else}
 			{#if filteredData.length || $rowsWithCategories.length}
 
-			{#each $rowsWithCategories.filter(r => !!r.id) as item, idx}
+			{#each $rowsWithCategories as item, idx}
 				<tr class="table-row table-row-edited">
-					<td class="date">{item.date}</td>
+					<td class="date">{timeAgo(item.date)}</td>
 					<td class="cat"><span class="pill">{getCategory(item)}</span></td>
 					<td class="desc">{getDescription(item)}</td>
 					<td class="amount">{formatNumber(item.amount)}</td>
@@ -23,8 +23,8 @@
 
 
 			{#each filteredData as item, idx}
-				<tr class="table-row {item.edited ? 'table-row-edited' : ''}" on:dblclick="onRowClick(item)">
-					<td class="date">{item.date}</td>
+				<tr class="table-row {item.edited ? 'table-row-hidden' : ''}" on:dblclick="onRowClick(item)">
+					<td class="date" title="{item.date}">{timeAgo(item.date)}</td>
 					<td class="cat"><span class="pill">{getCategory(item)}</span></td>
 					<td class="desc">{getDescription(item)}</td>
 					<td class="amount">{formatNumber(item.amount)}</td>
@@ -45,7 +45,7 @@
 
 
 <script>
-import {formatNumber} from '../util';
+import {formatNumber, timeAgo} from '../util';
 import {Data, Store, EVENT} from '../data';
 
 export default {
@@ -67,6 +67,7 @@ export default {
 	},
 	helpers: {
 		formatNumber,
+		timeAgo,
 		getCategory (item) {
 			return item && item.group && item.group.category && item.group.category.name || '';
 		},
@@ -105,9 +106,14 @@ export default {
 			Data.Expenses
 				.get(dateStr)
 				.then(res => {
+					res.sort(this.sortByDate.bind(this));
 					this.originalData = res;
 					this.set({ data: res, isLoading: false });
 				});
+		},
+
+		sortByDate (a, b) {
+			return b.date.localeCompare(a.date);
 		},
 
 		onRowClick (item) {
