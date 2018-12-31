@@ -43,7 +43,7 @@ function updateEntries (data) {
 
 
 function saveFile (data, name) {
-	fs.writeFileSync(`./_stuff/db/export/${name}.json`, JSON.stringify(data[name], null, '\t'), 'utf8');
+	fs.writeFileSync(`./_stuff/db/${name}.json`, JSON.stringify(data[name], null, '\t'), 'utf8');
 }
 
 function saveData (data) {
