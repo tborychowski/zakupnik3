@@ -15,7 +15,7 @@
 			{#each $rowsWithCategories as item, idx}
 				<tr class="table-row table-row-edited">
 					<td class="date">{timeAgo(item.date)}</td>
-					<td class="cat"><span class="pill">{getCategory(item)}</span></td>
+					<td class="cat"><span class="pill">{getMainCategory(item, $categoryNameMap)}</span></td>
 					<td class="desc">{getDescription(item)}</td>
 					<td class="amount">{formatNumber(item.amount)}</td>
 				</tr>
@@ -25,7 +25,7 @@
 			{#each filteredData as item, idx}
 				<tr class="table-row {item.edited ? 'table-row-hidden' : ''}" on:dblclick="onRowClick(item)">
 					<td class="date" title="{item.date}">{timeAgo(item.date)}</td>
-					<td class="cat"><span class="pill">{getCategory(item)}</span></td>
+					<td class="cat"><span class="pill">{getMainCategory(item, $categoryNameMap)}</span></td>
 					<td class="desc">{getDescription(item)}</td>
 					<td class="amount">{formatNumber(item.amount)}</td>
 				</tr>
@@ -48,6 +48,11 @@
 import {formatNumber, timeAgo} from '../util';
 import {Data, Store, EVENT} from '../data';
 
+function getMainCategory (item, $categoryNameMap) {
+	const id = item && item.category && item.category.parent_id;
+	return $categoryNameMap[id] || '';
+}
+
 export default {
 	store: () => Store,
 	data () {
@@ -68,18 +73,16 @@ export default {
 	helpers: {
 		formatNumber,
 		timeAgo,
-		getCategory (item) {
-			return item && item.group && item.group.category && item.group.category.name || '';
-		},
+		getMainCategory,
 		getDescription (item) {
 			const desc = [];
-			if (item.group && item.group.name) desc.push(item.group.name);
+			if (item.category && item.category.name) desc.push(item.category.name);
 			if (item.description) desc.push(item.description);
 			return desc.join(' - ');
 		}
 	},
 	computed: {
-		filteredData ({data, $text, $item}) {
+		filteredData ({data, $text, $item, $categoryNameMap}) {
 			data.forEach(item => {
 				item.edited = $item && item.id === $item.id;
 			});
@@ -87,7 +90,9 @@ export default {
 			if ($text) {
 				const text = $text.toLowerCase();
 				return data.filter(item => {
-					return (item.description.toLowerCase() + item.amount).includes(text);
+					const mainCat = getMainCategory(item, $categoryNameMap);
+					const s = (mainCat + item.category.name + item.description + item.amount);
+					return s.toLowerCase().includes($text);
 				});
 			}
 			return data;

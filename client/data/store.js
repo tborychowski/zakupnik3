@@ -20,6 +20,12 @@ store.compute('categoryTree', ['categories'], categories => {
 		});
 });
 
+store.compute('categoryNameMap', ['categories'], categories => {
+	const map = {};
+	categories.forEach(c => { map[c.id] = c.name;});
+	return map;
+});
+
 store.compute('date', ['dateStr'], dateStr  => {
 	let [y, m, d] = dateStr.split('-');
 	m -= 1;
