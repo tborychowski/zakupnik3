@@ -32,12 +32,6 @@ store.compute('date', ['dateStr'], dateStr  => {
 	return {y, m, d};
 });
 
-store.compute('rowsWithCategories', ['rows', 'categories'], (rows, categories)  => {
-	return rows.map(r => {
-		r.group.category = categories.find(c => c.id === r.group.category_id);
-		return r;
-	});
-});
 
 
 export default store;

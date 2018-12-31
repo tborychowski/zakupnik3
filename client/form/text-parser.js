@@ -64,9 +64,9 @@ function parseAmount (amount) {
 }
 
 
-function findGroup (s, groups) {
+function findCategory (s, categories) {
 	s = s.toLowerCase();
-	for (let g of groups) {
+	for (let g of categories) {
 		if (s.match(g._name)) {
 			s = s.replace(g._name, '');
 			return [g, s];
@@ -74,9 +74,9 @@ function findGroup (s, groups) {
 	}
 	const words = s.split(' ').filter(w => w.length);
 	for (let w of words) {
-		for (let g of groups) {
-			const keywords = g.keywords.split(/\s*,\s*/);
-			for (let k of keywords) {
+		for (let g of categories) {
+			const tags = g.tags.split(/\s*,\s*/);
+			for (let k of tags) {
 				if (k.startsWith(w)) return [g, s];
 			}
 		}
@@ -110,8 +110,8 @@ function findAmount (s) {
 }
 
 
-function parseGroups (groups = []) {
-	return groups.map(g => {
+function parseCategories (categories = []) {
+	return categories.map(g => {
 		const escaped = g.name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
 		g._name = new RegExp(escaped, 'i');
 		return g;
@@ -120,9 +120,9 @@ function parseGroups (groups = []) {
 
 
 
-function parse (val, groups, date) {
+function parse (val, categories, date) {
 	let repeat = 1;
-	groups = parseGroups(groups);
+	categories = parseCategories(categories);
 	const rows = val
 		.split('\n')
 		.map(row => {
@@ -133,13 +133,13 @@ function parse (val, groups, date) {
 					return {};
 				}
 			}
-			let group, amount, description;
-			[group, row] = findGroup(row, groups);
+			let category, amount, description;
+			[category, row] = findCategory(row, categories);
 			[amount, row] = findAmount(row);
 			description = row.trim();
-			return {amount, description, group_id: group.id, group};
+			return {amount, description, category_id: category.id, category};
 		})
-		.filter(row => row.amount !== '' && row.group_id);
+		.filter(row => row.amount !== '' && row.category_id);
 
 	if (!rows.length) return [];
 

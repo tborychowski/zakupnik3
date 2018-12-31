@@ -10,11 +10,11 @@
 		{#if isLoading}
 			<tr class="empty-row"><td colspan="4">Loading...</td></tr>
 		{:else}
-			{#if filteredData.length || $rowsWithCategories.length}
+			{#if filteredData.length || $rows.length}
 
-			{#each $rowsWithCategories as item, idx}
+			{#each $rows as item, idx}
 				<tr class="table-row table-row-edited">
-					<td class="date">{timeAgo(item.date)}</td>
+					<td class="date" title="{item.date}">{timeAgo(item.date)}</td>
 					<td class="cat"><span class="pill">{getMainCategory(item, $categoryNameMap)}</span></td>
 					<td class="desc">{getDescription(item)}</td>
 					<td class="amount">{formatNumber(item.amount)}</td>

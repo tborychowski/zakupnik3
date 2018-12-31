@@ -9,7 +9,7 @@ function get (query) {
 	const where = {};
 	if (query.date) where.date = {[Op.like]: query.date + '%'};
 	if (query.category) where.category_id = query.category;
-	if (query.key) where.keywords = {[Op.like]: `%${query.key}%`};
+	if (query.key) where.tags = {[Op.like]: `%${query.key}%`};
 
 	return Entry.findAll({
 		order: [['id', 'DESC'], ['date', 'DESC']],

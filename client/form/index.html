@@ -41,15 +41,13 @@ export default {
 			if (!previous) return;
 			if (changed.date) return this.parse();
 			if (changed.item && current.item) return this.edit(current.item);
-			if (changed.group || changed.category) {
+			if (changed.category) {
 				const text = this.store.get().text;
 				let newText = text;
-				if (previous.group && text === previous.group.name) newText = '';
-				else if (previous.category && text === previous.category.name) newText = '';
+				if (previous.category && text === previous.category.name) newText = '';
 
 				if (newText) return;
-				if (changed.group && current.group) newText = current.group.name;
-				else if (changed.category && current.category) newText = current.category.name;
+				if (changed.category && current.category) newText = current.category.name;
 
 				this.store.set({ text: newText });
 			}
@@ -75,21 +73,21 @@ export default {
 		parse () {
 			if (this.parseTimer) clearTimeout(this.parseTimer);
 			this.parseTimer = setTimeout(() => {
-				const {text, dateStr, groups} = this.store.get();
-				const rows = Parser.parse(text, groups, dateStr);
+				const {text, dateStr, categories} = this.store.get();
+				const rows = Parser.parse(text, categories, dateStr);
 				this.store.set({ rows });
 				if (rows.length) {
-					const group = rows[0].group;
+					const category = rows[0].category;
 					const desc = rows[0].description;
-					this.store.set({ group, desc });
+					this.store.set({ category, desc });
 				}
-				else this.store.set({ group: null, desc: text });
+				else this.store.set({ category: null, desc: text });
 			}, 300);
 		},
 
 		edit (data) {
 			this.reset(true);
-			const text = [data.group && data.group.name || '', data.description || '', data.amount].join(' ');
+			const text = [data.category && data.category.name || '', data.description || '', data.amount].join(' ');
 			this.set({ inEdit: true, id: data.id });
 			this.store.set({ dateStr: data.date, text })
 		},
@@ -141,7 +139,7 @@ export default {
 				date: item.date,
 				amount: item.amount,
 				description: item.description,
-				group_id: item.group_id
+				category_id: item.category_id
 			};
 		},
 

@@ -9,6 +9,7 @@ function timeAgo (dateStr) {
 	const date = new Date(dateStr);
 	const now = new Date(new Date().toISOString().substr(0, 10));
 	const diff = (now - date) / 1000;
+	if  (diff < 0) return dateStr;
 	// less than a day
 	if (diff < 86400) return 'today';
 	// less than 2 days ago
