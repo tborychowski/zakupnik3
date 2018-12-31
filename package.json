@@ -52,5 +52,7 @@
 		"webpack": "^4.28.2",
 		"webpack-stream": "^5.2.1"
 	},
-	"devDependencies": {}
+	"devDependencies": {
+		"sqlite-to-json": "^0.1.3"
+	}
 }
