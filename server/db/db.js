@@ -39,13 +39,13 @@ Entry.belongsTo(Category);
  * @deprecated to be removed if not used
  * @param {string} query
  */
-function raw (query) {
-	const dottie = require('dottie');
-	return sequelize
-		.query(query)
-		.spread(results => results)
-		.then(dottie.transform); // built-in "nest" doesn't do it right
-}
+// function raw (query) {
+// 	const dottie = require('dottie');
+// 	return sequelize
+// 		.query(query)
+// 		.spread(results => results)
+// 		.then(dottie.transform); // built-in "nest" doesn't do it right
+// }
 
 const init = () => sequelize.sync();
 
@@ -56,7 +56,7 @@ module.exports = {
 	init,
 	Category,
 	Entry,
-	raw,
+	// raw,
 	Op: Sequelize.Op,
 	sequelize,
 };

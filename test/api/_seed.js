@@ -5,10 +5,16 @@ const category = {
 	name: 'Category 1',
 };
 
+const subcategory = {
+	id: 2,
+	name: 'Subcategory 1',
+	parent_id: 1
+};
+
 
 const entry = {
 	id: 1,
-	category_id: 1,
+	category_id: 2,
 	date: '2018-01-01',
 	description: 'Entry 1',
 	amount: 100,
@@ -18,6 +24,7 @@ const entry = {
 function seed () {
 	return init()
 		.then(() => Category.create(category))
+		.then(() => Category.create(subcategory))
 		.then(() => Entry.create(entry));
 }
 

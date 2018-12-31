@@ -19,7 +19,7 @@ describe('Stats', () => {
 	});
 
 	it('- shoud return sums by category', done => {
-		req(`${base}?category=1`, res => {
+		req(`${base}?category=2`, res => {
 			expect(res.body.length).to.eq(1);
 			expect(res.body[0]).to.eq(entry.amount);
 			done();
@@ -33,5 +33,12 @@ describe('Stats', () => {
 		});
 	});
 
+	it('- shoud return sums by root category', done => {
+		req(`${base}?category=1`, res => {
+			expect(res.body.length).to.eq(1);
+			expect(res.body[0]).to.eq(entry.amount);
+			done();
+		});
+	});
 
 });

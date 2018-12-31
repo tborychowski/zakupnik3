@@ -3,15 +3,22 @@ import { Store } from 'svelte/store.js';
 const store = new Store({
 	dateStr: new Date().toISOString().substr(0, 10),
 	categories: [],
-	groups: [],
 	desc: '',
 	text: '',
 	category: null,
-	group: null,
 	item: null,
 	rows: [],
 });
 
+
+store.compute('categoryTree', ['categories'], categories => {
+	return categories
+		.filter(c => !c.parent_id)
+		.map(c => {
+			c.items = categories.filter(sub => sub.parent_id ===  c.id);
+			return c;
+		});
+});
 
 store.compute('date', ['dateStr'], dateStr  => {
 	let [y, m, d] = dateStr.split('-');

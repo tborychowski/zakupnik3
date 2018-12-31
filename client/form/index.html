@@ -97,7 +97,7 @@ export default {
 		reset (prereset) {
 			if (!prereset) {
 				this.set({ inEdit: false, id: null });
-				this.store.set({ text: '', desc: '', rows: [], group: null, item: null });
+				this.store.set({ text: '', desc: '', rows: [], category: null, item: null });
 			}
 			this.toggleAmountError();
 			this.updateHeight();

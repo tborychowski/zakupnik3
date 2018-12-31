@@ -35,18 +35,6 @@ const Categories = {
 	}
 };
 
-const Groups = {
-	base: 'groups',
-	get () {
-		return get(this.base);
-	},
-	save (data) {
-		return save(this.base, data);
-	},
-	del (id) {
-		return del(`${this.base}/${id}`);
-	}
-};
 
 const Expenses = {
 	base: 'entries',
@@ -74,7 +62,6 @@ const Stats = {
 
 export default {
 	Categories,
-	Groups,
 	Expenses,
 	Stats,
 };

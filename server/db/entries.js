@@ -2,7 +2,7 @@ const {Entry, Category, Op} = require('./db');
 
 
 function getOne (id) {
-	return Entry.findByPk(id);
+	return Entry.findByPk(id, { raw: true });
 }
 
 function get (query) {
@@ -14,7 +14,7 @@ function get (query) {
 	return Entry.findAll({
 		order: [['id', 'DESC'], ['date', 'DESC']],
 		where,
-		include: Category
+		include: Category,
 	});
 }
 
@@ -22,8 +22,9 @@ function getSumsByDate (date) {
 	return Entry.sum('amount', {
 		plain: false,
 		where: { date: {[Op.like]: date + '%'} },
-		category: 'entry.category_id',
-		attributes: ['category_id']
+		group: 'category_id',
+		attributes: ['category_id'],
+		raw: true
 	});
 }
 
