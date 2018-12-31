@@ -30,7 +30,6 @@ describe('Categories', () => {
 		req(`${base}?date=${entry.date.substr(0, 7)}`, res => {
 			expect(res.body[0].sum).to.eq(entry.amount);
 			expect(res.body[0].percent).to.eq(100);
-			expect(res.body[0].groups[0].sum).to.eq(entry.amount);
 			done();
 		});
 	});

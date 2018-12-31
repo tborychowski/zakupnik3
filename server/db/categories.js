@@ -1,34 +1,42 @@
-const {Category, Group} = require('./db');
+const {Category} = require('./db');
 const Entries = require('./entries');
 
 
 function getOne (id) {
-	return Category.findById(id);
+	return Category.findByPk(id);
 }
 
 function get () {
-	return Category.findAll({ order: ['name'], include: Group });
+	return Category.findAll({ order: ['name'] });
 }
 
 async function getWithAmounts (query) {
 	const entries = await Entries.getSumsByDate(query.date);
-	const categories = await Category.findAll({ order: ['name'], include: Group });
+	const categories = await Category.findAll({ order: ['name'] });
 	const cats = JSON.parse(JSON.stringify(categories));
-	const groupAmounts = {};
+
+	// calc amounts per category
+	const amounts = {};
 	entries.forEach(e => {
-		if (e.group_id) groupAmounts[e.group_id] = e.sum;
+		if (e.category_id) amounts[e.category_id] = e.sum;
 	});
 
+	// assign sums to categories
+	cats.forEach(cat => {
+		cat.sum = amounts[cat.id] || 0;
+	});
+
+	// calc sums for main categories
 	let total = 0;
 	cats.forEach(cat => {
-		let sum = 0;
-		if (cat.groups) cat.groups.forEach(g => {
-			g.sum = groupAmounts[g.id] || 0;
-			sum += g.sum;
+		if (cat.parent_id) return;
+		cats.forEach(subcat => {
+			if (subcat.parent_id === cat.id) cat.sum += subcat.sum;
 		});
-		cat.sum = sum;
-		total += sum;
+		total += cat.sum;
 	});
+
+	// calc percents
 	cats.forEach(cat => {
 		cat.percent = Math.round(cat.sum / total * 100);
 	});

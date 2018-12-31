@@ -18,18 +18,10 @@ const sequelize = new Sequelize(`sqlite:${dbName}`, {
 
 const Category = sequelize.define('category', {
 	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-	name: { type: Sequelize.TEXT, allowNull: false, unique: true },
-});
-
-
-const Group = sequelize.define('group', {
-	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
 	name: { type: Sequelize.TEXT, allowNull: false },
-	keywords: { type: Sequelize.TEXT, allowNull: false, defaultValue: '' },	// comma separated
+	tags: { type: Sequelize.TEXT, allowNull: false, defaultValue: '' },	// comma separated
+	parent_id: { type: Sequelize.INTEGER, allowNull: true },
 });
-Category.hasMany(Group);
-Group.belongsTo(Category);
-
 
 
 const Entry = sequelize.define('entry', {
@@ -38,8 +30,9 @@ const Entry = sequelize.define('entry', {
 	amount: { type: Sequelize.REAL, allowNull: false },
 	description: { type: Sequelize.TEXT, defaultValue: '' },
 });
-Group.hasMany(Entry);
-Entry.belongsTo(Group);
+
+Category.hasMany(Entry);
+Entry.belongsTo(Category);
 
 /**
  * Raw sql query
@@ -62,7 +55,6 @@ init();
 module.exports = {
 	init,
 	Category,
-	Group,
 	Entry,
 	raw,
 	Op: Sequelize.Op,

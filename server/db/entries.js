@@ -1,20 +1,20 @@
-const {Entry, Group, Category, Op} = require('./db');
+const {Entry, Category, Op} = require('./db');
 
 
 function getOne (id) {
-	return Entry.findById(id);
+	return Entry.findByPk(id);
 }
 
 function get (query) {
 	const where = {};
 	if (query.date) where.date = {[Op.like]: query.date + '%'};
-	if (query.group) where.group_id = query.group;
-	if (query.category) where['$group.category_id$'] = query.category;
+	if (query.category) where.category_id = query.category;
+	if (query.key) where.keywords = {[Op.like]: `%${query.key}%`};
 
 	return Entry.findAll({
 		order: [['id', 'DESC'], ['date', 'DESC']],
 		where,
-		include: { model: Group, include: Category }
+		include: Category
 	});
 }
 
@@ -22,8 +22,8 @@ function getSumsByDate (date) {
 	return Entry.sum('amount', {
 		plain: false,
 		where: { date: {[Op.like]: date + '%'} },
-		group: 'entry.group_id',
-		attributes: ['group_id']
+		category: 'entry.category_id',
+		attributes: ['category_id']
 	});
 }
 

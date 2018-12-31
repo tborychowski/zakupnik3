@@ -33,20 +33,5 @@ describe('Stats', () => {
 		});
 	});
 
-	it('- shoud return sums by group', done => {
-		req(`${base}?group=1`, res => {
-			expect(res.body.length).to.eq(1);
-			expect(res.body[0]).to.eq(entry.amount);
-			done();
-		});
-	});
-
-	it('- shoud not return sums by group', done => {
-		req(`${base}?group=0`, res => {
-			expect(res.body.length).to.eq(0);
-			done();
-		});
-	});
-
 
 });

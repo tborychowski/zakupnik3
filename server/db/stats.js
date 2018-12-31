@@ -1,11 +1,10 @@
-const {Entry, Group, Op, sequelize} = require('./db');
+const {Entry, Category, Op, sequelize} = require('./db');
 
 
 function get (year, query) {
 	const where = {};
 	where.date = {[Op.like]: year + '%'};
-	if (query.group) where.group_id = query.group;
-	if (query.category) where['$group.category_id$'] = query.category;
+	if (query.category) where.category_id = query.category;
 
 	return Entry
 		.sum('amount', {
@@ -15,9 +14,9 @@ function get (year, query) {
 				'date',
 				[ sequelize.fn('SUBSTR', sequelize.col('date'), '0', '5'), 'year'],
 				[ sequelize.fn('SUBSTR', sequelize.col('date'), '6', '2'), 'month'],
-				'group_id',
+				'category_id',
 			],
-			include: { model: Group, attributes: ['category_id'] },
+			include: Category,
 			group: 'month',
 			where,
 			order: [[sequelize.col('month'), 'ASC']],
