@@ -9,11 +9,13 @@ function timeAgo (dateStr) {
 	const date = new Date(dateStr);
 	const now = new Date(new Date().toISOString().substr(0, 10));
 	const diff = (now - date) / 1000;
-	if (diff < 60) return 'just now';
-	if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
-	if (diff < 86400) return `${Math.floor(diff / 60)} hours ago`;
+	// less than a day
+	if (diff < 86400) return 'today';
+	// less than 2 days ago
 	if (diff < 172800) return 'yesterday';
+	// up until a week
 	if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`;
+	// otherwise
 	return dateStr;
 }
 

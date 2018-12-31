@@ -14,7 +14,6 @@ async function getWithAmounts (query) {
 	const entries = await Entries.getSumsByDate(query.date);
 	const categories = await Category.findAll({ order: ['name'], include: Group });
 	const cats = JSON.parse(JSON.stringify(categories));
-
 	const groupAmounts = {};
 	entries.forEach(e => {
 		if (e.group_id) groupAmounts[e.group_id] = e.sum;

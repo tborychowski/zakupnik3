@@ -10,7 +10,7 @@
 			on:focus="onfocus()"
 			on:input="oninput()"
 			on:keydown="onkeydown(event)"
-			bind:value="text"></textarea>
+			bind:value="$text"></textarea>
 	</div>
 	<div class="form-footer form-row">
 		<button type="button" tabindex="4" class="btn danger btn-remove" on:click="remove()">Remove</button>
@@ -33,7 +33,6 @@ export default {
 		return {
 			inEdit: false,  // editing old entry
 			id: null,
-			text: '',
 		};
 	},
 
@@ -43,7 +42,7 @@ export default {
 			if (changed.date) return this.parse();
 			if (changed.item && current.item) return this.edit(current.item);
 			if (changed.group || changed.category) {
-				const text = this.get().text;
+				const text = this.store.get().text;
 				let newText = text;
 				if (previous.group && text === previous.group.name) newText = '';
 				else if (previous.category && text === previous.category.name) newText = '';
@@ -52,7 +51,7 @@ export default {
 				if (changed.group && current.group) newText = current.group.name;
 				else if (changed.category && current.category) newText = current.category.name;
 
-				this.set({ text: newText });
+				this.store.set({ text: newText });
 			}
 		});
 	},
@@ -70,14 +69,13 @@ export default {
 
 		onkeydown (e) {
 			if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) this.onsubmit(e);
-			else if (e.key === 'Escape') this.reset(e);
+			else if (e.key === 'Escape') this.reset();
 		},
 
 		parse () {
 			if (this.parseTimer) clearTimeout(this.parseTimer);
 			this.parseTimer = setTimeout(() => {
-				const {text} = this.get();
-				const {dateStr, groups} = this.store.get();
+				const {text, dateStr, groups} = this.store.get();
 				const rows = Parser.parse(text, groups, dateStr);
 				this.store.set({ rows });
 				if (rows.length) {
@@ -92,14 +90,14 @@ export default {
 		edit (data) {
 			this.reset(true);
 			const text = [data.group && data.group.name || '', data.description || '', data.amount].join(' ');
-			this.set({ inEdit: true, id: data.id, text });
-			this.store.set({ dateStr: data.date })
+			this.set({ inEdit: true, id: data.id });
+			this.store.set({ dateStr: data.date, text })
 		},
 
 		reset (prereset) {
 			if (!prereset) {
-				this.set({ inEdit: false, id: null, text: '' });
-				this.store.set({ desc: '', rows: [], group: null, item: null });
+				this.set({ inEdit: false, id: null });
+				this.store.set({ text: '', desc: '', rows: [], group: null, item: null });
 			}
 			this.toggleAmountError();
 			this.updateHeight();

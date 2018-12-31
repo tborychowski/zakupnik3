@@ -79,16 +79,15 @@ export default {
 		}
 	},
 	computed: {
-		filteredData ({data, $desc, $category, $group, $item}) {
+		filteredData ({data, $text, $item}) {
 			data.forEach(item => {
 				item.edited = $item && item.id === $item.id;
 			});
-			if ($group) return data.filter(item => item.group.id === $group.id);
-			if ($category) return data.filter(item => item.group.category.id === $category.id);
-			if ($desc) {
-				$desc = $desc.toLowerCase();
+
+			if ($text) {
+				const text = $text.toLowerCase();
 				return data.filter(item => {
-					return (item.description.toLowerCase() + item.amount).includes($desc);
+					return (item.description.toLowerCase() + item.amount).includes(text);
 				});
 			}
 			return data;
