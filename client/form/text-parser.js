@@ -59,7 +59,7 @@ function parseAmount (amount) {
 		catch (e) { amount = 0; }
 	}
 	let num = parseFloat(amount);
-	if (num === Infinity || isNaN(num) || num < 0) num = 'error';
+	if (num === Infinity || isNaN(num)) num = 'error';
 	return num;
 }
 
@@ -86,21 +86,21 @@ function findCategory (s, categories) {
 
 
 function findAmount (s) {
-	let amount, cer = 0;
+	let amount, probability = 0;
 	s = s.replace(/\s+([+-/*()])\s+/g, '$1');	// remove spaces around ops
 	const words = s.split(' ');
 	for (let w of words) {
-		if (w.match(/^\d+$/) && cer <= 8) {
+		if (w.match(/^-?\d+$/) && probability <= 8) {
 			amount = w;
-			cer = 8;
+			probability = 8;
 		}
-		else if (w.match(/^\d+\.\d+$/) && cer <= 9) {
+		else if (w.match(/^-?\d+\.\d+$/) && probability <= 9) {
 			amount = w;
-			cer = 9;
+			probability = 9;
 		}
-		else if (w.match(/^[\d.()+-/*]+$/)) {
+		else if (w.match(/^[-?\d.()+-/*]+$/)) {
 			amount = w;
-			cer = 10;
+			probability = 10;
 			break;
 		}
 	}

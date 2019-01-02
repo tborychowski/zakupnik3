@@ -82,24 +82,26 @@ export default {
 		}
 	},
 	computed: {
-		filteredData ({data, $text, $item, $categoryNameMap}) {
+		filteredData ({data, $desc, $item, $categoryNameMap}) {
 			data.forEach(item => {
 				item.edited = $item && item.id === $item.id;
 			});
 
-			if ($text) {
-				const text = $text.toLowerCase();
+			if ($desc) {
+				const text = $desc.toLowerCase();
 				return data.filter(item => {
 					const mainCat = getMainCategory(item, $categoryNameMap);
 					const s = (mainCat + item.category.name + item.description + item.amount);
-					return s.toLowerCase().includes($text);
+					return s.toLowerCase().includes($desc);
 				});
 			}
 			return data;
 		},
-		total ({filteredData}) {
+		total ({filteredData, $rows}) {
 			if (!Array.isArray(filteredData)) return 0;
-			return filteredData.reduce((p, c) => p + c.amount, 0);
+			let total = filteredData.reduce((p, c) => p + c.amount, 0);
+			total += $rows.reduce((p, c) => p + c.amount, 0);
+			return total;
 		}
 	},
 	methods: {
