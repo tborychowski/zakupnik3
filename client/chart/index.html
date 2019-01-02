@@ -31,10 +31,12 @@ export default {
 			let {date, category, group} = this.store.get();
 			if (category) category = category.id;
 			if (group) group = group.id;
-			Data.Stats.get({ year: date.y, group, category }).then(expenses => {
-				this.chart.set(expenses, date.m);
-				this.set({ isLoading: false });
-			});
+			Data.Stats
+				.get({ year: date.y, group, category })
+				.then(({expenses, income}) => {
+					this.chart.set(date.m, expenses, income);
+					this.set({ isLoading: false });
+				});
 		},
 
 	}
