@@ -26,23 +26,29 @@ async function getWithAmounts (query) {
 
 	// assign sums to categories
 	cats.forEach(cat => {
-		cat.sum = amounts[cat.id] || 0;
+		if (cat.income) cat.incomeSum = amounts[cat.id] || 0;
+		else cat.sum = amounts[cat.id] || 0;
 	});
 
 
 	// calc sums for main categories
-	let total = 0;
+	let total = 0, totalIncome = 0;
 	cats.forEach(cat => {
 		if (cat.parent_id) return;
 		cats.forEach(subcat => {
-			if (subcat.parent_id === cat.id) cat.sum += subcat.sum;
+			if (subcat.parent_id === cat.id) {
+				if (subcat.income) cat.incomeSum = (cat.incomeSum || 0) + subcat.incomeSum;
+				else cat.sum = (cat.sum || 0) + subcat.sum;
+			}
 		});
-		total += cat.sum;
+		total += cat.sum || 0;
+		totalIncome += cat.incomeSum || 0;
 	});
 
 	// calc percents
 	cats.forEach(cat => {
 		cat.percent = Math.round(cat.sum / total * 100);
+		cat.incomePercent = Math.round(cat.incomeSum / totalIncome * 100);
 	});
 	return cats;
 }

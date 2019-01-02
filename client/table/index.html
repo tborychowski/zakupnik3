@@ -78,30 +78,31 @@ export default {
 			const desc = [];
 			if (item.category && item.category.name) desc.push(item.category.name);
 			if (item.description) desc.push(item.description);
+			if (item.category.income) desc.push('INCOME')
 			return desc.join(' - ');
 		}
 	},
 	computed: {
-		filteredData ({data, $desc, $item, $categoryNameMap}) {
+		filteredData ({data, $text, $desc, $item, $categoryNameMap}) {
 			data.forEach(item => {
 				item.edited = $item && item.id === $item.id;
 			});
-
-			if ($desc) {
-				const text = $desc.toLowerCase();
+			const text = ($desc || $text || '').toLowerCase();
+			if (text) {
 				return data.filter(item => {
 					const mainCat = getMainCategory(item, $categoryNameMap);
 					const s = (mainCat + item.category.name + item.description + item.amount);
-					return s.toLowerCase().includes($desc);
+					return s.toLowerCase().includes(text);
 				});
 			}
 			return data;
 		},
 		total ({filteredData, $rows}) {
 			if (!Array.isArray(filteredData)) return 0;
-			let total = filteredData.reduce((p, c) => p + c.amount, 0);
-			total += $rows.reduce((p, c) => p + c.amount, 0);
-			return total;
+			const add = (p, c) => p + c.category.income ? 0 : c.amount;
+			const total = filteredData.reduce(add, 0);
+			const rowstotal = $rows.reduce(add, 0);
+			return total + rowstotal;
 		}
 	},
 	methods: {

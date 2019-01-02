@@ -22,6 +22,9 @@
 			<input bind:value="form.tags" class="tags" disabled="{!form.parent_id}" placeholder="e.g. tesco,supervalu">
 		</div>
 		<div class="form-row">
+			<label><input type="checkbox" bind:checked="form.income" class="income" disabled="{!form.parent_id}"> Income</label>
+		</div>
+		<div class="form-row">
 			<button type="button" tabindex="3" class="btn btn-reset" on:click="reset()">Reset</button>
 			<button type="button" tabindex="4" class="btn danger btn-remove" on:click="remove()">Remove</button>
 			<div class="flex-filler"></div>
@@ -40,17 +43,20 @@
 				<h2 class="editable-cat {isSelected(cat, $category)}" on:click="onclick(cat, this)">
 					<span>{cat.name}</span>
 					<span class="flex-filler"></span>
-					<span class="pill">{formatNumber(cat.sum)}</span>
+					<span class="pill">{formatNumber(cat.sum || cat.incomeSum)}</span>
 					<div class="cat-linebreak"></div>
-					<div class="cat-percent-wrapper" title="{cat.percent}%">
-						<span class="cat-percent" style="width: {cat.percent}%"></span>
+					<div class="cat-percent-wrapper" title="{cat.percent || cat.incomePercent || 0}%">
+						<span class="cat-percent" style="width: {cat.percent || cat.incomePercent || 0}%"></span>
 					</div>
 				</h2>
 				<ul class="subcats">
 					{#each cat.items as item}
 						<li class="editable-cat {isSelected(item, $category)}" on:click="onclick(item, this)">
 							{item.name}
-							<span class="pill">{formatNumber(item.sum)}</span>
+							{#if item.income}
+							(Income)
+							{/if}
+							<span class="pill">{formatNumber(item.sum || item.incomeSum)}</span>
 							<span class="keys">{item.tags}</span>
 						</li>
 					{/each}
