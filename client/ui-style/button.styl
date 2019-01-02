@@ -10,43 +10,41 @@ button::-moz-focus-inner
 
 .btn
 	font inherit
-	show 1
-	line-height 1
+	display inline-block
 	padding 5 15
 	min-width 24px
 	min-height 24px
 	margin-bottom 0
-	font 14/1.4
+	font 15/1.4
+	font-weight 100
 	height auto;
 	text-align center
 	white-space nowrap
 	vertical-align middle
 	cursor default
-	border transparent
+	border none
 	border-radius 3
-	transition background-color .2s, border-color .2s
 	user-select none
-	shadow 0 1 1 #000 .06;
+	box-shadow 0 1px 0 rgba(#000, .8)
 	color color-text-light2
 
 
 	// &.info
-	border-color lighten(color-info, 20%)
-	border-bottom-color lighten(color-info, 10%)
 	background color-info
 
 	&:focus
 		box-shadow 0 0 1px lighten(color-info, 50%)
 
 	&:active
+		outline none
+		box-shadow none
+		transform translateY(1px)
 		background darken(color-info, 15%)
-
+		color alpha(color-text-light2, 50%)
 
 
 
 	&.success
-		border-color color-success
-		border-bottom-color darken(color-success, 5%)
 		background darken(color-success, 30%)
 
 		&:focus
@@ -57,8 +55,6 @@ button::-moz-focus-inner
 
 
 	&.warning
-		border-color lighten(color-warning, 20%)
-		border-bottom-color lighten(color-warning, 10%)
 		background color-warning
 
 		&:focus
@@ -69,8 +65,6 @@ button::-moz-focus-inner
 
 
 	&.danger
-		border-color lighten(color-danger, 20%)
-		border-bottom-color lighten(color-danger, 10%)
 		background color-danger
 
 		&:focus
@@ -81,77 +75,25 @@ button::-moz-focus-inner
 
 
 
-
-// .btn-outline
-// 	background none
-// 	border-radius 4
-// 	font-size inherit
-// 	color color-text-light2
-// 	border lighten(color-default, 20%)
-
-// 	&:focus
-// 		outline none
-// 		box-shadow 0 0 1px lighten(color-default, 50%)
-
-// 	&:hover
-// 		border-color darken(color-default, 15%)
-// 		color darken(color-text-light2, 40%)
-
-
-
-
 .btn-outline
-.btn-icon
-.btn-icon-big
 	background none
-	border-radius 10px
-	font-size 20px
-	line-height 20px
-	size 30px
-	margin 0 5
-	color color-accent
-	border color-accent
-
-	&-big
-		size 38px
-		font-size  26px
-
+	border none
+	font-family inherit
+	font-size 18px
+	line-height 1
+	color alpha(color-text-light0, 50%)
 
 	&.success
-		border-color color-success
 		color color-success
 	&.warning
-		border-color color-warning
 		color color-warning
 	&.danger
-		border-color color-danger
 		color color-danger
 
 	&:focus
 	&:hover
 		outline none
-		border-color color-text-light0
 		color color-text-light0
 
 	&:active
-		border-color color-text-dark0
 		color color-text-dark0
-
-
-.btn-outline
-	border-color transparent
-	width auto
-	font-family inherit
-	font-size 18px
-	font-weight 400
-	padding 0 13
-	height 38px
-	line-height 1
-	border-radius 30px
-
-	&:hover
-		border-color color-bg-light0
-
-	&:focus
-	&:active
-		border-color transparent
