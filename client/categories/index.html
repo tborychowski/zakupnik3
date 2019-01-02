@@ -40,7 +40,9 @@
 		{:else}
 			{#if tree}
 				{#each tree as cat, idx}
-				<h2 class="editable-cat {isSelected(cat, $category)}" on:click="onclick(cat, this)">
+				<h2 class="editable-cat {isSelected(cat, $category)} {cat.incomePercent ? 'income' : 'expense'}"
+					on:click="onclick(cat, this)">
+
 					<span>{cat.name}</span>
 					<span class="flex-filler"></span>
 					<span class="pill">{formatNumber(cat.sum || cat.incomeSum)}</span>
@@ -53,9 +55,6 @@
 					{#each cat.items as item}
 						<li class="editable-cat {isSelected(item, $category)}" on:click="onclick(item, this)">
 							{item.name}
-							{#if item.income}
-							(Income)
-							{/if}
 							<span class="pill">{formatNumber(item.sum || item.incomeSum)}</span>
 							<span class="keys">{item.tags}</span>
 						</li>
