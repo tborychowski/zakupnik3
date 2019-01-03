@@ -10,38 +10,52 @@
 	transition transform .3s ease-out
 
 	h1
-	form
 		background color-bg-dark1
-		margin 0 0 1px
-		padding 10px 0
-
-	h1
 		font-size 20px
+		font-weight 400
+		margin 0 0 1px
+		padding 0 13 0 20
 		height 49px
 		display flex
 		align-items center
 		justify-content space-between
-		padding 0 13 0 20
 
 		.btn-outline
 			font-size 30px
-			line-height 22px
-			padding 2 7 6
+			font-weight 100
+			margin -3px -1px 0 0
+
+		.btn-settings
+			padding-top 7px
+			svg
+				width 22px
 
 
-	.form-row
-		.select-wrap
-		&>input
-			flex 1
+	.categories-wrap
+		bg color-bg-dark0
+		overflow-y auto
+		position absolute
+		top 50px
+		bottom 0
+		width 100%
+		-webkit-overflow-scrolling touch
+		user-select none
 
-		.btn-reset
-		.btn-cancel
-			margin-right 10px
 
-	.subcats
-		margin 0 0 0 0
-		padding 0
-		list-style none
+	.category-box
+		margin 0
+		padding 5 0
+		border-left color-accent
+
+		&:not(:first-child)
+			border-top color-bg-dark3
+
+		&.income
+			border-left-color color-accent-alt
+
+		&.expense
+			border-left-color color-accent
+
 
 	.editable-cat
 		cursor default
@@ -58,59 +72,43 @@
 
 
 	h2.editable-cat
-		margin 2 0 5
 		font-size 17px
-		padding 15 20 10 20
+		font-weight 100
+		text-transform uppercase
 		position relative
-		&:not(:first-child)
-			margin 20 0 5
-			border-top color-bg-dark3
+		padding 7 20
+		margin 0
 
-		.pill
-			page-break-after always
-
-		.cat-percent-wrapper
-			height 7px
-			margin 10 0 0
-			width 100%
-			bg color-bg-dark3
-
-		.cat-percent
-			height 100%
-			display block
-
-		&.income .cat-percent
-			background color-accent-alt
-		&.expense .cat-percent
-			background color-accent
-
-		.cat-linebreak
-			width 100%
 
 	li.editable-cat
-		padding 5 20 5 20
+		padding 5 20
+		opacity 0.7
 
 
-	.keys
+	.editable-cat.in-edit
+		background color-accent
+
+
+	.pill
+		page-break-after always
+
+
+	.tags
 		color alpha(color-text-light0, 50%)
-		display block
 		width 100%
 		font-size 13px
 		padding 5px 0 0
 		word-wrap break-word
+		display none
 
 		&:empty
-			display none
+			display none !important
 
-	.categories-wrap
-		bg color-bg-dark0
-		overflow-y auto
-		position absolute
-		top 50px
-		bottom 0
-		width 100%
-		-webkit-overflow-scrolling touch
-		user-select none
+	&.add
+	&.edit
+		.tags
+			display block
+
 
 
 	.no-results
@@ -118,25 +116,16 @@
 		top 30%
 		position relative
 
-	&.view
-		form
-			display none
 
+	&.view
 		.btn-settings
 			display block
-			padding-top 6px
-
-			svg
-				width 22px
 
 		.btn-close
 			display none
 
 	&.add
 	&.edit
-		form
-			display block
-
 		.btn-settings
 			display none
 
@@ -146,8 +135,6 @@
 		.categories-wrap
 			top 274px
 
-		.editable-cat.in-edit
-			background color-accent
 
 
 

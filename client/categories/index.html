@@ -39,27 +39,27 @@
 			<div class="no-results">Loading...</div>
 		{:else}
 			{#if tree}
-				{#each tree as cat, idx}
-				<h2 class="editable-cat {isSelected(cat, $category)} {cat.incomePercent ? 'income' : 'expense'}"
-					on:click="onclick(cat, this)">
+				{#each tree as cat}
+				<div class="category-box {cat.sum || cat.incomeSum ? '' : 'no-sum'} {cat.income ? 'income' : 'expense'}">
+					<h2 class="editable-cat {isSelected(cat, $category)}"
+						on:click="onclick(cat, this)">
 
-					<span>{cat.name}</span>
-					<span class="flex-filler"></span>
-					<span class="pill">{formatNumber(cat.sum || cat.incomeSum)}</span>
-					<div class="cat-linebreak"></div>
-					<div class="cat-percent-wrapper" title="{cat.percent || cat.incomePercent || 0}%">
-						<span class="cat-percent" style="width: {cat.percent || cat.incomePercent || 0}%"></span>
-					</div>
-				</h2>
-				<ul class="subcats">
-					{#each cat.items as item}
-						<li class="editable-cat {isSelected(item, $category)}" on:click="onclick(item, this)">
-							{item.name}
-							<span class="pill">{formatNumber(item.sum || item.incomeSum)}</span>
-							<span class="keys">{item.tags}</span>
-						</li>
-					{/each}
-				</ul>
+						<span>{cat.name}</span>
+						<span class="flex-filler"></span>
+						<span class="pill">{formatNumber(cat.sum || cat.incomeSum)}</span>
+					</h2>
+					<ul class="subcats">
+						{#each cat.items as item}
+							<li class="editable-cat {isSelected(item, $category)} {item.sum || item.incomeSum ? '' : 'no-sum'}"
+								on:click="onclick(item, this)">
+
+								{item.name}
+								<span class="pill">{formatNumber(item.sum || item.incomeSum)}</span>
+								<span class="tags">{item.tags}</span>
+							</li>
+						{/each}
+					</ul>
+				</div>
 				{/each}
 			{:else}
 				<div class="no-results">No results</div>
@@ -112,7 +112,8 @@ export default {
 						.map(c => {
 							c.items = categories.filter(sub => sub.parent_id ===  c.id);
 							return c;
-						});
+						})
+						.sort((a, b) => b.income - a.income);
 
 					this.store.set({ categories });
 					this.set({ tree, isLoading: false });

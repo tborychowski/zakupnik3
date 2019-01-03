@@ -37,7 +37,10 @@ async function getWithAmounts (query) {
 		if (cat.parent_id) return;
 		cats.forEach(subcat => {
 			if (subcat.parent_id === cat.id) {
-				if (subcat.income) cat.incomeSum = (cat.incomeSum || 0) + subcat.incomeSum;
+				if (subcat.income) {
+					cat.income = true;
+					cat.incomeSum = (cat.incomeSum || 0) + subcat.incomeSum;
+				}
 				else cat.sum = (cat.sum || 0) + subcat.sum;
 			}
 		});
