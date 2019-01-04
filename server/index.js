@@ -33,8 +33,8 @@ app.use(passport.session());
 app.get('/login', (req, res) => { req.logout(); sendView(res, 'login.html'); });
 app.get('/logout', (req, res) => { req.logout(); res.redirect('/'); });
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
-// app.use('/api/', isApiAuthenticated, api);
-app.use('/api/', api);
+app.use('/api/', isApiAuthenticated, api);
+// app.use('/api/', api);
 if (util.isDev) app.use('/', express.static(path.join(__dirname, '..', 'public')));
 app.use('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
 
