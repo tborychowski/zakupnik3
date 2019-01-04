@@ -1,7 +1,7 @@
 /* global describe, it, before, after */
 
 const {req, expect} = require('./_common');
-const {seed, unseed, entry} = require('./_seed');
+const {seed, unseed, data} = require('./_seed');
 const base = '/categories';
 
 describe('Categories', () => {
@@ -27,6 +27,7 @@ describe('Categories', () => {
 
 
 	it('- should count sum', done => {
+		const entry = data.entries[0];
 		req(`${base}?date=${entry.date.substr(0, 7)}`, res => {
 			expect(res.body[0].sum).to.eq(entry.amount);
 			expect(res.body[0].percent).to.eq(100);
