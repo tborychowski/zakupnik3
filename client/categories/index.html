@@ -47,6 +47,10 @@
 						<span>{cat.name}</span>
 						<span class="flex-filler"></span>
 						<span class="pill">{formatNumber(cat.sum || cat.incomeSum)}</span>
+						<div class="cat-linebreak"></div>
+						<div class="cat-percent-wrapper" title="{cat.percent || cat.incomePercent}%">
+							<span class="cat-percent" style="width: {cat.percent || cat.incomePercent || 0}%"></span>
+						</div>
 					</h2>
 					<ul class="subcats">
 						{#each cat.items as item}

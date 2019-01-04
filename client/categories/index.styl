@@ -52,9 +52,11 @@
 
 		&.income
 			border-left-color color-accent-alt
+			background alpha(color-accent-alt, 5%)
 
 		&.expense
 			border-left-color color-accent
+			background alpha(color-accent, 5%)
 
 
 	.editable-cat
@@ -63,7 +65,8 @@
 		flex-wrap wrap
 		justify-content space-between
 		align-items center
-		cursor pointer
+		position relative
+
 		&:hover
 			background color-highlight
 
@@ -92,6 +95,22 @@
 	.pill
 		page-break-after always
 
+	.cat-linebreak
+		width 100%
+
+	.cat-percent-wrapper
+		height 5px
+		width 100%
+		margin 10 0 0
+		bg color-bg-dark3
+
+	.cat-percent
+		height 100%
+		display block
+		background color-accent
+
+	.income .cat-percent
+		background color-accent-alt
 
 	.tags
 		color alpha(color-text-light0, 50%)

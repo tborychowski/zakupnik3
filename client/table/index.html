@@ -119,14 +119,10 @@ export default {
 			Data.Expenses
 				.get(dateStr)
 				.then(res => {
-					res.sort(this.sortByDate.bind(this));
+					res.sort((a, b) => b.id - a.id);
 					this.originalData = res;
 					this.set({ data: res, isLoading: false });
 				});
-		},
-
-		sortByDate (a, b) {
-			return b.date.localeCompare(a.date);
 		},
 
 		onRowClick (item) {
