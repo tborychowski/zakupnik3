@@ -95,8 +95,17 @@ input:not([type=checkbox]):not([type=radio])
 	&:disabled
 		opacity 0.5
 
+input[type=checkbox]
+input[type=radio]
+	vertical-align inherit
+	transform scale(1.4)
+	filter hue-rotate(-12deg) saturate(.4)
+	margin-right 6px
 
 label
 	display inline-block
 	margin-top 1
 	vertical-align top
+
+	&.disabled
+		opacity 0.3
