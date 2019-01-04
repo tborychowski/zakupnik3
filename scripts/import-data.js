@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+/* eslint no-console: 0, no-empty: 0 */
+
 const fs = require('fs');
-const {init, Category, Group, Entry} = require('../server/db/db');
+const {init, Category, Entry} = require('../server/db/db');
 
 
-const categoriesJson = require('../_stuff/sql-categories.json');
-const groupsJson = require('../_stuff/sql-groups.json');
-const entriesJson = require('../_stuff/sql-entries.json');
+const categoriesJson = require('../_stuff/db/categories.json');
+const entriesJson = require('../_stuff/db/entries.json');
 
 
 function removeDB () {
@@ -22,16 +23,7 @@ function categories () {
 		.bulkCreate(categoriesJson)
 		.then(() => Category.findAndCountAll())
 		.then(res => console.log(`OK (${res.count} categories imported)`))
-		.catch(e => console.error(e.errors[0].message));
-}
-
-function groups () {
-	process.stdout.write('Importing Groups.......');
-	return Group
-		.bulkCreate(groupsJson)
-		.then(() => Group.findAndCountAll())
-		.then(res => console.log(`OK (${res.count} groups imported)`))
-		.catch(e => console.error(e.errors[0].message));
+		.catch(e => console.error(e));
 }
 
 function entries () {
@@ -47,7 +39,6 @@ console.log('\nStarting import...');
 removeDB()
 	.then(init)
 	.then(categories)
-	.then(groups)
 	.then(entries)
 	.then(() => console.log('\nAll done!'));
 

@@ -59,14 +59,14 @@ function parseAmount (amount) {
 		catch (e) { amount = 0; }
 	}
 	let num = parseFloat(amount);
-	if (num === Infinity || isNaN(num) || num < 0) num = 'error';
+	if (num === Infinity || isNaN(num)) num = 'error';
 	return num;
 }
 
 
-function findGroup (s, groups) {
+function findCategory (s, categories) {
 	s = s.toLowerCase();
-	for (let g of groups) {
+	for (let g of categories) {
 		if (s.match(g._name)) {
 			s = s.replace(g._name, '');
 			return [g, s];
@@ -74,10 +74,10 @@ function findGroup (s, groups) {
 	}
 	const words = s.split(' ').filter(w => w.length);
 	for (let w of words) {
-		for (let g of groups) {
-			if (g.keywords.indexOf(w) > -1) {
-				// s = s.replace(w, '');
-				return [g, s];
+		for (let g of categories) {
+			const tags = g.tags.split(/\s*,\s*/);
+			for (let k of tags) {
+				if (k.startsWith(w)) return [g, s];
 			}
 		}
 	}
@@ -86,21 +86,21 @@ function findGroup (s, groups) {
 
 
 function findAmount (s) {
-	let amount, cer = 0;
+	let amount, probability = 0;
 	s = s.replace(/\s+([+-/*()])\s+/g, '$1');	// remove spaces around ops
 	const words = s.split(' ');
 	for (let w of words) {
-		if (w.match(/^\d+$/) && cer <= 8) {
+		if (w.match(/^-?\d+$/) && probability <= 8) {
 			amount = w;
-			cer = 8;
+			probability = 8;
 		}
-		else if (w.match(/^\d+\.\d+$/) && cer <= 9) {
+		else if (w.match(/^-?\d+\.\d+$/) && probability <= 9) {
 			amount = w;
-			cer = 9;
+			probability = 9;
 		}
-		else if (w.match(/^[\d.()+-/*]+$/)) {
+		else if (w.match(/^[-?\d.()+-/*]+$/)) {
 			amount = w;
-			cer = 10;
+			probability = 10;
 			break;
 		}
 	}
@@ -110,28 +110,38 @@ function findAmount (s) {
 }
 
 
+function parseCategories (categories = []) {
+	return categories.map(g => {
+		const escaped = g.name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
+		g._name = new RegExp(escaped, 'i');
+		return g;
+	});
+}
 
-function parse (val, {date, _groups}) {
+
+
+function parse (val, categories, date) {
 	let repeat = 1;
+	categories = parseCategories(categories);
 	const rows = val
 		.split('\n')
 		.map(row => {
-			if (row.toLowerCase().indexOf('repeat') > -1) {
+			if (row.toLowerCase().includes('repeat')) {
 				const m = row.match(/\d{1,2}/);
 				if (m && m.length) {
 					repeat = parseInt(m[0], 10);
 					return {};
 				}
 			}
-			let group, amount, description;
-			[group, row] = findGroup(row, _groups);
+			let category, amount, description;
+			[category, row] = findCategory(row, categories);
 			[amount, row] = findAmount(row);
 			description = row.trim();
-			return {amount, description, group_id: group.id, group};
+			return {amount, description, category_id: category.id, category};
 		})
-		.filter(row => row.amount !== '' && row.group_id);
+		.filter(row => row.amount !== '' && row.category_id);
 
-	if (!rows.length) return;
+	if (!rows.length) return [];
 
 	rows.forEach(r => (r.date = date));
 

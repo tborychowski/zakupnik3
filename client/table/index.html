@@ -4,127 +4,130 @@
 		<th class="date">Date</th>
 		<th class="cat"></th>
 		<th class="desc">Description</th>
-		<th class="amount">Amount</th>
+		<th class="amount">Income</th>
+		<th class="amount">Expense</th>
 	</tr></thead>
 	<tbody>
 		{#if isLoading}
 			<tr class="empty-row"><td colspan="4">Loading...</td></tr>
 		{:else}
-			{#if filteredData.length}
-			{#each filteredData as item, idx}
-				<tr class="table-row" on:dblclick="onRowClick(item)">
-					<td class="date">{item.date}</td>
-					<td class="cat"><span class="pill">{getCategory(item)}</span></td>
+			{#if filteredData.length || $rows.length}
+
+			{#each $rows as item, idx}
+				<tr class="table-row table-row-edited">
+					<td class="date" title="{item.date}">{timeAgo(item.date)}</td>
+					<td class="cat"><span class="pill">{getMainCategory(item, $categoryNameMap)}</span></td>
 					<td class="desc">{getDescription(item)}</td>
-					<td class="amount">{formatNumber(item.amount)}</td>
+					<td class="amount">{item.category.income ? formatNumber(item.amount) : ''}</td>
+					<td class="amount">{item.category.income ? '' : formatNumber(item.amount)}</td>
 				</tr>
 			{/each}
-				<tr class="row-filler"><td colspan="4">&nbsp;</td></tr>
+
+
+			{#each filteredData as item, idx}
+				<tr class="table-row {item.edited ? 'table-row-hidden' : ''}" on:dblclick="onRowClick(item)">
+					<td class="date" title="{item.date}">{timeAgo(item.date)}</td>
+					<td class="cat"><span class="pill">{getMainCategory(item, $categoryNameMap)}</span></td>
+					<td class="desc">{getDescription(item)}</td>
+					<td class="amount">{item.category.income ? formatNumber(item.amount) : ''}</td>
+					<td class="amount">{item.category.income ? '' : formatNumber(item.amount)}</td>
+				</tr>
+			{/each}
+				<tr class="row-filler"><td colspan="5">&nbsp;</td></tr>
 			{:else}
-				<tr class="empty-row"><td colspan="4">No results</td></tr>
+				<tr class="empty-row"><td colspan="5">No results</td></tr>
 			{/if}
 		{/if}
 	</tbody>
 	<tfoot><tr>
 		<th colspan="3">Spending per month</th>
+		<th class="amount">{formatNumber(totalIncome)}</th>
 		<th class="amount">{formatNumber(total)}</th>
 	</tr></tfoot>
 	</table>
-
-	<div class="table-filter-box {filter.length ? 'filtered' : ''}">
-		<i class="btn-search">⚲</i>
-		<input class="table-filter-input" placeholder="Filter"
-		bind:value="filter"
-		on:keydown="onFilterKeyDown(event)">
-		<i class="btn-clear" on:click="clearFilter()">×</i>
-	</div>
 </div>
 
 
 <script>
-import {formatNumber} from '../util';
-import Data from '../data';
+import {formatNumber, timeAgo} from '../util';
+import {Data, Store, EVENT} from '../data';
+
+function getMainCategory (item, $categoryNameMap) {
+	const id = item && item.category && item.category.parent_id;
+	return $categoryNameMap[id] || '';
+}
 
 export default {
+	store: () => Store,
 	data () {
 		return {
 			isLoading: true,
-			isPreview: false,
 			data: [],
-			date: new Date().toISOString().substr(0, 10),
-			filter: '',
-			isPreview: false
 		};
 	},
 	oncreate () {
+		this.store.on('state', ({ current, changed, previous }) => {
+			if (previous && changed.date) this.load();
+		});
+
+		EVENT.on(EVENT.item.updated, this.load.bind(this));
+
 		this.load();
-	},
-	onstate({ changed, current, previous }) {
-		if (previous && changed.date) this.load();
-		if (changed.filter && current.filter === '') this.fire('filter', '');
 	},
 	helpers: {
 		formatNumber,
-		getCategory (item) {
-			return item && item.group && item.group.category && item.group.category.name || '';
-		},
+		timeAgo,
+		getMainCategory,
 		getDescription (item) {
 			const desc = [];
-			if (item.group && item.group.name) desc.push(item.group.name);
+			if (item.category && item.category.name) desc.push(item.category.name);
 			if (item.description) desc.push(item.description);
 			return desc.join(' - ');
 		}
 	},
 	computed: {
-		filteredData ({data, filter}) {
-			if (!filter) return data;
-			filter = filter.toLowerCase();
-			return data.filter(item => {
-				let s = item.description + item.amount + item.date;
-				if (item.group) {
-					s += (item.group.name || '');
-					if (item.group.category) s += (item.group.category.name || '');
-				}
-				return (s.toLowerCase().indexOf(filter) > -1);
+		filteredData ({data, $text, $desc, $item, $categoryNameMap}) {
+			data.forEach(item => {
+				item.edited = $item && item.id === $item.id;
 			});
+			const text = ($desc || $text || '').toLowerCase();
+			if (text) {
+				return data.filter(item => {
+					const mainCat = getMainCategory(item, $categoryNameMap);
+					const s = (mainCat + item.category.name + item.description + item.amount);
+					return s.toLowerCase().includes(text);
+				});
+			}
+			return data;
 		},
-		total ({filteredData}) {
+		total ({filteredData, $rows}) {
 			if (!Array.isArray(filteredData)) return 0;
-			return filteredData.reduce((p, c) => p + c.amount, 0);
+			const add = (p, c) => p + (c.category.income ? 0 : c.amount);
+			return filteredData.reduce(add, 0) + $rows.reduce(add, 0);
+		},
+		totalIncome ({filteredData, $rows}) {
+			if (!Array.isArray(filteredData)) return 0;
+			const add = (p, c) => p + (c.category.income ? c.amount : 0);
+			return filteredData.reduce(add, 0) + $rows.reduce(add, 0);
 		}
 	},
 	methods: {
 		load () {
 			const data = this.get();
-			if (data.isPreview) return;
 			if (!data.data.length) this.set({ isLoading: true });
-			Data.Expenses.get(data.date).then(data => {
-				this.originalData = data;
-				this.set({ data, isLoading: false });
-			});
-		},
-
-		onFilterKeyDown (e) {
-			if (e.key === 'Escape') this.set({ filter: '' });
+			const {dateStr} = this.store.get();
+			Data.Expenses
+				.get(dateStr)
+				.then(res => {
+					res.sort((a, b) => b.id - a.id);
+					this.originalData = res;
+					this.set({ data: res, isLoading: false });
+				});
 		},
 
 		onRowClick (item) {
-			if (!this.get().isPreview) this.fire('click', item);
+			this.store.set({ item });
 		},
-
-		clearFilter () {
-			this.set({ filter: '' });
-			this.fire('filter', '');
-		},
-
-		// temporary set data
-		preview (data) {
-			this.set({ data, isPreview: true });
-		},
-
-		endPreview () {
-			this.set({ data: this.originalData, isPreview: false });
-		}
 	}
 };
 </script>

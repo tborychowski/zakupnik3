@@ -1,5 +1,6 @@
 @import "lib"
 
+
 form
 	position relative
 	font inherit
@@ -8,6 +9,7 @@ form
 	.btn-cancel
 	.btn-save
 		display none
+
 
 .add
 	.btn-add
@@ -22,6 +24,7 @@ form
 
 	.btn-add
 	.btn-reset
+	.btn-edit
 		display none
 
 
@@ -42,14 +45,14 @@ form
 	background-repeat no-repeat
 	background-position right .75rem center
 	background-size 8px 10px
-	border border-dark
 	transition background-color .3s ease-out, border-color .3s ease-out, box-shadow .3s ease-out
 	height 34
 	display inline-block
-	background-color bg-light
+	border color-bg-dark0
+	background-color color-bg-dark0
 	&:focus-within
-		border-color accent-color
-		box-shadow 0 0 2px 1px accent-color
+		border-color color-accent
+		box-shadow 0 0 2px 1px color-accent
 
 
 select
@@ -60,7 +63,7 @@ select
 	box-sizing border-box
 	vertical-align top
 	padding 2 22 0 10
-	color text-dark
+	color color-text-light0
 	width 100%
 	height 100%
 	text-indent -2px
@@ -70,23 +73,24 @@ select
 
 
 textarea
-input
+input:not([type=checkbox]):not([type=radio])
 	font inherit
 	line-height 16px
 	box-sizing border-box
 	border-radius 5
 	vertical-align top
 	height 34
-	padding 2px 10 0
+	padding 2 10
 	transition background-color .3s ease-out, border-color .3s ease-out, box-shadow .3s ease-out
 
-	border border-dark
-	color text-dark
-	background-color bg-light
+	border color-bg-dark3
+	color color-text-light0
+	background-color color-bg-dark0
 
 	&:focus
-		border-color accent-color
-		box-shadow 0 0 2px 1px accent-color
+		border-color color-accent
+		box-shadow 0 0 2px 1px color-accent
+		outline none
 
 	&:disabled
 		opacity 0.5

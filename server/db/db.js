@@ -18,18 +18,11 @@ const sequelize = new Sequelize(`sqlite:${dbName}`, {
 
 const Category = sequelize.define('category', {
 	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-	name: { type: Sequelize.TEXT, allowNull: false, unique: true },
-});
-
-
-const Group = sequelize.define('group', {
-	id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
 	name: { type: Sequelize.TEXT, allowNull: false },
-	keywords: { type: Sequelize.TEXT, allowNull: false, defaultValue: '' },	// comma separated
+	tags: { type: Sequelize.TEXT, allowNull: false, defaultValue: '' },	// comma separated
+	parent_id: { type: Sequelize.INTEGER, allowNull: true },
+	income: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
 });
-Category.hasMany(Group);
-Group.belongsTo(Category);
-
 
 
 const Entry = sequelize.define('entry', {
@@ -38,21 +31,10 @@ const Entry = sequelize.define('entry', {
 	amount: { type: Sequelize.REAL, allowNull: false },
 	description: { type: Sequelize.TEXT, defaultValue: '' },
 });
-Group.hasMany(Entry);
-Entry.belongsTo(Group);
 
-/**
- * Raw sql query
- * @deprecated to be removed if not used
- * @param {string} query
- */
-function raw (query) {
-	const dottie = require('dottie');
-	return sequelize
-		.query(query)
-		.spread(results => results)
-		.then(dottie.transform); // built-in "nest" doesn't do it right
-}
+Category.hasMany(Entry);
+Entry.belongsTo(Category);
+
 
 const init = () => sequelize.sync();
 
@@ -62,9 +44,7 @@ init();
 module.exports = {
 	init,
 	Category,
-	Group,
 	Entry,
-	raw,
 	Op: Sequelize.Op,
 	sequelize,
 };

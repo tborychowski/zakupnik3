@@ -7,9 +7,9 @@
 		<div class="form-row">
 			<input bind:value="form.id" type="hidden">
 			<div class="select-wrap">
-				<select bind:value="form.category_id">
-					<option value="0">MAIN CATEGORY</option>
-					{#each categories as cat, idx}
+				<select bind:value="form.parent_id" ref:parentIdSelect>
+					<option>MAIN CATEGORY</option>
+					{#each $categories.filter(c => !c.parent_id) as cat}
 					<option value="{cat.id}">{cat.name}</option>
 					{/each}
 				</select>
@@ -19,12 +19,15 @@
 			<input bind:value="form.name" class="name" ref:nameField placeholder="e.g. Groceries">
 		</div>
 		<div class="form-row">
-			<input bind:value="form.keywords" class="keywords" disabled="{form.category_id === '0'}" placeholder="e.g. tesco,supervalu">
+			<input bind:value="form.tags" class="tags" disabled="{!form.parent_id}" placeholder="e.g. tesco,supervalu">
 		</div>
 		<div class="form-row">
-			<button type="button" tabindex="3" class="btn btn-reset" on:click="reset()">Reset</button>
+			<label><input type="checkbox" bind:checked="form.income" class="income" disabled="{!form.parent_id}"> Income</label>
+		</div>
+		<div class="form-row">
 			<button type="button" tabindex="4" class="btn danger btn-remove" on:click="remove()">Remove</button>
 			<div class="flex-filler"></div>
+			<button type="button" tabindex="3" class="btn btn-reset" on:click="reset()">Reset</button>
 			<button type="button" tabindex="3" class="btn btn-cancel" on:click="reset()">Cancel</button>
 			<button type="submit" tabindex="2" class="btn success btn-save">Save</button>
 			<button type="submit" tabindex="2" class="btn success btn-add">Add</button>
@@ -35,26 +38,32 @@
 		{#if isLoading}
 			<div class="no-results">Loading...</div>
 		{:else}
-			{#if categories.length}
-				{#each categories as cat, idx}
-				<h2 class="editable-cat" on:click="onclick(cat, this)">
-					<span>{cat.name}</span>
-					<span class="flex-filler"></span>
-					<span class="pill">{formatNumber(cat.sum)}</span>
-					<div class="cat-linebreak"></div>
-					<div class="cat-percent-wrapper" title="{cat.percent}%">
-						<span class="cat-percent" style="width: {cat.percent}%"></span>
-					</div>
-				</h2>
-				<ul class="cat-groups">
-					{#each cat.groups as group}
-						<li class="editable-cat" on:click="onclick(group, this)">
-							{group.name}
-							<span class="pill">{formatNumber(group.sum)}</span>
-							<span class="keys">{group.keywords}</span>
-						</li>
-					{/each}
-				</ul>
+			{#if $categoryTree}
+				{#each $categoryTree as cat}
+				<div class="category-box {cat.sum || cat.incomeSum ? '' : 'no-sum'} {cat.income ? 'income' : 'expense'}">
+					<h2 class="editable-cat {isSelected(cat, $category)}"
+						on:click="onclick(cat, this)">
+
+						<span>{cat.name}</span>
+						<span class="flex-filler"></span>
+						<span class="pill">{formatNumber(cat.sum || cat.incomeSum)}</span>
+						<div class="cat-linebreak"></div>
+						<div class="cat-percent-wrapper" title="{cat.percent || cat.incomePercent}%">
+							<span class="cat-percent" style="width: {cat.percent || cat.incomePercent || 0}%"></span>
+						</div>
+					</h2>
+					<ul class="subcats">
+						{#each cat.items as item}
+							<li class="editable-cat {isSelected(item, $category)} {item.sum || item.incomeSum ? '' : 'no-sum'}"
+								on:click="onclick(item, this)">
+
+								{item.name}
+								<span class="pill">{formatNumber(item.sum || item.incomeSum)}</span>
+								<span class="tags">{item.tags}</span>
+							</li>
+						{/each}
+					</ul>
+				</div>
 				{/each}
 			{:else}
 				<div class="no-results">No results</div>
@@ -66,37 +75,44 @@
 
 <script>
 import {formatNumber} from '../util';
-import Data from '../data';
+import {Data, Store, EVENT} from '../data';
 
 export default {
+	store: () => Store,
 	data () {
 		return {
 			isLoading: true,
-			categories: [],		// same as categories
 			mode: 'view',		// view | edit | add
-			date: new Date().toISOString().substr(0, 7),
-			form: {category_id: '0', name: '', keywords: ''}
+			form: {parent_id: '0', name: '', tags: ''},
 		};
 	},
-	oncreate () {
-		this.load();
+	helpers: {
+		formatNumber: num => (num ? '€' + formatNumber(num) : ''),
+		isSelected (item, storeItem) {
+			if (storeItem && storeItem.id === item.id) return 'selected';
+			return '';
+		}
 	},
 
-	onstate({ changed, current, previous }) {
-		if (previous && changed.date) this.load();
-	},
-	helpers: {
-		formatNumber: num => (num ? '€' + formatNumber(num) : '')
+	oncreate () {
+		this.store.on('state', ({ current, changed, previous }) => {
+			if (previous && changed.date) this.load();
+		});
+		EVENT.on(EVENT.item.updated, this.load.bind(this));
+
+		this.load();
 	},
 
 	methods: {
 		load () {
-			if (!this.get().categories.length) this.set({ isLoading: true });
-			const date = this.get().date;
-			Data.Categories.get(date).then(categories => {
-				this.set({ categories, isLoading: false });
-				return categories;
-			});
+			if (!this.store.get().categories.length) this.set({ isLoading: true });
+			const {dateStr} = this.store.get();
+			Data.Categories
+				.get(dateStr)
+				.then(categories => {
+					this.store.set({ categories });
+					this.set({ isLoading: false });
+				});
 		},
 
 		toggleEdit () {
@@ -108,15 +124,15 @@ export default {
 
 		edit (item, el) {
 			this.reset();
-			const form = Object.assign({category_id: '0', keywords: ''}, item);
-			form.type = form.category_id === '0' ? 'category' : 'group';
+			const form = Object.assign({parent_id: null, tags: ''}, item);
 			this.set({ mode: 'edit', form });
 			this.elInEdit = el;
 			this.elInEdit.classList.add('in-edit');
 		},
 
 		reset () {
-			this.set({ mode: 'add', form: {category_id: '0', name: '', keywords: ''} });
+			this.refs.parentIdSelect.selectedIndex = 0;
+			this.set({ mode: 'add', form: {parent_id: null, name: '', tags: ''} });
 			this.showError();
 			if (this.elInEdit) {
 				this.elInEdit.classList.remove('in-edit');
@@ -126,11 +142,8 @@ export default {
 
 		remove () {
 			const form = this.get().form;
-			const type = form.type;
 			if (!form.id) return;
-
-			const res = type === 'category' ? Data.Categories : Data.Groups;
-			res
+			Data.Categories
 				.del(form.id)
 				.then(() => {
 					this.reset();
@@ -138,9 +151,9 @@ export default {
 				});
 		},
 
-		onclick (item, el) {
-			if (this.get().mode === 'view') this.fire('click', item);
-			else this.edit(item, el);
+		onclick (category, el) {
+			if (this.get().mode === 'view') this.store.set({ category});
+			else this.edit(category, el);
 		},
 
 		onsubmit (e) {
@@ -148,20 +161,17 @@ export default {
 			const form = this.get().form;
 			const type = form.type;
 			delete form.type;
-			delete form.groups;
-			if (form.category_id === '0') {
-				delete form.category_id;
-				delete form.keywords;
+			if (!form.parent_id) {
+				delete form.parent_id;
+				delete form.tags;
 			}
 			if (!form.name) return this.showError('Name is required');
 
-			const res = type === 'category' ? Data.Categories : Data.Groups;
-			res
+			Data.Categories
 				.save(form)
 				.then(() => {
 					this.reset();
 					this.load();
-					this.fire('updated');
 				});
 		},
 

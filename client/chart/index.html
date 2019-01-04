@@ -1,33 +1,25 @@
 <div class="chart"><canvas ref:canvas width="100%" height="200"></canvas></div>
 
 <script>
-import Data from '../data';
+import {Data, Store, EVENT} from '../data';
 import MyChart from './chart';
 
 export default {
-	data () {
-		return {
-			date: new Date().toISOString().substr(0, 7),
-			category: null,
-			group: null,
-			isLoading: true
-		};
-	},
+	store: () => Store,
+	data () { return { isLoading: true }; },
 	oncreate () {
+		this.store.on('state', ({ current, changed, previous }) => {
+			if (previous && changed.date) this.load();
+			if (previous && changed.category) this.load();
+			if (previous && changed.group) this.load();
+		});
+
+		EVENT.on(EVENT.item.updated, this.load.bind(this));
+
 		this.init();
 	},
 
-	onstate({ changed, current, previous }) {
-		if (previous && changed.date) this.load();
-		if (previous && changed.category) this.load();
-		if (previous && changed.group) this.load();
-	},
-
 	methods: {
-		isChartLoaded () {
-
-		},
-
 		init () {
 			if (!window.Chart) return setTimeout(() => this.init(), 200);
 			if (!this.chart) this.chart = new MyChart(this.refs.canvas);
@@ -36,14 +28,15 @@ export default {
 
 		load () {
 			this.set({ isLoading: true });
-			const data = this.get();
-			data.year = data.date.split('-')[0];
-			const month = parseInt(data.date.split('-')[1], 10) - 1;
-
-			Data.Stats.get(data).then(expenses => {
-				this.chart.set(expenses, month);
-				this.set({ isLoading: false });
-			});
+			let {date, category, group} = this.store.get();
+			if (category) category = category.id;
+			if (group) group = group.id;
+			Data.Stats
+				.get({ year: date.y, group, category })
+				.then(({expenses, income}) => {
+					this.chart.set(date.m, expenses, income);
+					this.set({ isLoading: false });
+				});
 		},
 
 	}

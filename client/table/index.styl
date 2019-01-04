@@ -2,15 +2,17 @@
 
 
 .table
+	flex 1
+	margin-top 1px
 	overflow-y auto
 	padding 0
 	cursor default
 	font 14/1
 	position relative
-	bg bg-light
+	bg color-bg-dark0
 	-webkit-overflow-scrolling touch
 	user-select none
-	border-bottom border-light
+	border-bottom color-bg-dark3
 
 	table
 		margin 0 0 -1
@@ -42,7 +44,7 @@
 		th
 			position sticky
 			height 36px
-			background bg-dark
+			background color-bg-dark1
 			font-weight 600
 			text-align left
 
@@ -52,29 +54,37 @@
 			top 0
 			padding-top 13
 			padding-bottom 10
-			box-shadow 0 1px 0 border-light
+			box-shadow 0 1px 0 color-bg-dark3
 
 	tfoot
 		td
 		th
-			bottom -1
+			bottom 0
 			border-top transparent
-			box-shadow 0 1px 0 border-light inset
+			box-shadow 0 1px 0 color-bg-dark3 inset
 
 
 	tbody
 	tfoot
-		.amount::before
+		.amount:not(:empty)::before
 			content '€'
-			color #666
+			color color-text-lighgt0
 			margin-right 5
 
 	tbody
-		tr:nth-child(odd)
-			background bg-superlight
-
 		.table-row:hover
-			background accent-light
+			background color-highlight
+			color color-text-light0
+
+		tr.table-row-edited
+			background color-accent
+			color color-text-dark0
+
+			.pill
+				color color-text-light0
+
+		tr.table-row-hidden
+			display none
 
 		tr td
 			height 30px
@@ -88,63 +98,3 @@
 			vertical-align middle
 			text-align center
 			height auto
-
-
-.table-filter-box
-	position fixed
-	right 20px
-	top 12px
-	display flex
-
-	.btn-search
-		font-style normal
-		font-size 23px
-		position absolute
-		top 1px
-		left 7px
-		color #33333380
-		transform rotate(-45deg)
-
-	.btn-clear
-		font-style normal
-		color #33333380
-		position absolute
-		padding 3px 3px
-		right 4px
-		font-size 20px
-		display none
-		&:hover
-			color #333
-
-	.table-filter-input
-		size 200 26
-		font-weight normal
-		padding 5 22 3 30
-		text-align center
-		text-indent -14px
-		bg #fff5
-
-		&:focus
-			text-indent 0
-			text-align left
-			bg bg-superlight
-
-
-	&.filtered
-		.table-filter-input
-			bg bg-superlight
-			text-indent 0
-			text-align left
-
-		.btn-clear
-			display inline-block
-
-
-
-@media (max-width: 428px)
-	.table-filter-box .table-filter-input
-		width 100px
-
-@media (max-width: 320px)
-	.table-filter-box
-		display none

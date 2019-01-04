@@ -1,7 +1,7 @@
 /* global describe, it, before, after */
 
 const {req, expect} = require('./_common');
-const {seed, unseed, entry} = require('./_seed');
+const {seed, unseed, data} = require('./_seed');
 const base = '/categories';
 
 describe('Categories', () => {
@@ -14,7 +14,7 @@ describe('Categories', () => {
 
 	it('- shoud be seeded', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(1);
+			expect(res.body.length).to.eq(2);
 			done();
 		});
 	});
@@ -27,17 +27,17 @@ describe('Categories', () => {
 
 
 	it('- should count sum', done => {
+		const entry = data.entries[0];
 		req(`${base}?date=${entry.date.substr(0, 7)}`, res => {
 			expect(res.body[0].sum).to.eq(entry.amount);
 			expect(res.body[0].percent).to.eq(100);
-			expect(res.body[0].groups[0].sum).to.eq(entry.amount);
 			done();
 		});
 	});
 
 
 	it('- add', done => {
-		const params = { name: 'TEST', parent_id: 0 };
+		const params = { name: 'TEST' };
 		req(base, { method: 'post', params }, res => {
 			expect(res.body.name).to.eq(params.name);
 			itemId = res.body.id;
@@ -48,13 +48,13 @@ describe('Categories', () => {
 
 	it('- shoud be added', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(2);
+			expect(res.body.length).to.eq(3);
 			done();
 		});
 	});
 
 	it('- update', done => {
-		const params = { name: 'TEST2', parent_id: 0 };
+		const params = { name: 'TEST2' };
 		req(`${base}/${itemId}`, { method: 'put', params }, res => {
 			expect(res.body.updated).to.eq(1);
 			done();
@@ -70,7 +70,7 @@ describe('Categories', () => {
 
 	it('- shoud be removed', done => {
 		req(base, res => {
-			expect(res.body.length).to.eq(1);
+			expect(res.body.length).to.eq(2);
 			done();
 		});
 	});

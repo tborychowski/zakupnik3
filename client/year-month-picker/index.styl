@@ -5,30 +5,29 @@
 	user-select none
 	font 20
 	display flex
-	align-items stretch
-	justify-content start
+	align-items center
+	justify-content center
 	padding 2 0 0
 	height 49
-	background bg-dark
+	background color-bg-dark1
 
 	.btn-outline
 		margin 10
 		font-size 30px
-		line-height 20px
-		padding 0 6 6
+		padding 0 13 3
 
 	.btn-today
 		padding 6 2 0
 
 	.day
 		height 100%
-		width 110
+		width 170
 		display flex
 		align-items center
 		justify-content center
-		padding 3 10 0
+		padding 0 10
 
 	&.is-today .btn-today
 		opacity 0
-		display none
+		visibility hidden
 		pointer-events none

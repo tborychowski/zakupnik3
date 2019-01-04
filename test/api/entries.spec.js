@@ -14,7 +14,7 @@ describe('Entries', () => {
 
 	const entry = {
 		date: '2018-05-01',
-		group_id: 1,
+		category_id: 1,
 		description: 'local store',
 		amount: 100
 	};
@@ -30,7 +30,7 @@ describe('Entries', () => {
 
 	it('- add an entry', done => {
 		req(base, { method: 'post', params: entry }, res => {
-			expect(res.body.group_id).to.eq(entry.group_id);
+			expect(res.body.category_id).to.eq(entry.category_id);
 			expect(res.body.date).to.eq(entry.date);
 			expect(res.body.amount).to.eq(entry.amount);
 			itemId = res.body.id;
@@ -62,29 +62,12 @@ describe('Entries', () => {
 	});
 
 
-	it('- shoud find by group', done => {
-		req(`${base}?group=1`, res => {
-			expect(res.body.length).to.not.eq(0);
-			done();
-		});
-	});
-
-	it('- shoud NOT find by group', done => {
-		req(`${base}?group=x`, res => {
-			expect(res.body.length).to.eq(0);
-			done();
-		});
-	});
-
-
-
 	it('- shoud find by category', done => {
 		req(`${base}?category=1`, res => {
 			expect(res.body.length).to.not.eq(0);
 			done();
 		});
 	});
-
 
 	it('- shoud NOT find by category', done => {
 		req(`${base}?category=x`, res => {
@@ -94,16 +77,16 @@ describe('Entries', () => {
 	});
 
 
-	it('- shoud find by group, category and date', done => {
-		req(`${base}?date=${entry.date}&category=1&group=1`, res => {
+	it('- shoud find by category and date', done => {
+		req(`${base}?date=${entry.date}&category=1`, res => {
 			expect(res.body.length).to.not.eq(0);
 			done();
 		});
 	});
 
 
-	it('- shoud NOT find by group, category and date', done => {
-		req(`${base}?group=1&category=1&date=2000-00-00`, res => {
+	it('- shoud NOT find by category and date', done => {
+		req(`${base}?category=1&date=2000-00-00`, res => {
 			expect(res.body.length).to.eq(0);
 			done();
 		});
