@@ -1,4 +1,4 @@
-const {Category, Entry, init} = require('../../server/db/db');
+const {Category, Entry, init} = require('../server/db/db');
 
 
 const categories = [
