@@ -6,7 +6,13 @@ import MyChart from './chart';
 
 export default {
 	store: () => Store,
-	data () { return { isLoading: true }; },
+	data () {
+		return {
+			isLoading: true,
+			year: null,       // last request
+			category: null,   // last request
+		};
+	},
 	oncreate () {
 		this.store.on('state', ({ current, changed, previous }) => {
 			if (previous && changed.date) this.load();
@@ -28,14 +34,17 @@ export default {
 
 		load () {
 			this.set({ isLoading: true });
-			let {date, category, group} = this.store.get();
+			let {date, category} = this.store.get();
 			if (category) category = category.id;
-			if (group) group = group.id;
+
+			const lastReq = this.get();
+			if (lastReq.year === date.y && lastReq.category === category) return;
+
 			Data.Stats
-				.get({ year: date.y, group, category })
+				.get({ year: date.y, category })
 				.then(({expenses, income}) => {
 					this.chart.set(date.m, expenses, income);
-					this.set({ isLoading: false });
+					this.set({ isLoading: false, year: date.y, category });
 				});
 		},
 
