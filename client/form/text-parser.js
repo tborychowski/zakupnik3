@@ -65,7 +65,6 @@ function parseAmount (amount) {
 
 
 function findCategory (s, categories) {
-	s = s.toLowerCase();
 	for (let g of categories) {
 		if (s.match(g._name)) {
 			s = s.replace(g._name, '');
