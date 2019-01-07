@@ -39,12 +39,13 @@ export default {
 
 			const lastReq = this.get();
 			if (lastReq.year === date.y && lastReq.category === category) return;
+			this.set({ year: date.y, category });
 
 			Data.Stats
 				.get({ year: date.y, category })
 				.then(({expenses, income}) => {
 					this.chart.set(date.m, expenses, income);
-					this.set({ isLoading: false, year: date.y, category });
+					this.set({ isLoading: false });
 				});
 		},
 

@@ -17,9 +17,13 @@ const post = (url, params) => req(url, 'POST', params);
 const put = (url, params) => req(url, 'PUT', params);
 const del = url => req(url, 'DELETE');
 const save = (url, data) => {
-	if (data.length === 1 && data[0].id) data = data[0];
-	if (data.id) return put(url, data);
-	return post(url, data);
+	const newEntries = data.filter(item => !item.id);
+	const withIds = data.filter(item => item.id);
+
+	const promises = withIds.length ? withIds.map(item  => put(url, item)) : [];
+	promises.push(post(url, newEntries));
+
+	return Promise.all(promises);
 };
 
 const Categories = {

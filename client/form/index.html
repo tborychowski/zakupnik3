@@ -95,7 +95,9 @@ export default {
 		reset (resetBeforeEdit) {
 			if (!resetBeforeEdit) {
 				this.set({ inEdit: false, id: null });
-				const dateStr = new Date().toISOString().substr(0, 10);
+				let {dateStr} = this.store.get();
+				// replace day in dateStr to the today's day (to avoid new entries with a different day)
+				dateStr = dateStr.substr(0, 8) + new Date().toISOString().substr(8, 2);
 				this.store.set({ text: '', desc: '', rows: [], category: null, item: null, dateStr });
 			}
 			this.toggleAmountError();
@@ -124,7 +126,7 @@ export default {
 				// return this.fire('error', 'Please enter amount and category');
 			}
 			// item was edited
-			if (id && rows.length === 1) rows[0].id = id;
+			if (id && rows.length) rows[0].id = id;
 			const items = rows.map(this.leanItemForSave);
 			Data.Expenses
 				.save(items)
