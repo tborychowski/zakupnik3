@@ -92,10 +92,11 @@ export default {
 			this.store.set({ dateStr: data.date, text })
 		},
 
-		reset (prereset) {
-			if (!prereset) {
+		reset (resetBeforeEdit) {
+			if (!resetBeforeEdit) {
 				this.set({ inEdit: false, id: null });
-				this.store.set({ text: '', desc: '', rows: [], category: null, item: null });
+				const dateStr = new Date().toISOString().substr(0, 10);
+				this.store.set({ text: '', desc: '', rows: [], category: null, item: null, dateStr });
 			}
 			this.toggleAmountError();
 			this.updateHeight();
