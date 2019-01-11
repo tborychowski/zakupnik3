@@ -119,11 +119,10 @@ export default {
 			e.preventDefault();
 			const {id} = this.get();
 			const {rows} = this.store.get();
-			if (!rows || !rows.length) {
+			const isZero = !rows || !rows.length || rows.find(item => item.amount === 0);
+			if (isZero) {
 				this.toggleAmountError('Please enter amount and category');
-
-				// TODO: toast?
-				// return this.fire('error', 'Please enter amount and category');
+				return EVENT.fire(EVENT.toast.error, 'Please enter amount and category');
 			}
 			// item was edited
 			if (id && rows.length) rows[0].id = id;

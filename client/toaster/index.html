@@ -1,0 +1,12 @@
+<script>
+import {EVENT} from '../data';
+import Toast from './toaster';
+
+export default {
+	oncreate () {
+		EVENT.on(EVENT.toast.show, msg => new Toast(msg));
+		EVENT.on(EVENT.toast.error, msg => new Toast(msg, 'error'));
+		EVENT.on(EVENT.toast.warning, msg => new Toast(msg, 'warning'));
+	},
+};
+</script>

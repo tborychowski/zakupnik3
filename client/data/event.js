@@ -9,5 +9,10 @@ export default {
 		updated: 'item-updated',
 	},
 
+	toast: {
+		show: 'info-toast',
+		error: 'error-toast',
+		warning: 'warning-toast',
+	}
 
 };

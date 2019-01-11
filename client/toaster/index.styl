@@ -1,0 +1,44 @@
+@require 'lib'
+
+.toaster
+	position fixed
+	top 0
+	left 200px
+	right 200px
+	padding-top 5px
+	display flex
+	flex-flow column
+	align-items center
+	z-index 9999
+	user-select none
+
+
+.toast
+	min-width 200px
+	max-width 50%
+	display block
+	height 56px
+	margin 5px auto
+	padding 20px 50px
+	text-align center
+	box-shadow 0 10px 20px 2px #0003
+	color color-text-light0
+
+	em
+		font-weight 600
+		color color-text-light2
+		font-style normal
+
+
+.toast
+.toast-info
+	background color-info
+
+
+.toast-warning
+	background color-warning
+	color color-text-dark0
+
+
+.toast-error
+	background color-error
