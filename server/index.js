@@ -38,4 +38,4 @@ app.use('/api/', isApiAuthenticated, api);
 if (util.isDev) app.use('/', express.static(path.join(__dirname, '..', 'public')));
 app.use('/', isAuthenticated, (req, res) => sendView(res, 'index.html'));
 
-app.listen(3000);
+module.exports = app;

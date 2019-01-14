@@ -104,21 +104,6 @@ function js () {
 }
 
 
-
-function testServer (cb) {
-	env.set({ NODE_ENV: 'test' });
-	server(cb);
-}
-
-function runTests (cb) {
-	const mocha = require('gulp-mocha');
-	return src(['./test/**/*.spec.js'], { read: false })
-		.pipe(mocha({ reporter: 'list' }))
-		.on('error', () => { cb(); process.exit(1); })
-		.on('end', () => { cb(); process.exit(0); });
-}
-
-
 function watchTask () {
 	if (isProd) return;
 	livereload.listen();
@@ -135,7 +120,6 @@ exports.eslint = eslint;
 exports.assets = assets;
 exports.js = js;
 exports.server = server;
-exports.test = series(testServer, runTests);
 
 exports.default = defaultTask;
 exports.watch = series(defaultTask, watchTask);
