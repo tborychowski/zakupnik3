@@ -1,9 +1,4 @@
-/* global describe, test, beforeAll, afterAll */
-
-const request = require('supertest');
-const app = require('../server');
-const expect = require('chai').expect;
-const {seed, unseed, data} = require('./_seed');
+const {request, app, expect, seed, unseed} = require('./_common');
 const base = '/api/entries';
 
 describe('Entries', () => {

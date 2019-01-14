@@ -1,4 +1,7 @@
 const {Category, Entry, init} = require('../server/db/db');
+const request = require('supertest');
+const app = require('../server');
+const expect = require('chai').expect;
 
 
 const categories = [
@@ -26,6 +29,9 @@ function unseed () {
 
 
 module.exports = {
+	request,
+	app,
+	expect,
 	data: {categories, entries},
 	seed,
 	unseed,
