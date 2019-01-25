@@ -21,7 +21,7 @@ function webpackLogger (err) {
 let serverStarted = false;
 function server (done) {
 	const nodemon = require('gulp-nodemon');
-	return nodemon({ script: './server/index.js', watch: ['./server'], ext: 'js html' })
+	return nodemon({ script: './app.js', watch: ['./server'], ext: 'js html' })
 		.on('start', () => {
 			if (serverStarted) return;
 			serverStarted = true;
