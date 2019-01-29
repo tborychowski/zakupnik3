@@ -59,17 +59,15 @@ const cfg = {
 			titleSpacing:  20,
 			footerSpacing: 20,
 			footerFontColor: '#aaa',
-			bodyFontFamily: 'monospace',
-			footerFontFamily: 'monospace',
 			bodyFontSize: 13,
 			footerFontSize: 13,
 			callbacks: {
-				label: (tt) => '€' + formatNumber(tt.yLabel),
+				label: (tt) => ' €' + formatNumber(tt.yLabel),
 				footer: (tt) => {
 					if (!tt[1]) return undefined;
 					const exp = tt[0] && tt[0].yLabel || 0;
 					const inc = tt[1] && tt[1].yLabel || 0;
-					return '= €' + formatNumber(inc - exp);
+					return ' =  €' + formatNumber(inc - exp);
 				}
 			}
 		},
