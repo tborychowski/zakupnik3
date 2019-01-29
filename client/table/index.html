@@ -86,10 +86,15 @@ export default {
 		}
 	},
 	computed: {
-		filteredData ({data, $text, $desc, $item, $categoryNameMap}) {
-			data.forEach(item => {
-				item.edited = $item && item.id === $item.id;
-			});
+		filteredData ({data, $text, $desc, $category, $item, $categoryNameMap}) {
+			data.forEach(item => { item.edited = $item && item.id === $item.id; });
+
+			if ($category && !$desc) {
+				return data.filter(item => {
+					const mainCat = getMainCategory(item, $categoryNameMap);
+					return $category.name === mainCat || $category.name === item.category.name;
+				});
+			}
 			const text = ($desc || $text || '').toLowerCase();
 			if (text) {
 				return data.filter(item => {

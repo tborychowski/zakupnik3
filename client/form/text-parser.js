@@ -122,7 +122,7 @@ function parseCategories (categories = []) {
 function parse (val, categories, date) {
 	let repeat = 1;
 	categories = parseCategories(categories);
-	const rows = val
+	let rows = val
 		.split('\n')
 		.map(row => {
 			if (row.toLowerCase().includes('repeat')) {
@@ -148,7 +148,8 @@ function parse (val, categories, date) {
 	for (let i = 1; i < rows.length; i++) sum += rows[i].amount;
 	rows[0].amount -= sum;
 
-	return repeatEntries(rows, repeat);
+	rows = repeatEntries(rows, repeat);
+	return rows;
 }
 
 

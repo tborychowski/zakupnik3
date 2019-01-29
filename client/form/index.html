@@ -75,7 +75,7 @@ export default {
 			this.parseTimer = setTimeout(() => {
 				const {text, dateStr, categories} = this.store.get();
 				const rows = Parser.parse(text, categories, dateStr);
-				this.store.set({ rows });
+				this.store.set({ rows: rows.filter(row => !!row.amount) });
 				if (rows.length) {
 					const category = rows[0].category;
 					const desc = rows[0].description;
