@@ -1,16 +1,21 @@
 import {formatNumber} from '../util';
 
-const colorAccent = '#d08770';
-const colorAccentSemi = '#ffa50033';
 const colorBgDark3 = '#4c566a';
 const colorTextLight0 = '#d8dee9';
+
+const colorExpense = '#d08770';
+const colorExpenseSemi = '#ffa50033';
 
 const colorIncome = '#88c0d0';
 const colorIncomeSemi = '#88c0d033';
 
+const colorSavings = '#a3be8c';
+const colorShortage = '#bf616a';
+
+
 const monthColors = (col = new Date().getMonth()) => {
 	const cols = Array(12).fill(colorBgDark3);
-	if (typeof col !== 'undefined') cols[col] = colorAccent;
+	if (typeof col !== 'undefined') cols[col] = colorExpense;
 	return cols;
 };
 
@@ -22,11 +27,11 @@ const cfg = {
 			{
 				label: 'Expenses',
 				borderWidth: 1,
-				borderColor: colorAccent,
-				pointBackgroundColor: colorAccent,
+				borderColor: colorExpense,
+				pointBackgroundColor: colorExpense,
 				pointRadius: 5,
 				pointHoverRadius: 5,
-				backgroundColor: colorAccentSemi,
+				backgroundColor: colorExpenseSemi,
 				data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			},
 			{
@@ -49,10 +54,24 @@ const cfg = {
 		},
 		tooltips: {
 			intersect: false,
-			mode: 'x',
-			callbacks: { label: (tt, data) => {
-				return data.datasets[tt.datasetIndex].label + ': €' + formatNumber(tt.yLabel);
-			}}
+			mode: 'index',
+			bodySpacing: 5,
+			titleSpacing:  20,
+			footerSpacing: 20,
+			footerFontColor: '#aaa',
+			bodyFontFamily: 'monospace',
+			footerFontFamily: 'monospace',
+			bodyFontSize: 13,
+			footerFontSize: 13,
+			callbacks: {
+				label: (tt) => '€' + formatNumber(tt.yLabel),
+				footer: (tt) => {
+					if (!tt[1]) return undefined;
+					const exp = tt[0] && tt[0].yLabel || 0;
+					const inc = tt[1] && tt[1].yLabel || 0;
+					return '= €' + formatNumber(inc - exp);
+				}
+			}
 		},
 		layout: { padding: { top: 10, left: 15, right: 15 }}
 	}
