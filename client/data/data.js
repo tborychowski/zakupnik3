@@ -17,6 +17,8 @@ const post = (url, params) => req(url, 'POST', params);
 const put = (url, params) => req(url, 'PUT', params);
 const del = url => req(url, 'DELETE');
 const save = (url, data) => {
+	if (!Array.isArray(data)) return data.id ? put(url, data) : post(url, data);
+
 	const newEntries = data.filter(item => !item.id);
 	const withIds = data.filter(item => item.id);
 

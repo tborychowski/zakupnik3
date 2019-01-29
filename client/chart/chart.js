@@ -9,9 +9,6 @@ const colorExpenseSemi = '#ffa50033';
 const colorIncome = '#88c0d0';
 const colorIncomeSemi = '#88c0d033';
 
-const colorSavings = '#a3be8c';
-const colorShortage = '#bf616a';
-
 
 const monthColors = (col = new Date().getMonth()) => {
 	const cols = Array(12).fill(colorBgDark3);
