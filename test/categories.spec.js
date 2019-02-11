@@ -1,4 +1,4 @@
-const {request, app, expect, seed, unseed, data} = require('./_common');
+const {get, post, put, del, expect, seed, unseed, data} = require('./_common');
 const base = '/api/categories';
 
 describe('Categories', () => {
@@ -9,16 +9,14 @@ describe('Categories', () => {
 	let itemId;
 
 	test('- shoud be seeded', () =>
-		request(app)
-			.get(base)
+		get(base)
 			.then(res => {
 				expect(res.body.length).to.eq(2);
 			})
 	);
 
 	test('- add fail', () =>
-		request(app)
-			.post(base)
+		post(base)
 			.then(res => {
 				expect(res.status).to.eq(500);
 			})
@@ -27,8 +25,7 @@ describe('Categories', () => {
 	test('- should count sum', () => {
 		const entry = data.entries[0];
 		const date = entry.date.substr(0, 7);
-		return request(app)
-			.get(`${base}?date=${date}`)
+		return get(`${base}?date=${date}`)
 			.then(res => {
 				expect(res.body[0].sum).to.eq(entry.amount);
 				expect(res.body[0].percent).to.eq(100);
@@ -36,8 +33,7 @@ describe('Categories', () => {
 	});
 
 	test('- add', () =>
-		request(app)
-			.post(base)
+		post(base)
 			.send({ name: 'TEST' })
 			.then(res => {
 				expect(res.body.name).to.eq('TEST');
@@ -46,16 +42,14 @@ describe('Categories', () => {
 	);
 
 	test('- shoud be added', () =>
-		request(app)
-			.get(base)
+		get(base)
 			.then(res => {
 				expect(res.body.length).to.eq(3);
 			})
 	);
 
 	test('- update', () =>
-		request(app)
-			.put(`${base}/${itemId}`)
+		put(`${base}/${itemId}`)
 			.send({ name: 'TEST2' })
 			.then(res => {
 				expect(res.body.updated).to.eq(1);
@@ -63,16 +57,14 @@ describe('Categories', () => {
 	);
 
 	test('- remove', () =>
-		request(app)
-			.delete(`${base}/${itemId}`)
+		del(`${base}/${itemId}`)
 			.then(res => {
 				expect(res.body.deleted).to.eq(1);
 			})
 	);
 
 	test('- shoud be removed', () =>
-		request(app)
-			.get(base)
+		get(base)
 			.then(res => {
 				expect(res.body.length).to.eq(2);
 			})

@@ -1,4 +1,4 @@
-const {request, app, expect, seed, unseed} = require('./_common');
+const {get, post, put, del, expect, seed, unseed} = require('./_common');
 const base = '/api/entries';
 
 describe('Entries', () => {
@@ -18,16 +18,14 @@ describe('Entries', () => {
 
 
 	test('- shoud be seeded', () =>
-		request(app)
-			.get(base)
+		get(base)
 			.then(res => {
 				expect(res.body.length).to.eq(1);
 			})
 	);
 
 	test('- add an entry', () =>
-		request(app)
-			.post(base)
+		post(base)
 			.send(entry)
 			.then(res => {
 				expect(res.body.category_id).to.eq(entry.category_id);
@@ -38,64 +36,56 @@ describe('Entries', () => {
 	);
 
 	test('- shoud be added', () =>
-		request(app)
-			.get(base)
+		get(base)
 			.then(res => {
 				expect(res.body.length).to.eq(2);
 			})
 	);
 
 	test('- shoud find by date', () =>
-		request(app)
-			.get(`${base}?date=${entry.date}`)
+		get(`${base}?date=${entry.date}`)
 			.then(res => {
 				expect(res.body.length).to.eq(1);
 			})
 	);
 
 	test('- shoud NOT find by date', () =>
-		request(app)
-			.get(`${base}?date=2000-00-00`)
+		get(`${base}?date=2000-00-00`)
 			.then(res => {
 				expect(res.body.length).to.eq(0);
 			})
 	);
 
 	test('- shoud find by category', () =>
-		request(app)
-			.get(`${base}?category=1`)
+		get(`${base}?category=1`)
 			.then(res => {
 				expect(res.body.length).to.not.eq(0);
 			})
 	);
 
 	test('- shoud NOT find by category', () =>
-		request(app)
-			.get(`${base}?category=x`)
+		get(`${base}?category=x`)
 			.then(res => {
 				expect(res.body.length).to.eq(0);
 			})
 	);
 
 	test('- shoud find by category and date', () =>
-		request(app)
-			.get(`${base}?date=${entry.date}&category=1`)
+		get(`${base}?date=${entry.date}&category=1`)
 			.then(res => {
 				expect(res.body.length).to.not.eq(0);
 			})
 	);
 
 	test('- shoud NOT find by category and date', () =>
-		request(app)
-			.get(`${base}?category=1&date=2000-00-00`)
+		get(`${base}?category=1&date=2000-00-00`)
 			.then(res => {
 				expect(res.body.length).to.eq(0);
 			})
 	);
 
 	test('- update an entry', () =>
-		request(app)
-			.put(`${base}/${itemId}`)
+		put(`${base}/${itemId}`)
 			.send({ amount: 200 })
 			.then(res => {
 				expect(res.body.updated).to.eq(1);
@@ -103,16 +93,14 @@ describe('Entries', () => {
 	);
 
 	test('- remove an entry', () =>
-		request(app)
-			.delete(`${base}/${itemId}`)
+		del(`${base}/${itemId}`)
 			.then(res => {
 				expect(res.body.deleted).to.eq(1);
 			})
 	);
 
 	test('- shoud be removed', () =>
-		request(app)
-			.get(base)
+		get(base)
 			.then(res => {
 				expect(res.body.length).to.eq(1);
 			})

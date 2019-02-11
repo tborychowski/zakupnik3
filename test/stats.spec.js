@@ -1,4 +1,4 @@
-const {request, app, expect, seed, unseed, data} = require('./_common');
+const {get, expect, seed, unseed, data} = require('./_common');
 const base = '/api/stats/2018';
 
 describe('Stats', () => {
@@ -8,8 +8,7 @@ describe('Stats', () => {
 	afterAll(() => unseed());
 
 	test('- shoud return sums', () =>
-		request(app)
-			.get(base)
+		get(base)
 			.then(res => {
 				expect(res.body).to.have.all.keys('expenses', 'income');
 				expect(res.body.expenses.length).to.eq(1);
@@ -18,8 +17,7 @@ describe('Stats', () => {
 	);
 
 	test('- shoud return sums by category', () =>
-		request(app)
-			.get(`${base}?category=2`)
+		get(`${base}?category=2`)
 			.then(res => {
 				expect(res.body).to.have.all.keys('expenses', 'income');
 				expect(res.body.expenses.length).to.eq(1);
@@ -28,8 +26,7 @@ describe('Stats', () => {
 	);
 
 	test('- shoud return sums by root category', () =>
-		request(app)
-			.get(`${base}?category=1`)
+		get(`${base}?category=1`)
 			.then(res => {
 				expect(res.body).to.have.all.keys('expenses', 'income');
 				expect(res.body.expenses.length).to.eq(1);
@@ -38,8 +35,7 @@ describe('Stats', () => {
 	);
 
 	test('- shoud not return sums by category', () =>
-		request(app)
-			.get(`${base}?category=0`)
+		get(`${base}?category=0`)
 			.then(res => {
 				expect(res.body).to.have.all.keys('expenses', 'income');
 				expect(res.body.expenses.length).to.eq(0);

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "import-data": "node ./scripts/import-data.js",
-    "test": "jest",
+    "test": "jest --runInBand",
     "start:client": "gulp watch",
     "start:server": "gulp server",
     "dist": "gulp --prod",
