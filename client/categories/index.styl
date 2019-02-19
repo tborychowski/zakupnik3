@@ -71,7 +71,17 @@
 			background color-highlight
 
 		&.selected
-			box-shadow 5px 0 0 color-accent inset;
+			color color-accent;
+			position relative
+
+			&:before
+				content '*'
+				color #d08770
+				width 10px
+				position absolute
+				left 4px
+				top 2px
+				font-size 32px
 
 
 	h2.editable-cat

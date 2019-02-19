@@ -44,7 +44,7 @@
 			{#if $categoryTree}
 				{#each $categoryTree as cat}
 				<div class="category-box {cat.sum || cat.incomeSum ? '' : 'no-sum'} {cat.income ? 'income' : 'expense'}">
-					<h2 class="editable-cat {isSelected(cat, $category)}"
+					<h2 class="editable-cat {isSelected(cat, $rows)}"
 						on:click="onclick(cat, this)">
 
 						<span>{cat.name}</span>
@@ -56,13 +56,13 @@
 						</div>
 					</h2>
 					<ul class="subcats">
-						{#each cat.items as item}
-							<li class="editable-cat {isSelected(item, $category)} {item.sum || item.incomeSum ? '' : 'no-sum'}"
-								on:click="onclick(item, this)">
+						{#each cat.items as subcat}
+							<li class="editable-cat {isSelected(subcat, $rows)} {subcat.sum || subcat.incomeSum ? '' : 'no-sum'}"
+								on:click="onclick(subcat, this)">
 
-								{item.name}
-								<span class="pill">{formatNumber(item.sum || item.incomeSum)}</span>
-								<span class="tags">{item.tags}</span>
+								{subcat.name}
+								<span class="pill">{formatNumber(subcat.sum || subcat.incomeSum)}</span>
+								<span class="tags">{subcat.tags}</span>
 							</li>
 						{/each}
 					</ul>
@@ -91,9 +91,11 @@ export default {
 	},
 	helpers: {
 		formatNumber: num => (num ? '€' + formatNumber(num) : ''),
-		isSelected (item, storeItem) {
-			if (storeItem && storeItem.id === item.id) return 'selected';
-			return '';
+		isSelected (item, rows) {
+			return rows
+				.map(r => r.category && r.category.id)
+				.filter(id => !!id)
+				.includes(item.id) ? 'selected' : '';
 		}
 	},
 
