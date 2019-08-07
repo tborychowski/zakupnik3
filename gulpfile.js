@@ -39,7 +39,8 @@ function eslint () {
 }
 
 function assets () {
-	return src(['assets/*.*']).pipe(dest(`${PUBLIC_PATH}`));
+	return src(['assets/*.*', 'node_modules/chart.js/dist/Chart.min.js'])
+		.pipe(dest(`${PUBLIC_PATH}`));
 }
 
 
