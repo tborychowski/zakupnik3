@@ -77,7 +77,7 @@
 
 
 <script>
-import {formatNumber} from '../util';
+import {formatNumber, addRegexToCategories} from '../util';
 import {Data, Store, EVENT} from '../data';
 
 export default {
@@ -115,6 +115,7 @@ export default {
 			Data.Categories
 				.get(dateStr)
 				.then(categories => {
+					categories = addRegexToCategories(categories);
 					this.store.set({ categories });
 					this.set({ isLoading: false });
 				});

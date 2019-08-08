@@ -1,3 +1,5 @@
+import {compareTwoStrings} from 'string-similarity';
+
 const deepCopyArray = arr => arr.map(o => Object.assign({}, o));
 
 
@@ -64,23 +66,42 @@ function parseAmount (amount) {
 }
 
 
-function findCategory (s, categories) {
-	for (let g of categories) {
-		if (s.match(g._name)) {
-			s = s.replace(g._name, '');
-			return [g, s];
-		}
+function findCategory (str, categories) {
+	str = str.toLowerCase();
+	// match cat name
+	const found = [];
+	for (let cat of categories) {
+		const match = str.match(cat.nameRegex);
+		if (match) found.push({ cat, idx: match.index  });
 	}
-	const words = s.split(' ').filter(w => w.length);
-	for (let w of words) {
-		for (let g of categories) {
-			const tags = g.tags.split(/\s*,\s*/);
-			for (let k of tags) {
-				if (k.startsWith(w)) return [g, s];
+	if (found.length) {
+		const {cat} = found.sort((a, b) => a.idx - b.idx)[0];
+		str = str.replace(cat.nameRegex, '');
+		return [cat, str];
+	}
+
+	// match cat tags
+	const words = str.split(' ').filter(w => w.length);
+	for (let word of words) {
+		for (let cat of categories) {
+			for (let tag of cat.tagsArray) {
+				if (tag.startsWith(word)) return [cat, str];
 			}
 		}
 	}
-	return [{}, s];
+
+	// match similarity in cat name
+	const similar = [];
+	for (let cat of categories) {
+		const score = compareTwoStrings(str, cat.nameLowcase);
+		if (score > 0) similar.push({ cat, score });
+	}
+	if (similar.length) {
+		const {cat} = similar.sort((a, b) => b.score - a.score)[0];
+		str = str.replace(cat.nameRegex, '');
+		return [cat, str];
+	}
+	return [{}, str];
 }
 
 
@@ -109,19 +130,8 @@ function findAmount (s) {
 }
 
 
-function parseCategories (categories = []) {
-	return categories.map(g => {
-		const escaped = g.name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
-		g._name = new RegExp(escaped, 'i');
-		return g;
-	});
-}
-
-
-
 function parse (val, categories, date) {
 	let repeat = 1;
-	categories = parseCategories(categories);
 	let rows = val
 		.split('\n')
 		.map(row => {
@@ -154,6 +164,4 @@ function parse (val, categories, date) {
 
 
 
-export default {
-	parse
-};
+export default { parse };

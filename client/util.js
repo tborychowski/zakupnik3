@@ -1,3 +1,4 @@
+
 function formatNumber (num) {
 	num = Math.round(0 + num * 100) / 100;
 	return num.toLocaleString('en-GB', { minimumFractionDigits: 2 });
@@ -21,7 +22,22 @@ function timeAgo (dateStr) {
 }
 
 
+
+function addRegexToCategories (categories = []) {
+	return categories.map(g => {
+		const escaped = g.name.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
+		g.nameRegex = new RegExp(escaped, 'i');
+		g.nameLowcase = g.name.toLowerCase();
+		g.tagsArray = g.tags.split(/\s*,\s*/);
+		return g;
+	});
+}
+
+
+
+
 export {
 	formatNumber,
 	timeAgo,
+	addRegexToCategories,
 };
