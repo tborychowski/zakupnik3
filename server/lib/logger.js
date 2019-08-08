@@ -19,7 +19,7 @@ const consoleFormat = winston.format.combine(
 
 
 const errorLog = new winston.transports.File({ filename: 'logs/error.log', level: 'error' });
-// const combinedLog = new winston.transports.File({ filename: 'logs/combined.log' });
+const combinedLog = new winston.transports.File({ filename: 'logs/combined.log' });
 const consoleLog = new winston.transports.Console({ format: consoleFormat });
 
 
@@ -28,7 +28,7 @@ const logger = winston.createLogger({
 	format: fileFormat,
 	transports: [
 		errorLog,
-		// combinedLog
+		combinedLog
 	]
 });
 
