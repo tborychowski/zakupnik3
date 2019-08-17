@@ -29,8 +29,8 @@
 					<td class="date" title="{item.date}">{timeAgo(item.date)}</td>
 					<td class="cat"><span class="pill">{getMainCategory(item, $categoryNameMap)}</span></td>
 					<td class="desc">{getDescription(item)}</td>
-					<td class="amount">{item.category.income ? formatNumber(item.amount) : ''}</td>
-					<td class="amount">{item.category.income ? '' : formatNumber(item.amount)}</td>
+					<td class="amount">{item.category && item.category.income ? formatNumber(item.amount) : ''}</td>
+					<td class="amount">{item.category && item.category.income ? '' : formatNumber(item.amount)}</td>
 				</tr>
 			{/each}
 				<tr class="row-filler"><td colspan="5">&nbsp;</td></tr>
@@ -104,7 +104,7 @@ export default {
 			if (text) {
 				return data.filter(item => {
 					const mainCat = getMainCategory(item, $categoryNameMap);
-					const s = (mainCat + item.category.name + item.description + item.amount);
+					const s = (mainCat + (item.category && item.category.name || '') + item.description + item.amount);
 					return s.toLowerCase().includes(text);
 				});
 			}
@@ -112,12 +112,12 @@ export default {
 		},
 		total ({filteredData, $rows}) {
 			if (!Array.isArray(filteredData)) return 0;
-			const add = (p, c) => p + (c.category.income ? 0 : c.amount);
+			const add = (p, c) => p + (c.category && c.category.income ? 0 : c.amount);
 			return filteredData.reduce(add, 0) + $rows.reduce(add, 0);
 		},
 		totalIncome ({filteredData, $rows}) {
 			if (!Array.isArray(filteredData)) return 0;
-			const add = (p, c) => p + (c.category.income ? c.amount : 0);
+			const add = (p, c) => p + (c.categgory && c.category.income ? c.amount : 0);
 			return filteredData.reduce(add, 0) + $rows.reduce(add, 0);
 		}
 	},
