@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  zakupnik:
+    container_name: zakupnik
+    image: tborychowski/zakupnik
+    # build:
+    #   context: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./database.db
+        target: /zakupnik/database.db
