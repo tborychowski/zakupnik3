@@ -19,7 +19,9 @@ services:
     container_name: zakupnik
     image: tborychowski/zakupnik
     ports:
-      - "3000:3000"
+      - "3000:${PORT}"
+    env_file:
+      - ./.env
     volumes:
       - type: bind
         source: ./database.db
