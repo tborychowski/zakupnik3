@@ -1,9 +1,8 @@
 const Sequelize = require('sequelize');
-const util = require('../lib/util');
+const {isTest} = require('../lib/util');
 const logger = require('../lib/logger');
 
-// const dbName = (util.isTest ? ':memory:' : 'database.db');
-const dbName = (util.isTest ? 'database-test.db' : 'database.db');
+const dbName = (isTest ? 'database-test.db' : 'database.db');
 const sequelize = new Sequelize(`sqlite:${dbName}`, {
 	define: { timestamps: false, underscored: true },
 	operatorsAliases: false,

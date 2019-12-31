@@ -1,5 +1,5 @@
 FROM node:alpine
-EXPOSE 3000
+EXPOSE ${PORT}
 RUN apk update && \
     apk add git && \
     git clone https://github.com/tborychowski/zakupnik3 zakupnik

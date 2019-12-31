@@ -5,8 +5,6 @@ const isProd = require('minimist')(process.argv.slice(2)).prod;
 const PUBLIC_PATH = 'public/';
 
 env.set({ NODE_TLS_REJECT_UNAUTHORIZED: 0 });
-env.set({ NODE_ENV: isProd ? 'production' : 'development' });
-
 
 function webpackLogger (err) {
 	const chalk = require('chalk');

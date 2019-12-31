@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('./lib/passport');
 const session = require('./lib/session');
-const {getFeat, isTest} = require('./lib/util');
+const {isDev, isTest} = require('./lib/util');
 const app = express();
 const api = require('./api/');
 
@@ -26,13 +26,13 @@ function rootPath (req, res) {
 	sendView(res, 'index.html');
 }
 
-if (getFeat('livereload')) app.use(require('connect-livereload')());
+if (isDev) app.use(require('connect-livereload')());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-if (getFeat('static')) app.use('/', express.static(path.join(__dirname, '..', 'public')));
+app.use('/', express.static(path.join(__dirname, '..', 'public')));
 
-if (getFeat('noauth')) {
+if (!process.env.AUTH) {
 	app.use('/api/', api);
 	app.use('/', rootPath);
 }

@@ -1,4 +1,5 @@
 const winston = require('winston');
+const {isProd} = require('./util');
 
 function print (info) {
 	const {timestamp, level, message} = info;
@@ -32,6 +33,6 @@ const logger = winston.createLogger({
 	]
 });
 
-if (process.env.NODE_ENV !== 'production') logger.add(consoleLog);
+if (!isProd) logger.add(consoleLog);
 
 module.exports = logger;
