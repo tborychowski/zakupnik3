@@ -18,8 +18,8 @@ version: '3.7'
 services:
   zakupnik:
     container_name: zakupnik
-	image: tborychowski/zakupnik
-	restart: always
+    image: tborychowski/zakupnik
+    restart: always
     ports:
       - "3000:${PORT}"
     env_file:
