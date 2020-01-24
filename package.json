@@ -7,7 +7,6 @@
     "url": "https://github.com/tborychowski/zakupnik3.git"
   },
   "scripts": {
-    "import-data": "node ./scripts/import-data.js",
     "test": "jest --runInBand",
     "start:client": "gulp watch",
     "start:server": "gulp server",
