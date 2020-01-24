@@ -117,7 +117,7 @@ export default {
 		},
 		totalIncome ({filteredData, $rows}) {
 			if (!Array.isArray(filteredData)) return 0;
-			const add = (p, c) => p + (c.categgory && c.category.income ? c.amount : 0);
+			const add = (p, c) => p + (c.category && c.category.income ? c.amount : 0);
 			return filteredData.reduce(add, 0) + $rows.reduce(add, 0);
 		}
 	},
