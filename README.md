@@ -3,7 +3,7 @@ Another version of a brilliant home-spendings-logger/manager.
 Mobile friendly and simpler than ever.
 
 ## Screenshots
-![Screen](screenshots/screen1.png)
+<img src="https://raw.githubusercontent.com/tborychowski/zakupnik3/master/screenshots/screen1.png" width="800" alt="Screenshot">
 
 
 ## Get started
