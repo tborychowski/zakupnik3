@@ -19,15 +19,13 @@ services:
   zakupnik:
     container_name: zakupnik
     image: tborychowski/zakupnik
-    restart: always
+    restart: unless-stopped
     ports:
       - "3000:${PORT}"
     env_file:
-      - .env
+      - ./.env
     volumes:
-      - type: bind
-        source: ./database.db
-        target: /zakupnik/database.db
+      - ./database.db:/app/database.db
 ```
 Then run:
 ```sh

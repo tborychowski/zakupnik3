@@ -1,3 +1,16 @@
+.DS_Store
+*.log
+*.db
+*.md
+.*
+gulpfile.js
+docker-compose.yml
+Dockerfile
+LICENSE
+
+_stuff/
+assets/
+client/
+node_modules/
 screenshots/
-scripts/
 test/

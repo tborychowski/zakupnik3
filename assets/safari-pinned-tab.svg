@@ -1,42 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="icon-b" x1="50%" x2="50%" y1="0%" y2="100%">
-      <stop offset="0%" stop-color="#909090"/>
-      <stop offset="100%" stop-color="#282828"/>
-    </linearGradient>
-    <rect id="icon-a" width="510" height="510" x="1" y="1" rx="115"/>
-    <linearGradient id="icon-d" x1="50%" x2="50%" y1="5.891%" y2="100%">
-      <stop offset="0%" stop-color="#D8AC13"/>
-      <stop offset="100%" stop-color="#D88707"/>
-    </linearGradient>
-    <path id="icon-f" d="M85.7343871,105.907184 L42.8671935,139.528512 L0,105.907184 L0,3.36213283 L85.7343871,3.36213283 L85.7343871,105.907184 Z"/>
-    <filter id="icon-e" width="144.3%" height="127.9%" x="-22.2%" y="-12.5%" filterUnits="objectBoundingBox">
-      <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
-      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="6"/>
-      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.400928442 0"/>
-    </filter>
-  </defs>
-  <g fill="none" fill-rule="evenodd">
-    <mask id="icon-c" fill="#fff">
-      <use xlink:href="#icon-a"/>
-    </mask>
-    <use fill="url(#icon-b)" xlink:href="#icon-a"/>
-    <g mask="url(#icon-c)">
-      <g transform="translate(-46 194)">
-        <polygon fill="url(#icon-d)" stroke="#FFF" stroke-width="16.811" points="0 376.467 0 132.735 190.235 16.78 326.478 152.268 445.827 54.57 602.978 297.74 602.978 376.467"/>
-        <ellipse cx="191.061" cy="25.171" fill="#FFF" rx="25.213" ry="25.171"/>
-        <ellipse cx="328.894" cy="147.108" fill="#FFF" rx="25.213" ry="25.171"/>
-        <ellipse cx="447.677" cy="63.206" fill="#FFF" rx="25.213" ry="25.171"/>
-      </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 62 (91390) - https://sketch.com -->
+    <title>icon-dark flat@1x</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M148.423399,1 L363.576601,1 C414.838929,1 433.427887,6.33747264 452.168628,16.3601305 C470.909369,26.3827883 485.617212,41.0906313 495.63987,59.831372 C505.662527,78.5721128 511,97.1610715 511,148.423399 L511,363.576601 C511,414.838929 505.662527,433.427887 495.63987,452.168628 C485.617212,470.909369 470.909369,485.617212 452.168628,495.63987 C433.427887,505.662527 414.838929,511 363.576601,511 L148.423399,511 C97.1610715,511 78.5721128,505.662527 59.831372,495.63987 C41.0906313,485.617212 26.3827883,470.909369 16.3601305,452.168628 C6.33747264,433.427887 1,414.838929 1,363.576601 L1,148.423399 C1,97.1610715 6.33747264,78.5721128 16.3601305,59.831372 C26.3827883,41.0906313 41.0906313,26.3827883 59.831372,16.3601305 C78.5721128,6.33747264 97.1610715,1 148.423399,1 Z" id="path-1"></path>
+        <path d="M0,3.36213283 L85.7343871,3.36213283 L85.7343871,105.907184 L42.8671935,139.528512 L0,105.907184 L0,3.36213283 Z" id="path-3"></path>
+        <filter x="-22.2%" y="-12.5%" width="144.3%" height="127.9%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="6" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.400928442 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="icon-dark-flat" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="bg" fill="#000000" xlink:href="#path-1"></use>
+        <g id="chart" mask="url(#mask-2)">
+            <g transform="translate(-46.000000, 194.000000)">
+                <polygon id="chart" stroke="#DDDDDD" stroke-width="16.8106641" fill="#9A512B" points="0 376.466733 0 132.735159 190.235433 16.7804154 326.47779 152.268411 445.82653 54.5702357 602.978096 297.740069 602.978096 376.466733"></polygon>
+                <ellipse id="poin1" stroke="none" fill="#FFFFFF" cx="191.061224" cy="25.1706231" rx="25.2133581" ry="25.1706231"></ellipse>
+                <ellipse id="point-2" stroke="none" fill="#FFFFFF" cx="328.894249" cy="147.108309" rx="25.2133581" ry="25.1706231"></ellipse>
+                <ellipse id="point-3" stroke="none" fill="#FFFFFF" cx="447.67718" cy="63.2062315" rx="25.2133581" ry="25.1706231"></ellipse>
+            </g>
+        </g>
+        <g id="tag" mask="url(#mask-2)">
+            <g transform="translate(240.000000, 111.000000)">
+                <g id="Combined-Shape">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="#DDDDDD" fill-rule="evenodd" xlink:href="#path-3"></use>
+                </g>
+                <text id="€" font-family="Arial-Black, Arial Black" font-size="84.0533206" font-weight="700">
+                    <tspan x="12.3141398" y="93" fill="#9A512B">€</tspan>
+                </text>
+            </g>
+        </g>
     </g>
-    <g mask="url(#icon-c)">
-      <g transform="translate(240 111)">
-        <use fill="#000" filter="url(#icon-e)" xlink:href="#icon-f"/>
-        <use fill="#FFF" xlink:href="#icon-f"/>
-        <text font-family="Arial-Black, Arial Black" font-size="84.053" font-weight="700">
-          <tspan x="12.314" y="93" fill="#D88707">€</tspan>
-        </text>
-      </g>
-    </g>
-  </g>
 </svg>

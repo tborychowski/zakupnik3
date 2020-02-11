@@ -1,14 +1,13 @@
+---
 version: '3.7'
 services:
   zakupnik:
     container_name: zakupnik
     image: tborychowski/zakupnik
-    restart: always
+    restart: unless-stopped
     ports:
       - "3000:${PORT}"
     env_file:
       - ./.env
     volumes:
-      - type: bind
-        source: ./database.db
-        target: /zakupnik/database.db
+      - ./database.db:/app/database.db

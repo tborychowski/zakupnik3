@@ -1,8 +1,8 @@
 FROM node:alpine
 EXPOSE 3000
-RUN apk update && \
-    apk add git && \
-    git clone https://github.com/tborychowski/zakupnik3 zakupnik
-WORKDIR /zakupnik
-RUN npm i && npm run dist
+WORKDIR /app
+COPY *.* ./
+RUN npm i --only=prod
+COPY server ./server
+COPY public ./public
 CMD ["node", "app.js"]
