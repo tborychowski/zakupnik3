@@ -1,5 +1,6 @@
 {
   "name": "zakupnik3",
+  "description": "Expense logger",
   "version": "2.1.1",
   "license": "GPL-3.0-or-later",
   "repository": {
