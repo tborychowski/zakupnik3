@@ -32,7 +32,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, '..', 'public')));
 
-if (!process.env.AUTH) {
+
+if (process.env.AUTH !== 'true') {
 	app.use('/api/', api);
 	app.use('/', rootPath);
 }
